@@ -1,3 +1,31 @@
 <template>
   <h1>Registration</h1>
+  <form>
+    <div>
+      <label>*First Name</label>
+      <input type="text" value.bind="firstName" placeholder="Jane" />
+    </div>
+    <div>
+      <label>*Surname</label>
+      <input type="text" value.bind="surname" placeholder="Doe" />
+    </div>
+    <div>
+      <label>*Email</label>
+      <input type="text" value.bind="email" placeholder="jane@example.com" />
+    </div>
+    <div>
+      <label>*Contact Number</label>
+      <input type="text" value.bind="number" placeholder="" />
+    </div>
+    <div>
+      <label>*Roles</label>
+      <div
+        repeat.for="role of roles"
+        click.trigger="selectRole(role)"
+        style="${ role.selected ? 'background: rgb(119, 221, 231)' : '' }">${role.name}</div>
+    </div>
+    <div>
+      <button click.trigger="register()">Register</button>
+    </div>
+  </form>
 </template>

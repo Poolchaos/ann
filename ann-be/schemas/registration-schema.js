@@ -10,8 +10,12 @@ var RegistrationSchema = new Schema({
   },
   firstName: String,
   surname: String,
-  email: String,
-  contactNumbers: [String]
+  email: {
+    type: String,
+    required: [true, 'No email specified']
+  },
+  number: String,
+  roles: [String]
 }, { collection : 'registration' });
 
 module.exports = RegistrationSchema;

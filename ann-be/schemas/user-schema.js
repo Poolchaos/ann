@@ -10,8 +10,12 @@ var UserSchema = new Schema({
   },
   firstName: String,
   surname: String,
-  email: String,
-  contactNumbers: [String]
+  email: {
+    type: String,
+    required: [true, 'No email specified']
+  },
+  number: String,
+  roles: [String]
 }, { collection : 'users' });
 
 module.exports = UserSchema;

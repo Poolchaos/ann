@@ -1,22 +1,15 @@
 <template>
-  <div>
+  <!-- <div>
     <button click.trigger="saveUser()">Save</button>
   </div>
-  <div>
-    <button click.trigger="register()">create reg</button>
-  </div>
-  
-  <div>
-    <button click.trigger="goToHome()">Home</button>
-  </div>
-  <div>
-    <button click.trigger="goToLogin()">Login</button>
-  </div>
-  <div>
-    <button click.trigger="goToRegistration()">Register</button>
-  </div>
-  <div>
-    <button click.trigger="goToDashboard()">Dashboard</button>
+   -->
+  <div class="nav">
+    <ul>
+      <li><button click.trigger="goToHome()">Home</button></li>
+      <li><button click.trigger="goToLogin()">Login</button></li>
+      <li><button click.trigger="goToRegistration()">Register</button></li>
+      <li><button click.trigger="goToDashboard()">Dashboard</button></li>
+    </ul>
   </div>
   <router-view></router-view>
 </template>
