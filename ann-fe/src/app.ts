@@ -1,17 +1,18 @@
-import { HttpClient } from 'aurelia-http-client';
-import { autoinject } from 'aurelia-framework';
+import { autoinject, computedFrom } from 'aurelia-framework';
 import { Router } from 'aurelia-router';
 import { PLATFORM } from 'aurelia-pal';
 
-import { UserRegistrationSettings } from 'registration/user-registration-settings';
+import { DataStore } from 'stores/data-store';
+import { EventAggregator } from 'aurelia-event-aggregator';
+import { EVENTS } from 'stores/events';
 
 @autoinject()
 export class App {
-  public message = 'Hello World!';
 
   constructor(
-    private httpClient: HttpClient,
-    private router: Router
+    private router: Router,
+    private dataStore: DataStore,
+    private eventAggregator: EventAggregator
   ) {}
 
   public configureRouter(config, router): void {
@@ -37,5 +38,19 @@ export class App {
 
   public goToRegistration(): void {
     this.router.navigate('registration');
+  }
+
+  public goToDashboard(): void {
+    this.router.navigate('dashboard');
+  }
+
+  public logout(): void {
+    this.eventAggregator.publish(EVENTS.USER_LOGGED_OUT);
+    this.router.navigate('home');
+  }
+
+  @computedFrom('dataStore.user')
+  public get isAuthenticated(): boolean {
+    return !!this.dataStore.user;
   }
 }

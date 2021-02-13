@@ -202,6 +202,7 @@ router.post(
           };
 
           if (decrypt(password) === decrypt(user.password)) {
+            delete user.password;
             return res.send(user);
           }
 

@@ -1,7 +1,8 @@
 import { autoinject } from 'aurelia-framework';
 import { Router } from 'aurelia-router';
+import { EventAggregator } from 'aurelia-event-aggregator';
 
-import { CookieService } from "services/cookie-service";
+import { EVENTS } from 'stores/events';
 import { LoginService } from "./login-service";
 
 @autoinject()
@@ -12,8 +13,8 @@ export class Login {
 
   constructor(
     private router: Router,
-    private loginService: LoginService,
-    private cookieService: CookieService
+    private eventAggregator: EventAggregator,
+    private loginService: LoginService
   ) {
     console.log(' ::>> Login ');
   }
@@ -24,7 +25,7 @@ export class Login {
     this.loginService
       .authenticate(this.email, this.password)
       .then(user => {
-        this.cookieService.setCookie('ann-user', JSON.stringify(user), 3);
+        this.eventAggregator.publish(EVENTS.USER_LOGGED_IN, user);
         this.router.navigate('dashboard');
       })
       .catch(error => {

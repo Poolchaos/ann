@@ -1,6 +1,5 @@
 import {LogManager} from 'aurelia-framework';
 import JSEncrypt from 'jsencrypt';
-// import JSEncrypt from 'node-jsencrypt';
 
 const logger = LogManager.getLogger('EncryptTools');
 
