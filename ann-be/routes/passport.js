@@ -4,7 +4,8 @@ const mongoose = require('mongoose');
 const ObjectID = require('mongodb').ObjectID;
 var jwt = require('jsonwebtoken');
 let JSEncrypt = require('node-jsencrypt');
-console.log(' ::>> JSEncrypt >>>> ', JSEncrypt);
+require('dotenv').config();
+
 
 const AnonymousModel = require('../models/anonymous-model');
 const RegistrationModel = require('../models/registration-model');
@@ -131,33 +132,6 @@ router.post(
   }
 );
 
-const pk = 'MIIEpAIBAAKCAQEAths59StFxNqXNZsi8Zm9cMTF4S4AKqDPvSGIGigwEkPmVT69' +
-  'PwNFIRufgBI9QAimObnQ2WGDfI1bPxWUMqFDvykwA+qq6CH+jI6APYPzXyyWawE6' +
-  'QFo/Z5o6JELuk0ioT8h51VR4oIzhFVaX9qJtaaCD64mk48Pfch57dH7VHr+xi8Ql' +
-  'G0vVWSTNCG8BXC7wqv5hlydddvrZvFDaw9UVEGQwyuwiE+sJBVjx3MmjYT/OfGpp' +
-  'ptSH/rhngtZPLn+6q5sJt1UkzIKExvHgyJ16tPqTsgX2zzslDuPrwQdPKa1YSvya' +
-  'C3uXFcPY9gOEFyy53Jcb21/3sTig+apBugt5TwIDAQABAoIBAQCrZ9kXsRFMhstI' +
-  'w6sSaTjsieoPV3MErLScOpGWvTjyGEMW/aS3SOaqkQuCSqioOvvq3cF8utI+S/cU' +
-  '28TQGwZfSe9N4HXZZRXpSr/eJvLOJHO4aEFiDRAc/ge31eAldYAnCHXUnFumErRR' +
-  'l14V4TDG+TTyYG55jAYnrhVZw3/qHcA7D3uCRbntRSysQ62gddZLGTPaeeizcXd1' +
-  'VB4YnxOCE51xGgbcYgkmm2E8J0HiDRnmg04Jr/4RpvsBC4vM4OWUGyPVgIfIZwci' +
-  'zizb/fdYPi8sP7vCsc44NLJ9P0PARJ0M1S+mChkdfLQ3nm5+7ORUeHbviY93hVjx' +
-  'JyRh6idBAoGBAO2ALIS/rp/Zg6yq4mbUvmy2iMeL6TjnUzRb1z+mOLbXRsyWaex1' +
-  'bJ7kihVrGOsz+TDyVQIftFBLrcFoF2jwJ7ugzraBcL7yDGYLnVv8eyuiIYuK2mh1' +
-  '/aM1ICsGmQr/LwVKNBQDXDLuftW9vkFofTIGPUYMKZKrV+C+CRtnwoqRAoGBAMRK' +
-  'eZxiFULEKsRpM3xkDNP/SOj4jUmmEH9Xrb3B2SyPDsTGGDeiZCFM538YRXLj9xvi' +
-  'l0P3UXRspOMLMGQ2X2xGkG6IIuis+Ta4QPCwkOK05qE8/uKGxKMqzZPIjvsrJcxW' +
-  'EvtU+4vt4AjnbuSvt6jVNePR6o+MVhAHLCllePXfAoGBAJPySUk0gtpOzEiudrRq' +
-  'CGl+V7w+er0Y1OsD3xVmPWQgvJjLhhZnm49rfF0VRwOVb8C+5JebGl7+lbGqXxLe' +
-  'r1GhPcPQ5GP+Mh0LVS4tHKk0qULc72stPSADAxPqW0HPbwITlFd3NGMB0H7jYPYr' +
-  '2flki5zsDKWyGN8GYnPw8e4RAoGAdVPizvPdq3Pf8FjFepO/CzSrWv2+TghiEgvR' +
-  'gPwOmNDFzh5uOUrquPDj6pcSY/MZMGTHb8uzt3h9Mmzstum9LdYb3MWowBUsPWXz' +
-  'Ays23xusQzJXVAWkIbei+7PEqyMGS9YjMHGCjghYgln7cdwKVnNi69L8dmM2ygvP' +
-  'fMr3e1cCgYBIEOuyDFCY4ytGktw4zKAymUGHSOakoPhY2v8JTqr1I6Y6T1Sh/Zc8' +
-  '+TpOrQlbWZbos32YZ0L7CtjMVyRNjvZLaGuO/82Enb/t5gahrJaDJdF++dELW4wQ' +
-  '6YovYK6ZYUj4KHcZZZp+nSTQPIMLNrR9K1HZg5pW9/IvopvFl4RdRw==';
-  const k = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAths59StFxNqXNZsi8Zm9cMTF4S4AKqDPvSGIGigwEkPmVT69PwNFIRufgBI9QAimObnQ2WGDfI1bPxWUMqFDvykwA+qq6CH+jI6APYPzXyyWawE6QFo/Z5o6JELuk0ioT8h51VR4oIzhFVaX9qJtaaCD64mk48Pfch57dH7VHr+xi8QlG0vVWSTNCG8BXC7wqv5hlydddvrZvFDaw9UVEGQwyuwiE+sJBVjx3MmjYT/OfGppptSH/rhngtZPLn+6q5sJt1UkzIKExvHgyJ16tPqTsgX2zzslDuPrwQdPKa1YSvyaC3uXFcPY9gOEFyy53Jcb21/3sTig+apBugt5TwIDAQAB';
-
 router.post(
   '/authenticate',
   function (req, res, next) {
@@ -197,7 +171,7 @@ router.post(
         try {
           let decrypt = function(data) {
             var _decrypt = new JSEncrypt();
-            _decrypt.setPrivateKey(pk);
+            _decrypt.setPrivateKey(process.env.PRIVATE_KEY);
             return _decrypt.decrypt(data);
           };
 
