@@ -1,7 +1,8 @@
 import { autoinject } from 'aurelia-framework';
-import { HttpClient } from "aurelia-http-client";
+import { Router } from 'aurelia-router';
 
-import { UserRegistrationSettings } from './user-registration-settings';
+import { RegistrationService } from './registration-service';
+import { CookieService } from 'services/cookie-service';
 
 @autoinject()
 export class Registration {
@@ -18,8 +19,10 @@ export class Registration {
   private selectedRoles: string[];
 
   constructor(
-    private httpClient: HttpClient
-  ) {
+    private registrationService: RegistrationService,
+    private router: Router,
+    private cookieService: CookieService
+    ) {
     console.log(' ::>> Registration ');
   }
 
@@ -44,19 +47,24 @@ export class Registration {
     };
 
     console.log(' ::>> this.user >>> ', user);
-    this.httpClient.createRequest('http://localhost:3000/passport/submit')
-      .asPost()
-      .withContent(user)
-      .withHeader('Content-Type', 'application/json')
-      .withHeader('Authorization', UserRegistrationSettings.ANONYMOUS_TOKEN)
-      .send()
-      .then(
-        (response) => {
-          console.log(' ::>> response ', response);
-        },
-        (error) => {
-          console.warn(' ::>> error ', error);
-        }
-      );
+    this.registrationService
+      .registerUser(
+        this.firstName,
+        this.surname,
+        this.email,
+        this.number,
+        this.selectedRoles
+      )
+      .then((userRegistration: any) => {
+        console.log(' ::>> response = ', userRegistration);
+        this.cookieService.setCookie('ann-registration', JSON.stringify(userRegistration), 1);
+        // route to email sent page
+        // todo: create sent page
+        // notify email sent
+        this.router.navigate('complete-registration'); // email will bring the user here
+      })
+      .catch(() => {
+        // todo: show some error
+      });
   }
 }

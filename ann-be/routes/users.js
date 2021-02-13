@@ -2,8 +2,6 @@ var express = require('express');
 var router = express.Router();
 const mongoose = require('mongoose');
 const UserModel = require('../models/user-model');
-const AnonymousModel = require('../models/anonymous-model');
-const RegistrationModel = require('../models/registration-model');
 const ObjectID = require('mongodb').ObjectID;
 var jwt = require('jsonwebtoken');
 

@@ -14,6 +14,7 @@ var RegistrationSchema = new Schema({
     type: String,
     required: [true, 'No email specified']
   },
+  token: String,
   number: String,
   roles: [String]
 }, { collection : 'registration' });
