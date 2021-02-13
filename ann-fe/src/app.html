@@ -1,9 +1,22 @@
 <template>
-  <h1>${message}</h1>
   <div>
     <button click.trigger="saveUser()">Save</button>
   </div>
   <div>
-    <button click.trigger="register()">Register</button>
+    <button click.trigger="register()">create reg</button>
   </div>
+  
+  <div>
+    <button click.trigger="goToHome()">Home</button>
+  </div>
+  <div>
+    <button click.trigger="goToLogin()">Login</button>
+  </div>
+  <div>
+    <button click.trigger="goToRegistration()">Register</button>
+  </div>
+  <div>
+    <button click.trigger="goToDashboard()">Dashboard</button>
+  </div>
+  <router-view></router-view>
 </template>
