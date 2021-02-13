@@ -38,6 +38,7 @@ export class CompleteRegistration {
       )
       .then(() => {
         console.log(' ::>> registration Complete >>> navigating to login');
+        this.cookieService.eraseCookie('ann-registration');
         this.router.navigate('login');
       })
       .catch(() => {

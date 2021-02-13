@@ -1,10 +1,10 @@
 import {LogManager} from 'aurelia-framework';
-import JSEncrypt from 'JSEncrypt';
+import JSEncrypt from 'jsencrypt';
+// import JSEncrypt from 'node-jsencrypt';
 
 const logger = LogManager.getLogger('EncryptTools');
 
-const k = 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCpO/u5r1sLMr7UTMg+SfZ8Tbl2eu2xCtUCVMQNvEyZAGQDZVv39ZPkjkDPkUFzzK0m3/sfYgKdJ3PyP6BJ8CEyNz+qnSHA6ks459R+gflt+QmihhLbLwe6Y5a5iaTFxLw85erdReZ3mNPmzBQ0qs7p0Vp1vTlly5nmdG/xtnMlfQIDAQAB';
-
+const k = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAths59StFxNqXNZsi8Zm9cMTF4S4AKqDPvSGIGigwEkPmVT69PwNFIRufgBI9QAimObnQ2WGDfI1bPxWUMqFDvykwA+qq6CH+jI6APYPzXyyWawE6QFo/Z5o6JELuk0ioT8h51VR4oIzhFVaX9qJtaaCD64mk48Pfch57dH7VHr+xi8QlG0vVWSTNCG8BXC7wqv5hlydddvrZvFDaw9UVEGQwyuwiE+sJBVjx3MmjYT/OfGppptSH/rhngtZPLn+6q5sJt1UkzIKExvHgyJ16tPqTsgX2zzslDuPrwQdPKa1YSvyaC3uXFcPY9gOEFyy53Jcb21/3sTig+apBugt5TwIDAQAB';
 export class EncryptService {
   static encrypt(plainText) {
     var jsencrypt = new JSEncrypt({});

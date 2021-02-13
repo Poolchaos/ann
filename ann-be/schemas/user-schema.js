@@ -14,6 +14,7 @@ var UserSchema = new Schema({
     type: String,
     required: [true, 'No email specified']
   },
+  password: String,
   token: String,
   number: String,
   roles: [String]

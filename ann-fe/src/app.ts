@@ -38,8 +38,4 @@ export class App {
   public goToRegistration(): void {
     this.router.navigate('registration');
   }
-
-  public goToDashboard(): void {
-    this.router.navigate('dashboard');
-  }
 }
