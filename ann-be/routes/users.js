@@ -1,12 +1,14 @@
 var express = require('express');
 var router = express.Router();
-var MongoClient = require('mongodb').MongoClient;
 const mongoose = require('mongoose');
 const UserModel = require('../models/user-model');
+const AnonymousModel = require('../models/anonymous-model');
+const RegistrationModel = require('../models/registration-model');
 const ObjectID = require('mongodb').ObjectID;
+var jwt = require('jsonwebtoken');
 
 //Set up default mongoose connection
-const mongoDB = 'mongodb://localhost:27017/db-ann';
+const mongoDB = 'mongodb://localhost:27017/ann-projector';
 mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
 
 //Get the default connection
@@ -45,15 +47,68 @@ router.post('/', function(req, res, next) {
     user_instance.save(function (err) {
       if (err) {
         console.log(err);
-        return res.send('respond with a resource');
+        return res.sendStatus(405);
       }
+      return res.sendStatus(200);
       // saved!
     });
 
-    res.send('respond with a resource');
   } catch(e) {
     console.log(' ::>> error ', e);
   }
 });
+
+// var testtoken = jwt.sign({ anonymous: 'is-anonymous' }, 'anonymous');
+// console.log(' ::>> testtoken >>>> ', testtoken);
+// jwt.verify(token, pubKey)
+
+// router.post(
+//   '/user-registration/submit',
+//   function (req, res, next) {
+//     // Gather the jwt access token from the request header
+//     const authHeader = req.headers['authorization']
+//     const token = authHeader && authHeader.split(' ')[1];
+    
+//     if (token == null) return res.sendStatus(401) // if there isn't any token
+
+//     AnonymousModel.find({}, function (err, docs) {
+//       console.log(' ::>> docs >>>> ', docs[0], docs);
+  
+//       if (docs[0]) {
+//         if (token === docs[0].anonymous) {
+//           next();
+//         }
+//       } else {
+//         console.log(' ::>> anonymous tokens don`t match ');
+//         return res.sendStatus(401)
+//       }
+
+//       // jwt.verify(token, 'anonymous', (err, data) => {
+//       //   console.log(' ::>> anonymous ', err, data)
+//       //   if (err) return res.sendStatus(403)
+
+//       // })
+//     });
+//   },
+//   function(req, res, next){
+//     try {
+//       let user = req.body;
+//       user._id = new ObjectID();
+      
+//       var user_instance = new RegistrationModel(user);
+//       // Save the new model instance, passing a callback
+//       user_instance.save(function (err) {
+//         if (err) {
+//           console.log(err);
+//           return res.sendStatus(405);
+//         }
+//         return res.sendStatus(200);
+//         // saved!
+//       });
+
+//     } catch(e) {
+
+//     }
+//   });
 
 module.exports = router;

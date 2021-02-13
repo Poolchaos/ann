@@ -1,0 +1,1 @@
+This project contains aurelia fe app and webpack/mongoose/mongodb be app
