@@ -6,19 +6,19 @@
       <!-- todo: add form validation -->
 
       *<label i18n="page.register.form.firstName"></label>
-      <input type="text" value.bind="firstName" placeholder="Jane" />
+      <input type="text" value.bind="firstName & validate" placeholder="Jane" />
     </div>
     <div>
       *<label i18n="page.register.form.lastName"></label>
-      <input type="text" value.bind="surname" placeholder="Doe" />
+      <input type="text" value.bind="surname & validate" placeholder="Doe" />
     </div>
     <div>
       *<label i18n="page.register.form.email"></label>
-      <input type="text" value.bind="email" placeholder="jane@example.com" />
+      <input type="text" value.bind="email & validate" placeholder="jane@example.com" />
     </div>
     <div>
       *<label i18n="page.register.form.contactNumber"></label>
-      <input type="text" value.bind="number" />
+      <input type="text" value.bind="number & validate" />
     </div>
     <div>
       *<label i18n="page.register.form.role"></label>
@@ -27,8 +27,13 @@
         click.trigger="selectRole(role)"
         style="${ role.selected ? 'background: rgb(119, 221, 231)' : '' }">${role.name}</div>
     </div>
+    <ul if.bind="validation.errors">
+      <li repeat.for="error of validation.errors">
+        ${error.message}
+      </li>
+    </ul>
     <div>
-      <button click.trigger="register()" i18n="page.register.form.register-button"></button>
+      <button disabled.bind="submitted" click.trigger="register()" i18n="page.register.form.register-button"></button>
     </div>
   </form>
 </template>
