@@ -1,3 +1,27 @@
 {
-  "title": "Hallo"
+  "title": "Hallo",
+  "nav-links": {
+    "home": "Tuis",
+    "login": "Teken Aan",
+    "register": "Registreer",
+    "dashboard": "Paneelbord",
+    "logout": "Teken Uit"
+  },
+  "page": {
+    "home": {
+      "title": "Tuis"
+    },
+    "login": {
+      "title": "Teken Aan",
+      "form": {
+        "email": {
+          "label": "Epos"
+        },
+        "password": {
+          "label": "Wagwoord"
+        },
+        "login-button": "Teken Aan"
+      }
+    }
+  }
 }
