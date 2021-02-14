@@ -1,5 +1,7 @@
 <template>
-  <h1>Dashboard</h1>
-  
   <h1 i18n="title"></h1>
+
+  <admin if.bind="dataStore.isAdmin"></admin>
+  <journalist if.bind="dataStore.isJournalist"></journalist>
+  <voice-over if.bind="dataStore.isVoiceOver"></voice-over>
 </template>
