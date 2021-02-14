@@ -10,7 +10,8 @@ export class Registration {
   public roles: { name: string; selected?: boolean }[] = [
     { name: 'Admin'},
     { name: 'Joernalis'},
-    { name: 'Voice-Over' }
+    { name: 'Voice-Over' },
+    { name: 'User' }
   ];
   public firstName: string;
   public surname: string;

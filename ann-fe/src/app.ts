@@ -8,6 +8,8 @@ import { EVENTS } from 'stores/events';
 import { AppRoutes } from 'app-routes';
 import { CookieService } from 'services/cookie-service';
 
+import './includes';
+
 @autoinject()
 export class App {
   

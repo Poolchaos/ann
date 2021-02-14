@@ -10,7 +10,8 @@ export class DataStore {
   private static ROLES = {
     ADMIN: 'Admin',
     JOURNALIST: 'Joernalis',
-    VOICE_OVER: 'Voice-Over'
+    VOICE_OVER: 'Voice-Over',
+    USER: 'User'
   };
   private USER: IUser;
 

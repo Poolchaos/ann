@@ -215,6 +215,16 @@ module.exports = ({ production } = {}, {extractCss, analyze, tests, hmr, port, h
         // CSS required in templates cannot be extracted safely
         // because Aurelia would try to require it again in runtime
         use: cssRules
+      },{
+        test: /\.s[ac]ss$/i,
+        use: [
+          // Creates `style` nodes from JS strings
+          "style-loader",
+          // Translates CSS into CommonJS
+          "css-loader",
+          // Compiles Sass to CSS
+          "sass-loader",
+        ],
       },
       { test: /\.html$/i, loader: 'html-loader' },
       { test: /\.ts$/, loader: "ts-loader" },

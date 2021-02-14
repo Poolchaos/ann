@@ -27,6 +27,16 @@
         click.trigger="selectRole(role)"
         style="${ role.selected ? 'background: rgb(119, 221, 231)' : '' }">${role.name}</div>
     </div>
+    <ul class="reg-roles">
+      <li
+        click.trigger="selectRole('Admin')">Admin</li>
+      <li 
+        click.trigger="selectRole('Journalist')">Create news articles</li>
+      <li 
+        click.trigger="selectRole('Voice-Over')">Add voice over to articles</li>
+      <li 
+        click.trigger="selectRole('User')">Find and use articles</li>
+    </ul>
     <ul if.bind="validation.errors">
       <li repeat.for="error of validation.errors">
         ${error.message}
