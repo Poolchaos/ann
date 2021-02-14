@@ -67,7 +67,7 @@ router.post(
             return res.send(user);
           });
         } else {
-          return res.sendStatus(405);
+          return res.sendStatus(401);
         }
       });
 
@@ -159,7 +159,7 @@ router.post(
     UserModel.find({ email }, function (err, docs) {
       if (err || docs.length == 0) {
         console.log('err = ', err);
-        return res.sendStatus(405)
+        return res.sendStatus(401)
       }
       let user = docs[0].toJSON();
       console.log(' ::>> user = ', user);

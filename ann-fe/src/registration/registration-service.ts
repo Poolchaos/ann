@@ -16,12 +16,12 @@ export class RegistrationService {
     surname: string,
     email: string,
     number: string,
-    roles: string[]
+    role: string
   ): Promise<void> {
     return new Promise(resolve => {
       this.httpClient.createRequest('http://localhost:3000/passport/submit')
         .asPost()
-        .withContent({ firstName, surname, email, number, roles })
+        .withContent({ firstName, surname, email, number, role })
         .withHeader('Content-Type', 'application/json')
         .withHeader('Authorization', UserRegistrationSettings.ANONYMOUS_TOKEN)
         .send()

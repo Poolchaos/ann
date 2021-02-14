@@ -6,6 +6,8 @@ import { DataStore, IUser } from 'stores/data-store';
 import { EventAggregator } from 'aurelia-event-aggregator';
 import { EVENTS } from 'stores/events';
 import { AppRoutes } from 'app-routes';
+import { CookieService } from 'services/cookie-service';
+import { JSONPRequestMessage } from 'aurelia-http-client';
 
 @autoinject()
 export class App {
@@ -56,12 +58,15 @@ export class App {
 class AuthStep {
   private showLoader: boolean;
 
-  constructor(private dataStore: DataStore, private eventAggregator: EventAggregator) {
-  }
+  constructor(
+    private dataStore: DataStore,
+    private cookieService: CookieService
+  ) {}
 
   run(navigationInstruction: NavigationInstruction, next: Next): any {
 
-    const user: IUser = this.dataStore.user;
+    const cookie = this.cookieService.getCookie('ann-user');
+    const user: IUser = cookie ? JSON.parse(cookie) : null;
     /*AUTH*/
     let isAuthRoute: boolean = navigationInstruction.getAllInstructions().some(i => i.config.auth);
     if (isAuthRoute) {
@@ -81,15 +86,12 @@ class AuthStep {
     let nextInstruction: NavigationInstruction = allInstructions[1];
     let access: any = nextInstruction ? nextInstruction.config.settings.access || nextInstruction.config.settings : null;
 
-    if (access && user && user.roles) {
+    if (access && user && user.role) {
       let hasAccess = false;
-      const roles = user.roles;
 
       for (let role of access) {
-        for (let item of roles) {
-          if (role === item) {
-            hasAccess = true;
-          }
+        if (role === user.role) {
+          hasAccess = true;
         }
       }
       if (!hasAccess) {

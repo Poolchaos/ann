@@ -7,6 +7,11 @@ import { EVENTS } from './events';
 @autoinject()
 export class DataStore {
 
+  private static ROLES = {
+    ADMIN: 'Admin',
+    JOURNALIST: 'Joernalis',
+    VOICE_OVER: 'Voice-Over'
+  };
   private USER: IUser;
 
   constructor(
@@ -14,6 +19,10 @@ export class DataStore {
     private cookieService: CookieService
   ) {
     this.initialiseSubscriptions();
+  }
+
+  private dataUpdated(event: string, data?: any): void {
+    this.eventAggregator.publish(event, data);
   }
 
   private initialiseSubscriptions(): void {
@@ -29,11 +38,27 @@ export class DataStore {
     } else {
       this.cookieService.eraseCookie('ann-user');
     }
+    this.dataUpdated(EVENTS.USER_UPDATED);
   }
 
   @computedFrom('USER')
   public get user(): IUser {
     return this.USER;
+  }
+
+  @computedFrom('USER.roles')
+  public get isAdmin(): boolean {
+    return this.USER ? this.USER.role === DataStore.ROLES.ADMIN : false;
+  }
+
+  @computedFrom('USER.roles')
+  public get isJournalist(): boolean {
+    return this.USER ? this.USER.role === DataStore.ROLES.JOURNALIST : false;
+  }
+
+  @computedFrom('USER.roles')
+  public get isVoiceOver(): boolean {
+    return this.USER ? this.USER.role === DataStore.ROLES.VOICE_OVER : false;
   }
 }
 
@@ -43,5 +68,5 @@ export interface IUser {
   email: string;
   token: string;
   number: string;
-  roles: string[];
+  role: string;
 }

@@ -17,7 +17,7 @@ var UserSchema = new Schema({
   password: String,
   token: String,
   number: String,
-  roles: [String]
+  role: String
 }, { collection : 'users' });
 
 module.exports = UserSchema;

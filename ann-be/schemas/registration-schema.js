@@ -16,7 +16,7 @@ var RegistrationSchema = new Schema({
   },
   token: String,
   number: String,
-  roles: [String],
+  role: String,
   isComplete: Boolean
 }, { collection : 'registration' });
 
