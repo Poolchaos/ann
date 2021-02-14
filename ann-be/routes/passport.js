@@ -22,6 +22,12 @@ var db = mongoose.connection;
 //Bind connection to error event (to get notification of connection errors)
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
+const decrypt = function(data) {
+  var _decrypt = new JSEncrypt();
+  _decrypt.setPrivateKey(process.env.PRIVATE_KEY);
+  return _decrypt.decrypt(data);
+};
+
 router.post(
   '/submit',
   function (req, res, next) {
@@ -32,7 +38,8 @@ router.post(
     if (token == null) return res.sendStatus(401);
 
     AnonymousModel.find({}, function (err, docs) {
-      if (err) console.log('err = ', err);
+      if (err) return res.send(500, {error: err});
+      
       if (docs[0]) {
         if (token === docs[0].anonymous) {
           return next();
@@ -54,10 +61,7 @@ router.post(
           
           var user_instance = new RegistrationModel(user);
           user_instance.save(function (err) {
-            if (err) {
-              console.log(err);
-              return res.sendStatus(405);
-            }
+            if (err) return res.send(500, {error: err});
             
             sendEmail(user);
             return res.send(user);
@@ -80,54 +84,44 @@ router.post(
     // Gather the jwt access token from the request header
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1];
-    const email = req.body ? req.body.email : null;
     const password = req.body ? req.body.password : null;
     console.log(' ::>> req.body >>>> ', req.body);
     
-    if (token == null || email == null) return res.sendStatus(401);
+    if (token == null) return res.sendStatus(401);
 
-    RegistrationModel.find({ email }, function (err, docs) {
-      if (err) console.log('err = ', err);
+    const decrypted = jwt.verify(token, 'completing registration');;
+    console.log(' ::> >decrypted >>>> ', decrypted);
+
+    RegistrationModel.find({ _id: decrypted.userId }, function (err, docs) {
+      if (err) return res.send(500, {error: err});
+
       let user = docs[0].toJSON();
+      console.log(' ::>> user >>>> ', user);
       if (user) {
-        console.log(' ::>> token1 >>>> ', token);
-        console.log(' ::>> token2 >>>> ', token);
-        if (token.indexOf(user.token) >= 0) {
 
-          user.token = null;
-          console.log(' ::>> sign token with data >>>> ', user);
-          let reg_token = jwt.sign(user, 'complete');
-          user.token = reg_token;
-          user.password = password;
-          
-          console.log(' ::>> user signed >>>> ', user);
-          var register_instance = new RegistrationModel(user);
-          register_instance.deleteOne({ _id: user._id }, function (err) {
-            if (err) {
-              console.log(' ::>> failed to remove item ', err);
-              return;
-            }
-            // deleted at most one tank document
+        user.token = null;
+        user.token = jwt.sign(user, 'complete');
+        user.password = password;
+        
+        RegistrationModel.findOneAndUpdate(
+          { _id: user._id },
+          { ...user, isComplete: true },
+          { upsert: true },
+          function (err) {
+            if (err) return res.send(500, {error: err});
                 
-            console.log(' ::>> remove registration ');
 
             var user_instance = new UserModel(user);
             user_instance.save(function (err) {
-              if (err) {
-                console.log(err);
-                return res.sendStatus(405);
-              }
-              console.log(' ::>> save user ');
+              if (err) return res.send(500, {error: err});
+
               return res.sendStatus(200);
             });
           });
-            
 
-        }
-        return;
+      } else {
+        return res.sendStatus(401)
       }
-      console.log(' ::>> tokens don`t match ');
-      return res.sendStatus(401)
     });
   }
 );
@@ -163,18 +157,15 @@ router.post(
     if (token == null || email == null) return res.sendStatus(401);
 
     UserModel.find({ email }, function (err, docs) {
-      if (err) console.log('err = ', err);
+      if (err || docs.length == 0) {
+        console.log('err = ', err);
+        return res.sendStatus(405)
+      }
       let user = docs[0].toJSON();
       console.log(' ::>> user = ', user);
       if (user) {
         
         try {
-          let decrypt = function(data) {
-            var _decrypt = new JSEncrypt();
-            _decrypt.setPrivateKey(process.env.PRIVATE_KEY);
-            return _decrypt.decrypt(data);
-          };
-
           if (decrypt(password) === decrypt(user.password)) {
             delete user.password;
             return res.send(user);

@@ -2,10 +2,10 @@
   <div class="nav">
     <ul>
       <li><button click.trigger="goToHome()">Home</button></li>
-      <li><button click.trigger="goToLogin()" if.bind="!isAuthenticated">Login</button></li>
-      <li><button click.trigger="goToRegistration()" if.bind="!isAuthenticated">Register</button></li>
-      <li><button click.trigger="goToDashboard()" if.bind="isAuthenticated">Dashboard</button></li>
-      <li><button click.trigger="logout()" if.bind="isAuthenticated">Logout</button></li>
+      <li if.bind="!isAuthenticated"><button click.trigger="goToLogin()">Login</button></li>
+      <li if.bind="!isAuthenticated"><button click.trigger="goToRegistration()">Register</button></li>
+      <li if.bind="isAuthenticated"><button click.trigger="goToDashboard()">Dashboard</button></li>
+      <li if.bind="isAuthenticated"><button click.trigger="logout()">Logout</button></li>
     </ul>
   </div>
   <router-view></router-view>

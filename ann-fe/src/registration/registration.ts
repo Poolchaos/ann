@@ -57,11 +57,9 @@ export class Registration {
       )
       .then((userRegistration: any) => {
         console.log(' ::>> response = ', userRegistration);
-        this.cookieService.setCookie('ann-registration', JSON.stringify(userRegistration), 1);
+        // this.cookieService.setCookie('ann-registration', JSON.stringify(userRegistration), 1);
         // route to email sent page
-        // todo: create sent page
-        // notify email sent
-        this.router.navigate('complete-registration'); // email will bring the user here
+        this.router.navigate('email-sent'); // email will bring the user here
       })
       .catch(() => {
         // todo: show some error

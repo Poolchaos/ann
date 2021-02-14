@@ -42,11 +42,10 @@ export class RegistrationService {
     })
   }
 
-  public completeRegistration(user: { email: string; token: string}, password: string): Promise<void> {
+  public completeRegistration(token: string, password: string): Promise<void> {
 
     const encryptedPassword = EncryptService.encrypt(password);
     console.log(' ::>> user >>>> ', {
-      user,
       password,
       encryptedPassword
     });
@@ -55,11 +54,10 @@ export class RegistrationService {
       this.httpClient.createRequest('http://localhost:3000/passport/confirm')
         .asPost()
         .withContent({
-          email: user.email,
           password: encryptedPassword
         })
         .withHeader('Content-Type', 'application/json')
-        .withHeader('Authorization', `Bearer ${user.token}`)
+        .withHeader('Authorization', `Bearer ${token}`)
         .send()
         .then(
           (response) => {

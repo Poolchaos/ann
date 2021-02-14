@@ -12,6 +12,8 @@ export class CompleteRegistration {
   public password: string;
   public confirmPassword: string;
 
+  private token: string;
+
   constructor(
     private cookieService: CookieService,
     private router: Router,
@@ -23,8 +25,8 @@ export class CompleteRegistration {
   public activate(params: {[key: string]: string}): void {
     console.log(' ::>> params >>>> ', params);
     try {
-      this.user = JSON.parse(this.cookieService.getCookie('ann-registration'));
-      console.log(' ::><> user = ', this.user);
+      this.token = params.token;
+      console.log(' ::><> token = ', this.token);
     } catch(e) {
       console.warn(' ::>> Failed to parse registration data.');
     }
@@ -33,7 +35,7 @@ export class CompleteRegistration {
   public completeRegistration(): void {
     this.registrationService
       .completeRegistration(
-        this.user,
+        this.token,
         this.password
       )
       .then(() => {
