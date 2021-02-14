@@ -1,12 +1,17 @@
 <template>
+  <style>
+    .nav > ul > li {
+      display: inline-block;
+    }
+  </style>
   <div class="nav">
-    <ul>
+    <ul style="width: 100%;margin: 0;padding: 0">
       <li><button click.trigger="goToHome()">Home</button></li>
       <li if.bind="!isAuthenticated"><button click.trigger="goToLogin()">Login</button></li>
       <li if.bind="!isAuthenticated"><button click.trigger="goToRegistration()">Register</button></li>
       <li if.bind="isAuthenticated"><button click.trigger="goToDashboard()">Dashboard</button></li>
       <li if.bind="isAuthenticated"><button click.trigger="logout()">Logout</button></li>
-      <li slule="float:right;">
+      <li style="float:right;">
         
         <ul>
           <li repeat.for="locale of locales"
