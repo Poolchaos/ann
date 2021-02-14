@@ -4,6 +4,10 @@ import {PLATFORM} from 'aurelia-pal';
 import {I18N, TCustomAttribute} from 'aurelia-i18n';
 import Backend from 'i18next-xhr-backend';
 
+// todo: detect device
+
+const languageCodes = ['af', 'en', 'nr', 'xh', 'zu', 'st', 'nso', 'tn', 'ss', 've', 'ts' ];
+
 export function configure(aurelia: Aurelia): void {
   aurelia.use
     .standardConfiguration()
@@ -16,8 +20,8 @@ export function configure(aurelia: Aurelia): void {
 
       return instance.setup({
         fallbackLng: 'en',
-        whitelist: ['en', 'ru'],
-        preload: ['en', 'ru'],
+        whitelist: languageCodes,
+        preload: languageCodes,
         ns: 'global',
         defaultNS: 'global',
         fallbackNS: false,

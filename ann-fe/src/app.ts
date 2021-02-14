@@ -1,9 +1,9 @@
 import { autoinject, computedFrom } from 'aurelia-framework';
 import { Router, NavigationInstruction, Next, RedirectToRoute, Redirect, RouteConfig } from 'aurelia-router';
+import { EventAggregator } from 'aurelia-event-aggregator';
 import { I18N } from 'aurelia-i18n';
 
 import { DataStore, IUser } from 'stores/data-store';
-import { EventAggregator } from 'aurelia-event-aggregator';
 import { EVENTS } from 'stores/events';
 import { AppRoutes } from 'app-routes';
 import { CookieService } from 'services/cookie-service';
@@ -21,14 +21,17 @@ export class App {
     private i18n: I18N
   ) {
     this.locales = [
-      {
-        title: "English",
-        code: "en"
-      },
-      {
-        title: "Русский",
-        code: "ru"
-      }
+      { title: "Afrikaans", code: "af" },
+      { title: "English", code: "en" },
+      { title: "isiNdebele", code: "nr" },
+      { title: "isiXhosa", code: "xh" },
+      { title: "isiZulu", code: "zu" },
+      { title: "Sesotho", code: "st" },
+      { title: "Sepedi", code: "nso" },
+      { title: "Setswana", code: "tn" },
+      { title: "siSwati", code: "ss" },
+      { title: "Tshivenda", code: "ve" },
+      { title: "Xitsonga", code: "ts" }
     ];
     this.currentLocale = this.i18n.getLocale();
 
