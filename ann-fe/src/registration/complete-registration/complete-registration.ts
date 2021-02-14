@@ -23,12 +23,11 @@ export class CompleteRegistration {
   }
 
   public activate(params: {[key: string]: string}): void {
-    console.log(' ::>> params >>>> ', params);
-    try {
+    if (params.token) {
       this.token = params.token;
-      console.log(' ::><> token = ', this.token);
-    } catch(e) {
-      console.warn(' ::>> Failed to parse registration data.');
+    } else {
+      // todo: new toastee warning
+        this.router.navigate('home');
     }
   }
 

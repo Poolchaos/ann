@@ -37,7 +37,7 @@ export class DataStore {
   }
 }
 
-interface IUser {
+export interface IUser {
   firstName: string;
   surname: string;
   email: string;

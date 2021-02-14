@@ -1,10 +1,11 @@
 import { autoinject, computedFrom } from 'aurelia-framework';
-import { Router } from 'aurelia-router';
+import { Router, NavigationInstruction, Next, RedirectToRoute, Redirect, RouteConfig } from 'aurelia-router';
 import { PLATFORM } from 'aurelia-pal';
 
-import { DataStore } from 'stores/data-store';
+import { DataStore, IUser } from 'stores/data-store';
 import { EventAggregator } from 'aurelia-event-aggregator';
 import { EVENTS } from 'stores/events';
+import { AppRoutes } from 'app-routes';
 
 @autoinject()
 export class App {
@@ -18,15 +19,9 @@ export class App {
   public configureRouter(config, router): void {
     config.title = 'ANN';
     config.options.pushState = true;
-    config.map([
-      { route: ['', 'home'],            name: 'home',                  moduleId: PLATFORM.moduleName('home/home')                                                                                           },
-      { route: 'login',                 name: 'login',                 moduleId: PLATFORM.moduleName('login/login'),                                              nav: true, title: 'Login'                 },
-      { route: 'registration',          name: 'registration',          moduleId: PLATFORM.moduleName('registration/registration'),                                nav: true, title: 'Registration'          },
-      { route: 'email-sent',            name: 'email-sent',            moduleId: PLATFORM.moduleName('registration/email-sent/email-sent'),                       nav: true, title: 'email-sent'            },
-      { route: 'registration-complete', name: 'registration-complete', moduleId: PLATFORM.moduleName('registration/registration-complete/registration-complete'), nav: true, title: 'Registration Complete' },
-      { route: 'complete-registration', name: 'complete-registration', moduleId: PLATFORM.moduleName('registration/complete-registration/complete-registration'), nav: true, title: 'Complete Registration' },
-      { route: 'dashboard',             name: 'dashboard',             moduleId: PLATFORM.moduleName('dashboard/dashboard'),                                      nav: true, title: 'Dashboard'             },
-    ]);
+    config.addPipelineStep('authorize', AuthStep);
+    let routeConfigs: RouteConfig[] = AppRoutes.routes;
+    config.map(routeConfigs);
     this.router = router;
   }
 
@@ -54,5 +49,54 @@ export class App {
   @computedFrom('dataStore.user')
   public get isAuthenticated(): boolean {
     return !!this.dataStore.user;
+  }
+}
+
+@autoinject()
+class AuthStep {
+  private showLoader: boolean;
+
+  constructor(private dataStore: DataStore, private eventAggregator: EventAggregator) {
+  }
+
+  run(navigationInstruction: NavigationInstruction, next: Next): any {
+
+    const user: IUser = this.dataStore.user;
+    /*AUTH*/
+    let isAuthRoute: boolean = navigationInstruction.getAllInstructions().some(i => i.config.auth);
+    if (isAuthRoute) {
+      if (!user) {
+        return next.cancel(new RedirectToRoute('login', { from: `${document.location.pathname}${document.location.search}` }));
+      }
+    }
+
+    /*BLOCKED*/
+    let isBlocked: boolean = navigationInstruction.getAllInstructions().some(i => i.config.isBlocked);
+    if (isBlocked) {
+      return next.cancel(new Redirect('/error/1'));
+    }
+
+    /*AUTHORISED*/
+    let allInstructions: NavigationInstruction[] = navigationInstruction.getAllInstructions();
+    let nextInstruction: NavigationInstruction = allInstructions[1];
+    let access: any = nextInstruction ? nextInstruction.config.settings.access || nextInstruction.config.settings : null;
+
+    if (access && user && user.roles) {
+      let hasAccess = false;
+      const roles = user.roles;
+
+      for (let role of access) {
+        for (let item of roles) {
+          if (role === item) {
+            hasAccess = true;
+          }
+        }
+      }
+      if (!hasAccess) {
+        return next.cancel(new Redirect('/error/2'));
+      }
+    }
+
+    return next();
   }
 }

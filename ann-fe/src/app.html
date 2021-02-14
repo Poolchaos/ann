@@ -4,7 +4,8 @@
       <li><button click.trigger="goToHome()">Home</button></li>
       <li if.bind="!isAuthenticated"><button click.trigger="goToLogin()">Login</button></li>
       <li if.bind="!isAuthenticated"><button click.trigger="goToRegistration()">Register</button></li>
-      <li if.bind="isAuthenticated"><button click.trigger="goToDashboard()">Dashboard</button></li>
+      <!-- <li if.bind="isAuthenticated"><button click.trigger="goToDashboard()">Dashboard</button></li> -->
+      <li><button click.trigger="goToDashboard()">Dashboard</button></li>
       <li if.bind="isAuthenticated"><button click.trigger="logout()">Logout</button></li>
     </ul>
   </div>

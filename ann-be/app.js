@@ -42,4 +42,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+// todo: hide all sensitive data in logs
+// todo: update logs https://www.loggly.com/ultimate-guide/node-logging-basics/
+
 module.exports = app;

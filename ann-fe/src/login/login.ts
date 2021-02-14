@@ -11,12 +11,18 @@ export class Login {
   public email: string;
   public password: string;
 
+  private fromRoute: string;
+
   constructor(
     private router: Router,
     private eventAggregator: EventAggregator,
     private loginService: LoginService
   ) {
     console.log(' ::>> Login ');
+  }
+
+  public activate(params: { from: string }): void {
+    this.fromRoute = params.from;
   }
 
   public login(): void {
@@ -26,7 +32,13 @@ export class Login {
       .authenticate(this.email, this.password)
       .then(user => {
         this.eventAggregator.publish(EVENTS.USER_LOGGED_IN, user);
-        this.router.navigate('dashboard');
+
+        if (this.fromRoute) {
+          this.router.navigate(this.fromRoute);
+        } else {
+          this.router.navigate('dashboard');
+        }
+
       })
       .catch(error => {
         console.warn('Failed to login due to cause', error);
