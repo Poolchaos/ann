@@ -18,6 +18,7 @@ export class App {
     private router: Router,
     private dataStore: DataStore,
     private eventAggregator: EventAggregator,
+    private cookieService: CookieService,
     private i18n: I18N
   ) {
     this.locales = [
@@ -33,9 +34,12 @@ export class App {
       { title: "Tshivenda", code: "ve" },
       { title: "Xitsonga", code: "ts" }
     ];
-    this.currentLocale = this.i18n.getLocale();
-
-    console.log(' ::>> this.currentLocale >>>> ', this.currentLocale);
+    const code = this.cookieService.getCookie('ann-locale');
+    if (code) {
+      this.setLocale({ code });
+    } else {
+      this.currentLocale = this.i18n.getLocale();
+    }
   }
 
   public configureRouter(config, router): void {
@@ -52,6 +56,7 @@ export class App {
     if(this.currentLocale !== code) {
       this.i18n.setLocale(code);
       this.currentLocale = code;
+      this.cookieService.setCookie('ann-locale', code);
     }
   }
 

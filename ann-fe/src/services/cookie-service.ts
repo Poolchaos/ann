@@ -1,6 +1,6 @@
 export class CookieService {
 
-  public setCookie(name: string, value: string, days: number): void {
+  public setCookie(name: string, value: string, days?: number): void {
     var expires = "";
     if (days) {
       var date = new Date();

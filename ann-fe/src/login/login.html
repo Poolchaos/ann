@@ -2,11 +2,11 @@
   <h1 i18n="page.login.title"></h1>
   <form>
     <div>
-      <label i18n="page.login.form.email.label"></label>:
+      <label i18n="page.login.form.email"></label>:
       <input type="text" value.bind="identity & validate" />
     </div>
     <div>
-      <label i18n="page.login.form.password.label"></label>:
+      <label i18n="page.login.form.password"></label>:
       <input type="password" value.bind="password & validate" />
     </div>
     <ul if.bind="validation.errors">
