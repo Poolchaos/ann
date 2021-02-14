@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const mongoose = require('mongoose');
 const UserModel = require('../models/user-model');
+const RegistrationModel = require('../models/registration-model');
 const ObjectID = require('mongodb').ObjectID;
 var jwt = require('jsonwebtoken');
 
@@ -17,14 +18,26 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
+  
+  const authHeader = req.headers['authorization']
+  const token = authHeader && authHeader.split(' ')[1];
+  
+  if (token == null) return res.sendStatus(401);
+
   try {
-
-    UserModel.find({}, function (err, docs) {
-      // docs.forEach
-      console.log(' ::>> docs >>>> ', docs);
-      res.send(docs);
+    const decrypted = jwt.verify(token, 'complete');
+    if (decrypted) {
+      return next();
+    }
+  } catch(e) {
+    console.log(' ::>> decrypt error >>>>> ', e);
+    return res.sendStatus(401);
+  }
+}, function(req, res, next) {
+  try {
+    RegistrationModel.find({}, function (err, docs) {
+      return res.send(docs);
     });
-
   } catch(e) {
     console.log(' ::>> error ', e);
   }
