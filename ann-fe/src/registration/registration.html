@@ -1,31 +1,34 @@
 <template>
-  <h1>Registration</h1>
+  <h1 i18n="page.register.title"></h1>
   <form>
     <div>
-      <label>*First Name</label>
+      <!-- toto: add required indicators -->
+      <!-- todo: add form validation -->
+
+      *<label i18n="page.register.form.firstName"></label>
       <input type="text" value.bind="firstName" placeholder="Jane" />
     </div>
     <div>
-      <label>*Surname</label>
+      *<label i18n="page.register.form.lastName"></label>
       <input type="text" value.bind="surname" placeholder="Doe" />
     </div>
     <div>
-      <label>*Email</label>
+      *<label i18n="page.register.form.email"></label>
       <input type="text" value.bind="email" placeholder="jane@example.com" />
     </div>
     <div>
-      <label>*Contact Number</label>
-      <input type="text" value.bind="number" placeholder="" />
+      *<label i18n="page.register.form.contactNumber"></label>
+      <input type="text" value.bind="number" />
     </div>
     <div>
-      <label>*Roles</label>
+      *<label i18n="page.register.form.role"></label>
       <div
         repeat.for="role of roles"
         click.trigger="selectRole(role)"
         style="${ role.selected ? 'background: rgb(119, 221, 231)' : '' }">${role.name}</div>
     </div>
     <div>
-      <button click.trigger="register()">Register</button>
+      <button click.trigger="register()" i18n="page.register.form.register-button"></button>
     </div>
   </form>
 </template>

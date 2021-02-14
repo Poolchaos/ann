@@ -14,13 +14,20 @@
     "login": {
       "title": "Teken Aan",
       "form": {
-        "email": {
-          "label": "Epos"
-        },
-        "password": {
-          "label": "Wagwoord"
-        },
+        "email": "Epos",
+        "password": "Wagwoord",
         "login-button": "Teken Aan"
+      }
+    },
+    "register": {
+      "title": "Registreer",
+      "form": {
+        "firstName": "Naam",
+        "lastName": "Van",
+        "email": "Epos",
+        "contactNumber": "Kontak Nommer",
+        "role": "Rol",
+        "register-button": "Registreer"
       }
     }
   }

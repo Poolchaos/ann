@@ -14,13 +14,20 @@
     "login": {
       "title": "Login",
       "form": {
-        "email": {
-          "label": "Email"
-        },
-        "password": {
-          "label": "Password"
-        },
+        "email": "Email",
+        "password": "Password",
         "login-button": "Login"
+      }
+    },
+    "register": {
+      "title": "Register",
+      "form": {
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "email": "Email",
+        "contactNumber": "Contact Number",
+        "role": "Role",
+        "register-button": "Register"
       }
     }
   }
