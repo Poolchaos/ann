@@ -6,6 +6,16 @@
       <li if.bind="!isAuthenticated"><button click.trigger="goToRegistration()">Register</button></li>
       <li if.bind="isAuthenticated"><button click.trigger="goToDashboard()">Dashboard</button></li>
       <li if.bind="isAuthenticated"><button click.trigger="logout()">Logout</button></li>
+      <li slule="float:right;">
+        
+        <ul>
+          <li repeat.for="locale of locales"
+          css="text-decoration: ${locale.code === currentLocale ? 'underline' : 'none'}"
+          click.trigger="setLocale(locale)">
+            ${locale.title}
+          </li>
+        </ul>
+      </li>
     </ul>
   </div>
   <router-view></router-view>

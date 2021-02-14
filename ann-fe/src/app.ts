@@ -1,22 +1,39 @@
 import { autoinject, computedFrom } from 'aurelia-framework';
 import { Router, NavigationInstruction, Next, RedirectToRoute, Redirect, RouteConfig } from 'aurelia-router';
-import { PLATFORM } from 'aurelia-pal';
+import { I18N } from 'aurelia-i18n';
 
 import { DataStore, IUser } from 'stores/data-store';
 import { EventAggregator } from 'aurelia-event-aggregator';
 import { EVENTS } from 'stores/events';
 import { AppRoutes } from 'app-routes';
 import { CookieService } from 'services/cookie-service';
-import { JSONPRequestMessage } from 'aurelia-http-client';
 
 @autoinject()
 export class App {
+  
+  public locales: any;
+  public currentLocale: any;
 
   constructor(
     private router: Router,
     private dataStore: DataStore,
-    private eventAggregator: EventAggregator
-  ) {}
+    private eventAggregator: EventAggregator,
+    private i18n: I18N
+  ) {
+    this.locales = [
+      {
+        title: "English",
+        code: "en"
+      },
+      {
+        title: "Русский",
+        code: "ru"
+      }
+    ];
+    this.currentLocale = this.i18n.getLocale();
+
+    console.log(' ::>> this.currentLocale >>>> ', this.currentLocale);
+  }
 
   public configureRouter(config, router): void {
     config.title = 'ANN';
@@ -25,6 +42,14 @@ export class App {
     let routeConfigs: RouteConfig[] = AppRoutes.routes;
     config.map(routeConfigs);
     this.router = router;
+  }
+
+  public setLocale(locale: { code: string }): void {
+    let code = locale.code
+    if(this.currentLocale !== code) {
+      this.i18n.setLocale(code);
+      this.currentLocale = code;
+    }
   }
 
   public goToHome(): void {

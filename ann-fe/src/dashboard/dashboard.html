@@ -1,4 +1,13 @@
 <template>
   <h1>Dashboard</h1>
   
+  <h1 i18n="users"></h1>
+  <ul>
+    <li repeat.for="user of users">
+      <b t="user.name"></b>:
+      <span>
+        ${user.name}
+      </span>
+    </li>
+  </ul>
 </template>
