@@ -7,12 +7,6 @@ import { RegistrationService } from './registration-service';
 @autoinject()
 export class Registration {
 
-  public roles: { name: string; selected?: boolean }[] = [
-    { name: 'Admin'},
-    { name: 'Joernalis'},
-    { name: 'Voice-Over' },
-    { name: 'User' }
-  ];
   public firstName: string;
   public surname: string;
   public email: string;
@@ -55,10 +49,8 @@ export class Registration {
       .on(this);
   }
 
-  public selectRole(role: { name: string; selected?: boolean; }): void {
-    this.roles.forEach(role => role.selected = false);
-    role.selected = true;
-    this.selectedRole = role.name;
+  public selectRole(role: string): void {
+    this.selectedRole = role;
   }
 
   public register(): void {

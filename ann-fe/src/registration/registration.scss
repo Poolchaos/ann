@@ -1,0 +1,63 @@
+
+@function shade($color, $percentage) {
+  @return mix(black, $color, $percentage);
+}
+
+.reg-roles {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+
+  li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 200px;
+    width: 25%;
+  }
+
+  li:nth-child(1) {
+    background-color: rgb(28, 211, 162);
+  }
+  li:nth-child(1):active {
+    background-color: shade(rgb(28, 211, 162), 5);
+  }
+  li:nth-child(1).selected {
+    background-color: shade(rgb(28, 211, 162), 20);
+    color: #fff;
+  }
+
+  li:nth-child(2) {
+    background-color: rgb(162, 173, 208);
+  }
+  li:nth-child(2):active {
+    background-color: shade(rgb(162, 173, 208), 5);
+  }
+  li:nth-child(2).selected {
+    background-color: shade(rgb(162, 173, 208), 20);
+    color: #fff;
+  }
+
+  li:nth-child(3) {
+    background-color: rgb(255, 155, 170);
+  }
+  li:nth-child(3):active {
+    background-color: shade(rgb(255, 155, 170), 5);
+  }
+  li:nth-child(3).selected {
+    background-color: shade(rgb(255, 155, 170), 20);
+    color: #fff;
+  }
+
+  li:nth-child(4) {
+    background-color: rgb(205, 167, 108);
+  }
+  li:nth-child(4):active {
+    background-color: shade(rgb(205, 167, 108), 5);
+  }
+  li:nth-child(4).selected {
+    background-color: shade(rgb(205, 167, 108), 20);
+    color: #fff;
+  }
+}

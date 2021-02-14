@@ -26,7 +26,6 @@
         "lastName": "Last Name",
         "email": "Email",
         "contactNumber": "Contact Number",
-        "role": "Role",
         "register-button": "Register"
       }
     }

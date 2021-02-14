@@ -21,21 +21,11 @@
       <input type="text" value.bind="number & validate" />
     </div>
     <div>
-      *<label i18n="page.register.form.role"></label>
-      <div
-        repeat.for="role of roles"
-        click.trigger="selectRole(role)"
-        style="${ role.selected ? 'background: rgb(119, 221, 231)' : '' }">${role.name}</div>
-    </div>
-    <ul class="reg-roles">
-      <li
-        click.trigger="selectRole('Admin')">Admin</li>
-      <li 
-        click.trigger="selectRole('Journalist')">Create news articles</li>
-      <li 
-        click.trigger="selectRole('Voice-Over')">Add voice over to articles</li>
-      <li 
-        click.trigger="selectRole('User')">Find and use articles</li>
+    <ul class="reg-roles hoverable">
+      <li click.trigger="selectRole('Admin')" class.bind="selectedRole === 'Admin' ? 'selected' : ''">Admin<br/>(This will be removed)</li>
+      <li click.trigger="selectRole('Journalist')" class.bind="selectedRole === 'Journalist' ? 'selected' : ''">Create news articles</li>
+      <li click.trigger="selectRole('Voice-Over')" class.bind="selectedRole === 'Voice-Over' ? 'selected' : ''">Add voice over to articles</li>
+      <li click.trigger="selectRole('User')" class.bind="selectedRole === 'User' ? 'selected' : ''">Find and use articles</li>
     </ul>
     <ul if.bind="validation.errors">
       <li repeat.for="error of validation.errors">

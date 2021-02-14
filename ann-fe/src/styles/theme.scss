@@ -1,0 +1,68 @@
+/*------------------------------------*\
+  #THEME SETTINGS
+\*------------------------------------*/
+
+:root {
+  /*  ---- colors ----  */
+  --gray: #3f3f40;
+  --blue: #13a89e;
+  --red: #a81322;
+
+  /* ---- font sizes ---- */
+  --tiny: 14px;
+  --small: 16px;
+  --medium: 20px;
+  --large: 28px;
+}
+
+/*------------------------------------*\
+  #THEME COLOUR CLASSES
+\*------------------------------------*/
+
+.gray-text {
+  color: var(--gray)!important;
+}
+
+.blue-text {
+  color: var(--blue);
+}
+
+.red-text {
+  color: var(--red);
+}
+
+/*------------------------------------*\
+  #THEME FONTS
+\*------------------------------------*/
+
+// @font-face {
+//   font-family: 'Calibri Light';
+//   font-style: normal;
+//   font-weight: normal;
+//   src: local('Calibri Light'), url('../fonts/calibril.woff') format('woff');
+// }
+
+// html, body, div, a, button, li {
+//   font-family: 'Calibri light', 'Roboto'!important;
+// }
+
+/*------------------------------------*\
+  #THEME FONT CLASSES
+\*------------------------------------*/
+
+
+.tiny-font {
+  font-size: var(--tiny);
+}
+
+.small-font {
+  font-size: var(--small);
+}
+
+.medium-font {
+  font-size: var(--medium);
+}
+
+.large-font {
+  font-size: var(--large);
+}
