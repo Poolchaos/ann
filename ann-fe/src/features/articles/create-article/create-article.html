@@ -1,0 +1,26 @@
+<template>
+  <div class="container content">
+    <form submit.trigger="createArticle($event)">
+      <div>
+        *<label>Artikel Titel</label>
+        <input type="text" value.bind="title" />
+      </div>
+      <div>
+        *<label>Kategorie</label>
+        <input type="text" value.bind="category" />
+        <label class="tiny-font"><i>Kies n kategorie vir die artikel</i></label>
+      </div>
+      <div>
+        *<label>Artikelinhoud</label>
+        <input id="x" type="hidden" name="content">
+        <trix-editor input="x"></trix-editor>
+        <label class="tiny-font"><i>Voeg jou artikel by</i></label>
+      </div>
+      <div>
+        <input type="file" change.delegate="uploadFlow($event)" />
+      </div>
+      <button disabled.bind="disable">submit</button>
+      <progress id="progressBar" value="0" max="100" style="width:300px;" if.bind="submitted"></progress>
+    </form>
+  </div>
+</template>

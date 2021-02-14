@@ -61,6 +61,11 @@ export class DataStore {
   public get isVoiceOver(): boolean {
     return this.USER ? this.USER.role === DataStore.ROLES.VOICE_OVER : false;
   }
+
+  @computedFrom('USER.roles')
+  public get isUser(): boolean {
+    return this.USER ? this.USER.role === DataStore.ROLES.USER : false;
+  }
 }
 
 export interface IUser {

@@ -7,14 +7,14 @@
   <div class="nav">
     <ul style="width: 100%;margin: 0;padding: 0">
       <li><button click.trigger="goToHome()" i18n="nav-links.home"></button></li>
-      <li if.bind="!isAuthenticated"><button click.trigger="goToLogin()" i18n="nav-links.login"></button></li>
-      <li if.bind="!isAuthenticated"><button click.trigger="goToRegistration()" i18n="nav-links.register"></button></li>
-      <li if.bind="isAuthenticated"><button click.trigger="goToDashboard()" i18n="nav-links.dashboard"></button></li>
-      <li if.bind="isAuthenticated"><button click.trigger="logout()" i18n="nav-links.logout"></button></li>
+      <li class="hoverable" if.bind="!isAuthenticated"><button click.trigger="goToLogin()" i18n="nav-links.login"></button></li>
+      <li class="hoverable" if.bind="!isAuthenticated"><button click.trigger="goToRegistration()" i18n="nav-links.register"></button></li>
+      <li class="hoverable" if.bind="isAuthenticated"><button click.trigger="goToDashboard()" i18n="nav-links.dashboard"></button></li>
+      <li class="hoverable" if.bind="isAuthenticated"><button click.trigger="logout()" i18n="nav-links.logout"></button></li>
       <li style="float:right;">
         <img src="../static/1280px-Font_Awesome_5_solid_language.svg.png" width="50px" height="40px" />
         <ul>
-          <li repeat.for="locale of locales"
+          <li class="hoverable" repeat.for="locale of locales"
           css="text-decoration: ${locale.code === currentLocale ? 'underline' : 'none'}"
           click.trigger="setLocale(locale)">
             ${locale.title}

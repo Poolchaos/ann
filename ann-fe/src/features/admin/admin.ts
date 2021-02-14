@@ -1,10 +1,9 @@
-import { customElement, containerless } from 'aurelia-framework';
+import { autoinject, containerless } from 'aurelia-framework';
 
 import { DashboardService } from 'dashboard/dashboard-service';
 import { IUser } from 'stores/data-store';
 
-@containerless()
-@customElement('admin')
+@autoinject()
 export class Admin {
   
   public users: IUser[] = [];

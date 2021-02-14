@@ -7,7 +7,7 @@ export class AppRoutes {
   }
 
   public static get routes(): RouteConfig[] {
-    return this.loginRoutes().concat(this.registrationRoutes(), this.appRoutes())
+    return this.loginRoutes().concat(this.registrationRoutes(), this.appRoutes(), this.authRoutes())
   }
 
   
@@ -74,13 +74,6 @@ export class AppRoutes {
       nav: false,
       title: 'Error',
       auth: false
-    // }, {
-    //   route: 'redirect',
-    //   name: 'redirect',
-    //   moduleId: PLATFORM.moduleName('redirect/redirect'),
-    //   nav: false,
-    //   title: 'Redirect',
-    //   auth: false
     }, {
       route: ['', 'home'],
       name: 'home',
@@ -88,13 +81,40 @@ export class AppRoutes {
       nav: true,
       title: 'Home',
       auth: false
-    }, {
+    }];
+  }
+
+  private static authRoutes(): RouteConfig[] {
+    return [{
       route: 'dashboard',
       name: 'dashboard',
       moduleId: PLATFORM.moduleName('dashboard/dashboard'),
       nav: true,
       title: 'Dashboard',
-      auth: true
+      auth: true,
+      settings: {
+        access: ['DEFAULT_USER', 'Admin', 'Journalist', 'Voice-Over']
+      }
+    }, {
+      route: 'articles',
+      name: 'articles',
+      moduleId: PLATFORM.moduleName('features/articles/articles'),
+      nav: true,
+      title: 'Articles',
+      auth: false,
+      settings: {
+        access: ['Journalist']
+      }
+    }, {
+      route: 'create-article',
+      name: 'create-article',
+      moduleId: PLATFORM.moduleName('features/articles/create-article/create-article'),
+      nav: true,
+      title: 'Create Article',
+      auth: false,
+      settings: {
+        access: ['Journalist']
+      }
     }];
   }
 }

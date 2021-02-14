@@ -28,6 +28,23 @@
         "contactNumber": "Kontak Nommer",
         "register-button": "Registreer"
       }
+    },
+    "journalist": {
+
+    },
+    "voice-over": {
+
+    },
+    "user": {
+      "dashboard": {
+        "news": "Nuus",
+        "sport": "Sport",
+        "politics": "Politiek",
+        "crime": "Misdaad",
+        "technical": "Tegnies",
+        "buniness": "Sake",
+        "travel": "Reis"
+      }
     }
   }
 }

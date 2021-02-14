@@ -1,6 +1,7 @@
 import { autoinject } from 'aurelia-framework';
+import { Router } from 'aurelia-router';
 
-import { DataStore, IUser } from 'stores/data-store';
+import { DataStore } from 'stores/data-store';
 import { CookieService } from 'services/cookie-service';
 import { EventsStore } from 'stores/events-store';
 import { EVENTS } from 'stores/events';
@@ -11,7 +12,8 @@ export class Dashboard {
   constructor(
     private dataStore: DataStore,
     private cookieService: CookieService,
-    private eventsStore: EventsStore
+    private eventsStore: EventsStore,
+    private router: Router
   ) {}
 
   public activate(): void {
@@ -38,11 +40,10 @@ export class Dashboard {
   }
 
   private userValidated(): void {
-    console.log(' ::>> userValidated this.dataStore ', this.dataStore.user);
     if (this.dataStore.isAdmin) {
-      console.log(' ::>> is admin ');
+      this.router.navigate('admin');
     } else if (this.dataStore.isJournalist) {
-      console.log(' ::>> is journalist ');
+      this.router.navigate('articles');
     } else if (this.dataStore.isVoiceOver) {
       console.log(' ::>> is voice-over ');
     }

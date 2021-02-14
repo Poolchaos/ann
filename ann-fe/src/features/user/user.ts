@@ -1,5 +1,5 @@
 import { customElement, containerless } from 'aurelia-framework';
 
-export class VoiceOver {
+export class User {
   
 }
