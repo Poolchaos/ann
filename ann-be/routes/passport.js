@@ -149,6 +149,7 @@ router.post(
 router.post('/authenticate-token',
   authenticateToken,
   function(req, res, next) {
+    console.log(' ::>> authenticate token ');
     try {
       UserModel.find({}, function (err, docs) {
         if (err || docs.length == 0) return res.sendStatus(500, {error: err});

@@ -1,5 +1,7 @@
 import { autoinject } from 'aurelia-framework';
-import { ValidationControllerFactory, ValidationController, ValidationRules, validateTrigger } from 'aurelia-validation';
+import { ValidationControllerFactory, ValidationController,  validateTrigger } from 'aurelia-validation';
+
+import { ArticleService } from '../articles-service';
 
 @autoinject()
 export class CreateArticle {
@@ -11,7 +13,10 @@ export class CreateArticle {
   
   private validation: ValidationController;
 
-  constructor(validationControllerFactory: ValidationControllerFactory) {
+  constructor(
+    private articleService: ArticleService,
+    validationControllerFactory: ValidationControllerFactory
+  ) {
     this.validation = validationControllerFactory.createForCurrentScope();
     this.validation.validateTrigger = validateTrigger.change;
   }
@@ -51,11 +56,24 @@ export class CreateArticle {
       const payload = {
         title: this.title,
         category: this.category,
-        content,
+        content: messageContent,
         files: this.fileContents
       };
 
       console.log(' ::>> payload >>> ', payload);
+      this.articleService
+        .createArticle(
+          this.title,
+          this.category,
+          messageContent,
+          this.fileContents
+        )
+        .then(() => {
+          console.log(' ::>> article created >>>> ');
+        })
+        .catch(error => {
+          console.log(' ::>> failed to create article >>>> ');
+        });
     }
   }
 }
