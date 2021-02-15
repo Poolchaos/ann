@@ -9,5 +9,4 @@ export class Admin {
   public navToMembers(): void {
     this.router.navigate('users');
   }
-
 }
