@@ -22,7 +22,7 @@ const authenticateToken = function(req, res, next) {
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1];
     
-    if (token == null) return res.sendStatus(401);
+    if (!token) return res.sendStatus(401);
 
     const decrypted = jwt.verify(token, 'complete');
     if (decrypted && decrypted.role === ROLES.ADMIN) {
@@ -38,7 +38,7 @@ const authenticateAnonymous = function (req, res, next) {
   const authHeader = req.headers['authorization']
   const token = authHeader && authHeader.split(' ')[1];
   
-  if (token == null) return res.sendStatus(401);
+  if (!token) return res.sendStatus(401);
 
   AnonymousModel.find({}, function (err, docs) {
     if (err) return res.send(500, {error: err});
@@ -55,7 +55,7 @@ const tokenValidate = function (req, res, next) {
   const authHeader = req.headers['authorization']
   const token = authHeader && authHeader.split(' ')[1];
   
-  if (token == null) return res.sendStatus(401);
+  if (!token) return res.sendStatus(401);
   next();
 }
 
