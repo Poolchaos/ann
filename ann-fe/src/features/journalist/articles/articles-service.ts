@@ -36,4 +36,26 @@ export class ArticleService {
     });
   }
   
+  public retrieveArticles(): Promise<any> {
+
+    return new Promise(resolve => {
+      this.httpClient.createRequest('http://localhost:3000/articles')
+        .asGet()
+        .send()
+        .then(
+          (response) => {
+            try {
+              const user = JSON.parse(response.response);
+              resolve(user);
+            } catch(e) {
+              resolve(response.response);
+            }
+          },
+          (error) => {
+            console.warn(' ::>> error ', error);
+          }
+        );
+    });
+  }
+  
 }

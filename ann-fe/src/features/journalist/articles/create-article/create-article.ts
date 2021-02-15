@@ -1,5 +1,10 @@
 import { autoinject } from 'aurelia-framework';
-import { ValidationControllerFactory, ValidationController,  validateTrigger } from 'aurelia-validation';
+import {
+  ValidationControllerFactory,
+  ValidationController,
+  validateTrigger
+} from 'aurelia-validation';
+import { Router } from 'aurelia-router';
 
 import { ArticleService } from '../articles-service';
 
@@ -15,6 +20,7 @@ export class CreateArticle {
 
   constructor(
     private articleService: ArticleService,
+    private router: Router,
     validationControllerFactory: ValidationControllerFactory
   ) {
     this.validation = validationControllerFactory.createForCurrentScope();
@@ -70,6 +76,7 @@ export class CreateArticle {
         )
         .then(() => {
           console.log(' ::>> article created >>>> ');
+          this.router.navigate('articles');
         })
         .catch(error => {
           console.log(' ::>> failed to create article >>>> ');

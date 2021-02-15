@@ -22,27 +22,26 @@ router.post('/', authenticateToken, function(req, res, next) {
       return res.sendStatus(500, { error: err });
     }
     let article = req.body;
+    article._id = new ObjectID();
 
     console.log(' ::>> article >>>>> ', article);
 
     var instance = new ArticleModel(article);
     // todo: upload files
-    // instance.save(function (err) {
-    //   if (err) return res.send(500, {error: err});
-    //   return res.sendStatus(200);
-    //   // saved!
-    // });
+    instance.save(function (err) {
+      if (err) return res.send(500, {error: err});
+      return res.sendStatus(200);
+      // saved!
+    });
 
-    return res.sendStatus(401, { error: err });
   } catch(e) {
     return res.sendStatus(500, { error: err });
   }
 });
 
-/* GET users listing. */
 router.get('/', authenticateToken, function(req, res, next) {
   try {
-    UserModel.find({}, function (err, docs) {
+    ArticleModel.find({}, function (err, docs) {
       return res.send(docs);
     });
   } catch(e) {
@@ -50,17 +49,17 @@ router.get('/', authenticateToken, function(req, res, next) {
   }
 });
 
-router.delete('/', authenticateToken, function(req, res, next) {
-  try {
-    console.log(' ::>> req >>> ', req.body);
+// router.delete('/', authenticateToken, function(req, res, next) {
+//   try {
+//     console.log(' ::>> req >>> ', req.body);
 
-    if (!req.body || !req.body.userId) {
-      return res.sendStatus(500, { error: err });
-    }
-    return removeUser(req, res);
-  } catch(e) {
-    console.log(' ::>> error ', e);
-  }
-});
+//     if (!req.body || !req.body.userId) {
+//       return res.sendStatus(500, { error: err });
+//     }
+//     return removeUser(req, res);
+//   } catch(e) {
+//     console.log(' ::>> error ', e);
+//   }
+// });
 
 module.exports = router;
