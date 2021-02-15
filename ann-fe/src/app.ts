@@ -74,7 +74,7 @@ export class App {
 
       this.eventsStore
       .subscribeAndPublish(
-        EVENTS.USER_LOGGED_IN,
+        EVENTS.USER_REHYDRATE,
         EVENTS.USER_UPDATED,
         user,
         () => this.userValidated()

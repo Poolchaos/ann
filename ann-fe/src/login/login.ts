@@ -3,7 +3,7 @@ import { Router } from 'aurelia-router';
 import { ValidationControllerFactory, ValidationController, ValidationRules, validateTrigger } from 'aurelia-validation';
 
 import { AuthenticateService } from "./authenticate-service";
-import { IUser } from 'stores/data-store';
+import { ILogin } from 'stores/data-store';
 import { EventsStore } from 'stores/events-store';
 import { EVENTS } from 'stores/events';
 
@@ -72,7 +72,7 @@ export class Login {
       });
   }
 
-  private handleUserAuthenticated(user: IUser): void {
+  private handleUserAuthenticated(user: ILogin): void {
 
     this.eventsStore
       .subscribeAndPublish(

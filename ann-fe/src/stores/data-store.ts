@@ -13,7 +13,7 @@ export class DataStore {
     VOICE_OVER: 'Voice-Over',
     USER: 'DEFAULT_USER'
   };
-  private USER: IUser;
+  private USER: ILogin | IUser;
 
   constructor(
     private eventAggregator: EventAggregator,
@@ -27,11 +27,12 @@ export class DataStore {
   }
 
   private initialiseSubscriptions(): void {
-    this.eventAggregator.subscribe(EVENTS.USER_LOGGED_IN, (data: IUser) => this.user = data);
+    this.eventAggregator.subscribe(EVENTS.USER_LOGGED_IN, (data: ILogin) => this.user = data);
+    this.eventAggregator.subscribe(EVENTS.USER_REHYDRATE, (data: IUser) => this.user = data);
     this.eventAggregator.subscribe(EVENTS.USER_LOGGED_OUT, (data: IUser) => this.user = data);
   }
 
-  public set user(user: IUser) {
+  public set user(user: ILogin | IUser) {
     this.USER = user;
     if (user) {
       this.cookieService.setCookie('ann-user', JSON.stringify(user), 3);
@@ -42,7 +43,7 @@ export class DataStore {
   }
 
   @computedFrom('USER')
-  public get user(): IUser {
+  public get user(): ILogin | IUser {
     return this.USER;
   }
 
@@ -65,6 +66,11 @@ export class DataStore {
   public get isUser(): boolean {
     return this.USER ? this.USER.role === DataStore.ROLES.USER : false;
   }
+}
+
+export interface ILogin {
+  token: string;
+  role: string;
 }
 
 export interface IUser {

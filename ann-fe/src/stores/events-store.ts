@@ -18,7 +18,10 @@ export class EventsStore {
         return;
       }
 
-      this.eventAggregator.subscribe(subEvt, (data: any) => subCallback(data));
+      const sub = this.eventAggregator.subscribe(subEvt, (data: any) => {
+        sub && sub.dispose();
+        subCallback(data);
+      });
       this.eventAggregator.publish(pubEvt, pubData);
     }
 }
