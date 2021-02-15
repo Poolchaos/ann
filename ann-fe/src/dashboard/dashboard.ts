@@ -1,37 +1,29 @@
 import { autoinject } from 'aurelia-framework';
-import { Router, RouteConfig } from 'aurelia-router';
+import { Router } from 'aurelia-router';
 
 import { DataStore } from 'stores/data-store';
-import { CookieService } from 'services/cookie-service';
-import { EventsStore } from 'stores/events-store';
-import { EVENTS } from 'stores/events';
 import { DashboardRoutes } from './dashboard-routes';
 
 @autoinject()
 export class Dashboard {
 
-  public router: Router
+  constructor(
+    private dataStore: DataStore,
+    private router: Router
+  ) {}
 
-  constructor(private dataStore: DataStore) {}
-
-  public configureRouter(config, router): void {
-    
-    let routeConfigs: RouteConfig[];
-
+  public activate(): void {
     if (this.dataStore.user) {
-      routeConfigs = DashboardRoutes.routes;
-      routeConfigs.forEach(route => {
+      const routes = DashboardRoutes.routes;
+      console.log(' ::>> this.dataStore.user.role.toLowerCase() >>> ', this.dataStore.user.role.toLowerCase());
+      routes.forEach(route => {
+        console.log(' ::>> route.name ', route.name);
         if (this.dataStore.user.role.toLowerCase() === route.name) {
-          // @ts-ignore
-          route.route.push('');
+          console.log(' ::>> routing to ', route.name);
+          this.router.navigate(route.name);
         }
       });
-    } else {
-      routeConfigs = DashboardRoutes.globalRoutes;
     }
-
-    config.map(routeConfigs);
-    this.router = router;
   }
 
 }

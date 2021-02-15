@@ -7,26 +7,21 @@ export class DashboardRoutes {
     return this.adminRoutes().concat(this.journalistRoutes(), this.voiceOverRoutes(), this.defaultUserRoutes());
   }
 
-  public static get globalRoutes(): RouteConfig[] {
-    return this.global();
-  }
-
-  private static global(): RouteConfig[] {
-    return [{
-      route: ['', 'error/:code'],
-      name: 'error',
-      moduleId: PLATFORM.moduleName('error/error'),
-      nav: false,
-      title: 'Error',
-      auth: false
-    }];
-  }
-
   private static adminRoutes(): RouteConfig[] {
     return [{
-      route: ['admin'],
+      route: 'admin',
       name: 'admin',
       moduleId: PLATFORM.moduleName('features/admin/admin'),
+      nav: true,
+      title: 'Admin',
+      auth: true,
+      settings: {
+        access: ['Admin']
+      }
+    }, {
+      route: 'users',
+      name: 'users',
+      moduleId: PLATFORM.moduleName('features/admin/users/users'),
       nav: true,
       title: 'Admin',
       auth: true,
@@ -38,7 +33,7 @@ export class DashboardRoutes {
 
   private static journalistRoutes(): RouteConfig[] {
     return [{
-      route: ['journalist'],
+      route: 'journalist',
       name: 'journalist',
       moduleId: PLATFORM.moduleName('features/journalist/journalist'),
       nav: true,
@@ -72,7 +67,7 @@ export class DashboardRoutes {
 
   private static voiceOverRoutes(): RouteConfig[] {
     return [{
-      route: ['voice-over'],
+      route: 'voice-over',
       name: 'voice-over',
       moduleId: PLATFORM.moduleName('features/voice-over/voice-over'),
       nav: true,
@@ -86,7 +81,7 @@ export class DashboardRoutes {
 
   private static defaultUserRoutes(): RouteConfig[] {
     return [{
-      route: ['default-user'],
+      route: 'default_user',
       name: 'default_user',
       moduleId: PLATFORM.moduleName('features/default_user/default_user'),
       nav: true,

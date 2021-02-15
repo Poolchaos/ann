@@ -10,6 +10,7 @@ import { CookieService } from 'services/cookie-service';
 
 import './includes';
 import { EventsStore } from 'stores/events-store';
+import { DashboardRoutes } from 'dashboard/dashboard-routes';
 
 @autoinject()
 export class App {
@@ -47,11 +48,11 @@ export class App {
   }
 
   public configureRouter(config, router): void {
-    console.log(' ::>> configROuter');
     config.title = 'ANN';
     config.options.pushState = true;
     config.addPipelineStep('authorize', AuthStep);
-    let routeConfigs: RouteConfig[] = AppRoutes.routes;
+    
+    const routeConfigs: RouteConfig[] = [].concat(AppRoutes.routes, DashboardRoutes.routes);
     config.map(routeConfigs);
     this.router = router;
   }
@@ -136,7 +137,6 @@ export class AuthStep {
   ) {}
 
   run(navigationInstruction: NavigationInstruction, next: Next): any {
-    console.log(' ::>> navigationInstruction >>>>> ');
 
     const cookie = this.cookieService.getCookie('ann-user');
     const user: IUser = cookie ? JSON.parse(cookie) : null;
@@ -152,25 +152,24 @@ export class AuthStep {
     /*BLOCKED*/
     let isBlocked: boolean = navigationInstruction.getAllInstructions().some(i => i.config.isBlocked);
     if (isBlocked) {
-      return next.cancel(new Redirect('/error/1'));
+      return next.cancel(new Redirect('/error?code=1'));
     }
 
     /*AUTHORISED*/
-    let allInstructions: NavigationInstruction[] = navigationInstruction.getAllInstructions();
-    let nextInstruction: NavigationInstruction = allInstructions[1];
-    let access: any = nextInstruction ? nextInstruction.config.settings.access || nextInstruction.config.settings : null;
-    
-    console.log(' ::>> role check ', user, access);
+    const allInstructions: NavigationInstruction[] = navigationInstruction.getAllInstructions();
+    const currentInstruction =  allInstructions[0];
+    const access: any = currentInstruction ? currentInstruction.config.settings.access : null;
+
     if (access && user && user.role) {
       let hasAccess = false;
 
-      for (let role of access) {
+      for (const role of access) {
         if (role === user.role) {
           hasAccess = true;
         }
       }
       if (!hasAccess) {
-        return next.cancel(new Redirect('/error/2'));
+        return next.cancel(new Redirect('/error?code=2'));
       }
     }
 

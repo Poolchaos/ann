@@ -4,7 +4,7 @@ import { HttpClient } from 'aurelia-http-client';
 import { DataStore, IUser } from 'stores/data-store';
 
 @autoinject()
-export class DashboardService {
+export class UserService {
 
   constructor(
     private httpClient: HttpClient,

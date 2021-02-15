@@ -28,6 +28,11 @@ export class LoginService {
             console.log(' ::>> response ', response);
             try {
               const user = JSON.parse(response.response);
+              
+              this.httpClient.configure(req => {
+                req.withHeader('Authorization', 'Bearer ' + user.token);
+              });
+
               resolve(user);
             } catch(e) {
               resolve(response.response);

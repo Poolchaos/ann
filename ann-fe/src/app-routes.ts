@@ -7,7 +7,7 @@ export class AppRoutes {
   }
 
   public static get routes(): RouteConfig[] {
-    return this.loginRoutes().concat(this.registrationRoutes(), this.appRoutes(), this.authRoutes())
+    return this.errorRoutes().concat(this.loginRoutes(), this.registrationRoutes(), this.appRoutes(), this.authRoutes());
   }
 
   private static loginRoutes(): RouteConfig[] {
@@ -19,7 +19,7 @@ export class AppRoutes {
       title: 'Login',
       auth: false
     }
-    // todo: add forpot password
+    // todo: add forgot password
     ];
   }
 
@@ -77,6 +77,17 @@ export class AppRoutes {
       settings: {
         access: ['DEFAULT_USER', 'Admin', 'Journalist', 'Voice-Over']
       }
+    }];
+  }
+
+  private static errorRoutes(): RouteConfig[] {
+    return [{
+      route: 'error',
+      name: 'error',
+      moduleId: PLATFORM.moduleName('error/error'),
+      nav: false,
+      title: 'Error',
+      auth: false
     }];
   }
 }

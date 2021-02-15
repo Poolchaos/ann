@@ -2,7 +2,8 @@
   <form class="">
     Logo here
     <h1 class="">Error</h1>
-    <h2 class="">Sorry, the page cannot be found.</h2>
+    <h2 class="" if.bind="code === '1'">Sorry, the page cannot be found.</h2>
+    <h2 class="" if.bind="code === '2'">You are not authorised to view this page.</h2>
     <div class="">
       <button class="" click.delegate="back()">Go Back</button>
     </div>
