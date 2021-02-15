@@ -17,31 +17,25 @@ var db = mongoose.connection;
 //Bind connection to error event (to get notification of connection errors)
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-const removeUser = function(userId) {
+const removeUser = function(req, res) {
+  const user = req.body;
   UserRequestModel.deleteOne(
-    { _id: userId },
+    { _id: user.userId },
     function (err) {
       if (err) return res.send(500, { error: err });
-      return res.sendStatus(200);
-      // removed
+      return updateRegistration(res, user)
     }
   );
 }
 
-const updateRegistration = function(userId) {
+const updateRegistration = function(res, user) {
   RegistrationModel.findOneAndUpdate(
-    { _id: userId },
-    { ...user, status: '' },// todo: set enum deleted
+    { _id: user.userId },
+    { status: 'removed' },// todo: set enum deleted
     { upsert: true },
     function (err) {
       if (err) return res.send(500, {error: err});
-          
-      var user_instance = new UserRequestModel(user);
-      user_instance.save(function (err) {
-        if (err) return res.send(500, {error: err});
-
-        return res.sendStatus(200);
-      });
+      return res.sendStatus(200);
     }
   );
 }
@@ -87,10 +81,7 @@ router.delete('/', authenticateToken, function(req, res, next) {
     if (!req.body || !req.body.userId) {
       return res.sendStatus(500, { error: err });
     }
-    removeUser(req.body.userId);
-    updateRegistration(req.body.userId)
-
-    return res.sendStatus(500);
+    return removeUser(req, res);
   } catch(e) {
     console.log(' ::>> error ', e);
   }

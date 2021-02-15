@@ -53,6 +53,8 @@ router.post(
             sendEmail(user);
             return res.send(user);
           });
+        } else if (docs[0].status === 'removed') {
+          return res.send(500, { error: 'A user with this email has been removed from the system' });
         } else {
           return res.sendStatus(401);
         }
@@ -88,7 +90,7 @@ router.post(
           
           RegistrationModel.findOneAndUpdate(
             { _id: user._id },
-            { ...user, status: 'registration-complete' },
+            { status: 'registration-complete' },
             { upsert: true },
             function (err) {
               if (err) return res.send(500, {error: err});
@@ -120,7 +122,7 @@ router.post(
       const email = req.body ? req.body.email : null;
       const password = req.body ? req.body.password : null;
       
-      if (token == null || email == null) return res.sendStatus(401);
+      if (!token || email == null) return res.sendStatus(401);
 
       UserResponseModel.find({ email }, function (err, docs) {
         if (err || docs.length == 0) return res.sendStatus(401, {error: err});

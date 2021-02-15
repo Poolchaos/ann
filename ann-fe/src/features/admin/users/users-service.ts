@@ -32,7 +32,7 @@ export class UserService {
     });
   }
   
-  public removeUser(userId: string): Promise<IUser[]> {
+  public removeUser(userId: string): Promise<void> {
     return new Promise(resolve => {
       this.httpClient.createRequest('http://localhost:3000/users')
         .asDelete()
@@ -41,6 +41,7 @@ export class UserService {
         .then(
           () => {
             console.log(' ::>> successfully removed member ');
+            resolve();
           },
           (error) => {
             console.warn(' ::>> error ', error);

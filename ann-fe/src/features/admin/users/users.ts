@@ -45,11 +45,10 @@ export class Admin {
   }
 
   private removeConfirmed(userId: string): void {
-    console.log(' ::>> remove user ');
     this.userService
       .removeUser(userId)
       .then(() => {
-        console.log(' ::>> remove user >>>> ');
+        this.users = this.users.filter(user => user._id !== userId);
       })
       .catch(() => {
 
