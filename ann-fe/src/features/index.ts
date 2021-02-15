@@ -5,6 +5,6 @@ export function configure(config: FrameworkConfiguration): void {
   config.globalResources([
     PLATFORM.moduleName('./admin/admin'),
     PLATFORM.moduleName('./voice-over/voice-over'),
-    PLATFORM.moduleName('./user/user')
+    PLATFORM.moduleName('./default_user/default_user')
   ]);
 }

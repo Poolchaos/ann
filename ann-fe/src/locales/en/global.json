@@ -26,7 +26,8 @@
         "lastName": "Last Name",
         "email": "Email",
         "contactNumber": "Contact Number",
-        "register-button": "Register"
+        "register-button": "Register",
+        "role": "Role"
       }
     },
     "journalist": {

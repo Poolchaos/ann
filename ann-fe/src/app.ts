@@ -9,6 +9,7 @@ import { AppRoutes } from 'app-routes';
 import { CookieService } from 'services/cookie-service';
 
 import './includes';
+import { EventsStore } from 'stores/events-store';
 
 @autoinject()
 export class App {
@@ -21,7 +22,8 @@ export class App {
     private dataStore: DataStore,
     private eventAggregator: EventAggregator,
     private cookieService: CookieService,
-    private i18n: I18N
+    private i18n: I18N,
+    private eventsStore: EventsStore
   ) {
     this.locales = [
       { title: "Afrikaans", code: "af" },
@@ -45,12 +47,47 @@ export class App {
   }
 
   public configureRouter(config, router): void {
+    console.log(' ::>> configROuter');
     config.title = 'ANN';
     config.options.pushState = true;
     config.addPipelineStep('authorize', AuthStep);
     let routeConfigs: RouteConfig[] = AppRoutes.routes;
     config.map(routeConfigs);
     this.router = router;
+  }
+
+  public activate(): void {
+    this.init();
+  }
+
+  private init(): void {
+    try {
+      let user = JSON.parse(this.cookieService.getCookie('ann-user'));
+      if (!user || user === 'null') {
+        return;
+      }
+
+      this.eventsStore
+      .subscribeAndPublish(
+        EVENTS.USER_LOGGED_IN,
+        EVENTS.USER_UPDATED,
+        user,
+        () => this.userValidated()
+      );
+    } catch(e) {}
+  }
+
+  private userValidated(): void {
+
+
+    const currentInstruction = location.href.split('/');
+    const routeName = currentInstruction[currentInstruction.length - 1];
+    const anonymousRoutes = ['login', 'registration', 'complete-registration', 'registration-complete', 'email-sent'];
+
+    if (anonymousRoutes.includes(routeName)) {
+      this.router.navigate('dashboard');
+      location.href = location.href.replace(routeName, 'dashboard');
+    }
   }
 
   public setLocale(locale: { code: string }): void {
@@ -90,7 +127,7 @@ export class App {
 }
 
 @autoinject()
-class AuthStep {
+export class AuthStep {
   private showLoader: boolean;
 
   constructor(
@@ -99,9 +136,11 @@ class AuthStep {
   ) {}
 
   run(navigationInstruction: NavigationInstruction, next: Next): any {
+    console.log(' ::>> navigationInstruction >>>>> ');
 
     const cookie = this.cookieService.getCookie('ann-user');
     const user: IUser = cookie ? JSON.parse(cookie) : null;
+    console.log(' :>> user ==== ', user);
     /*AUTH*/
     let isAuthRoute: boolean = navigationInstruction.getAllInstructions().some(i => i.config.auth);
     if (isAuthRoute) {
@@ -120,7 +159,8 @@ class AuthStep {
     let allInstructions: NavigationInstruction[] = navigationInstruction.getAllInstructions();
     let nextInstruction: NavigationInstruction = allInstructions[1];
     let access: any = nextInstruction ? nextInstruction.config.settings.access || nextInstruction.config.settings : null;
-
+    
+    console.log(' ::>> role check ', user, access);
     if (access && user && user.role) {
       let hasAccess = false;
 

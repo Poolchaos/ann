@@ -9,9 +9,9 @@ export class DataStore {
 
   private static ROLES = {
     ADMIN: 'Admin',
-    JOURNALIST: 'Joernalis',
+    JOURNALIST: 'Journalist',
     VOICE_OVER: 'Voice-Over',
-    USER: 'User'
+    USER: 'DEFAULT_USER'
   };
   private USER: IUser;
 
@@ -32,7 +32,6 @@ export class DataStore {
   }
 
   public set user(user: IUser) {
-    console.log(' ::>> setting user >>>> ');
     this.USER = user;
     if (user) {
       this.cookieService.setCookie('ann-user', JSON.stringify(user), 3);
