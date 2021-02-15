@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const ROLES = require('../enums/roles');
+const AnonymousModel = require('../models/anonymous-model');
 const UserRequestModel = require('../models/user-request-model');
 
 const authenticateUser = function(res, next, userId) {
@@ -33,4 +34,33 @@ const authenticateToken = function(req, res, next) {
   }
 }
 
-module.exports = { authenticateToken };
+const authenticateAnonymous = function (req, res, next) {
+  const authHeader = req.headers['authorization']
+  const token = authHeader && authHeader.split(' ')[1];
+  
+  if (token == null) return res.sendStatus(401);
+
+  AnonymousModel.find({}, function (err, docs) {
+    if (err) return res.send(500, {error: err});
+    if (docs[0]) {
+      if (token.indexOf(docs[0].anonymous) >= 0) {
+        return next();
+      }
+    }
+    return res.sendStatus(401)
+  });
+};
+
+const tokenValidate = function (req, res, next) {
+  const authHeader = req.headers['authorization']
+  const token = authHeader && authHeader.split(' ')[1];
+  
+  if (token == null) return res.sendStatus(401);
+  next();
+}
+
+module.exports = {
+  authenticateToken,
+  authenticateAnonymous,
+  tokenValidate
+};

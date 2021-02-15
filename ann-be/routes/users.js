@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const UserRequestModel = require('../models/user-request-model');
 const RegistrationModel = require('../models/registration-model');
 const ObjectID = require('mongodb').ObjectID;
-var jwt = require('jsonwebtoken');
 
 const { authenticateToken } = require('./authenticate-token');
 
@@ -17,17 +16,6 @@ var db = mongoose.connection;
 
 //Bind connection to error event (to get notification of connection errors)
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-
-/* GET users listing. */
-router.get('/', authenticateToken, function(req, res, next) {
-  try {
-    UserRequestModel.find({}, function (err, docs) {
-      return res.send(docs);
-    });
-  } catch(e) {
-    console.log(' ::>> error ', e);
-  }
-});
 
 const removeUser = function(userId) {
   UserRequestModel.deleteOne(
@@ -48,7 +36,6 @@ const updateRegistration = function(userId) {
     function (err) {
       if (err) return res.send(500, {error: err});
           
-
       var user_instance = new UserRequestModel(user);
       user_instance.save(function (err) {
         if (err) return res.send(500, {error: err});
@@ -58,22 +45,6 @@ const updateRegistration = function(userId) {
     }
   );
 }
-
-router.delete('/', authenticateToken, function(req, res, next) {
-  try {
-    console.log(' ::>> req >>> ', req.body);
-
-    if (!req.body || !req.body.userId) {
-      return res.sendStatus(500, { error: err });
-    }
-    removeUser(req.body.userId);
-    updateRegistration(req.body.userId)
-
-    return res.sendStatus(500);
-  } catch(e) {
-    console.log(' ::>> error ', e);
-  }
-});
 
 router.post('/', function(req, res, next) {
   try {
@@ -93,6 +64,33 @@ router.post('/', function(req, res, next) {
       // saved!
     });
 
+  } catch(e) {
+    console.log(' ::>> error ', e);
+  }
+});
+
+/* GET users listing. */
+router.get('/', authenticateToken, function(req, res, next) {
+  try {
+    UserRequestModel.find({}, function (err, docs) {
+      return res.send(docs);
+    });
+  } catch(e) {
+    console.log(' ::>> error ', e);
+  }
+});
+
+router.delete('/', authenticateToken, function(req, res, next) {
+  try {
+    console.log(' ::>> req >>> ', req.body);
+
+    if (!req.body || !req.body.userId) {
+      return res.sendStatus(500, { error: err });
+    }
+    removeUser(req.body.userId);
+    updateRegistration(req.body.userId)
+
+    return res.sendStatus(500);
   } catch(e) {
     console.log(' ::>> error ', e);
   }

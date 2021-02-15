@@ -51,7 +51,7 @@ export class RegistrationService {
     });
 
     return new Promise(resolve => {
-      this.httpClient.createRequest('http://localhost:3000/passport/confirm')
+      this.httpClient.createRequest('http://localhost:3000/passport/complete-registration')
         .asPost()
         .withContent({
           password: encryptedPassword

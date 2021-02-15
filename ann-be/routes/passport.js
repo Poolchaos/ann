@@ -7,12 +7,15 @@ let JSEncrypt = require('node-jsencrypt');
 require('dotenv').config();
 
 
-const AnonymousModel = require('../models/anonymous-model');
 const RegistrationModel = require('../models/registration-model');
 const UserRequestModel = require('../models/user-request-model');
 const UserResponseModel = require('../models/user-response-model');
 const sendEmail = require('../emails/email');
-const { authenticateToken } = require('./authenticate-token');
+const {
+  authenticateToken,
+  authenticateAnonymous,
+  tokenValidate
+} = require('./authenticate-token');
 
 //Set up default mongoose connection
 const mongoDB = 'mongodb://localhost:27017/ann-projector';
@@ -32,25 +35,7 @@ const decrypt = function(data) {
 
 router.post(
   '/submit',
-  function (req, res, next) {
-    // Gather the jwt access token from the request header
-    const authHeader = req.headers['authorization']
-    const token = authHeader && authHeader.split(' ')[1];
-    
-    if (token == null) return res.sendStatus(401);
-
-    AnonymousModel.find({}, function (err, docs) {
-      if (err) return res.send(500, {error: err});
-      
-      if (docs[0]) {
-        if (token === docs[0].anonymous) {
-          return next();
-        }
-      }
-      console.log(' ::>> anonymous tokens don`t match ');
-      return res.sendStatus(401)
-    });
-  },
+  authenticateAnonymous,
   function(req, res, next) {
     try {      
       let user = req.body;
@@ -79,123 +64,93 @@ router.post(
   }
 );
 
-
 router.post(
-  '/confirm',
+  '/complete-registration',
+  tokenValidate,
   function (req, res, next) {
-    // Gather the jwt access token from the request header
-    const authHeader = req.headers['authorization']
-    const token = authHeader && authHeader.split(' ')[1];
-    const password = req.body ? req.body.password : null;
-    console.log(' ::>> req.body >>>> ', req.body);
+    try {
+      const authHeader = req.headers['authorization']
+      const token = authHeader && authHeader.split(' ')[1];
+      const decrypted = jwt.verify(token, 'completing registration');
+
+      if (!req.body.password) return res.send(500, {error: 'No password specified'});
     
-    if (token == null) return res.sendStatus(401);
-
-    const decrypted = jwt.verify(token, 'completing registration');;
-    console.log(' ::> >decrypted >>>> ', decrypted);
-
-    RegistrationModel.find({ _id: decrypted.userId }, function (err, docs) {
-      if (err) return res.send(500, {error: err});
-
-      let user = docs[0].toJSON();
-      console.log(' ::>> user >>>> ', user);
-      if (user) {
-
-        user.token = null;
-        user.token = jwt.sign(user, 'complete');
-        user.password = password;
-        
-        RegistrationModel.findOneAndUpdate(
-          { _id: user._id },
-          { ...user, status: 'registration-complete' },
-          { upsert: true },
-          function (err) {
-            if (err) return res.send(500, {error: err});
-                
-
-            var user_instance = new UserRequestModel(user);
-            user_instance.save(function (err) {
+      // find user entity for new token
+      RegistrationModel.find({ _id: decrypted.userId }, function (err, docs) {
+        if (err) return res.send(500, {error: err});
+    
+        let user = docs[0].toJSON();
+        if (user) {
+          const password = req.body ? req.body.password : null;
+          user.token = null;
+          user.token = jwt.sign(user, 'complete');
+          user.password = password;
+          
+          RegistrationModel.findOneAndUpdate(
+            { _id: user._id },
+            { ...user, status: 'registration-complete' },
+            { upsert: true },
+            function (err) {
               if (err) return res.send(500, {error: err});
 
-              return res.sendStatus(200);
-            });
-          });
-
-      } else {
-        return res.sendStatus(401)
-      }
-    });
+              const user_instance = new UserRequestModel(user);
+              user_instance.save(function (err) {
+                if (err) return res.send(500, {error: err});
+                return res.sendStatus(200);
+              });
+            }
+          );
+        } else {
+          return res.sendStatus(401)
+        }
+      });
+    } catch(e) {console.log(' ::>> error >>>> ', e);
+      res.send(500, {error: e});
+    }
   }
 );
 
 router.post(
   '/authenticate',
+  authenticateAnonymous,
   function (req, res, next) {
-    // Gather the jwt access token from the request header
-    const authHeader = req.headers['authorization']
-    const token = authHeader && authHeader.split(' ')[1];
-    
-    if (token == null) return res.sendStatus(401);
+    try {
+      const authHeader = req.headers['authorization']
+      const token = authHeader && authHeader.split(' ')[1];
+      const email = req.body ? req.body.email : null;
+      const password = req.body ? req.body.password : null;
+      
+      if (token == null || email == null) return res.sendStatus(401);
 
-    AnonymousModel.find({}, function (err, docs) {
-      if (err) console.log('err = ', err);
-      if (docs[0]) {
-        if (token.indexOf(docs[0].anonymous) >= 0) {
-          return next();
+      UserResponseModel.find({ email }, function (err, docs) {
+        if (err || docs.length == 0) return res.sendStatus(401, {error: err});
+
+        let user = docs[0].toJSON();
+        if (user && decrypt(password) === decrypt(user.password)) {
+          delete user.password;
+          return res.send(user);
         }
-      }
-      console.log(' ::>> anonymous tokens don`t match ');
-      return res.sendStatus(401)
-    });
-  },
-  function (req, res, next) {
-    // Gather the jwt access token from the request header
-    const authHeader = req.headers['authorization']
-    const token = authHeader && authHeader.split(' ')[1];
-    const email = req.body ? req.body.email : null;
-    const password = req.body ? req.body.password : null;
-    console.log(' ::>> req.body >>>> ', req.body);
-    
-    if (token == null || email == null) return res.sendStatus(401);
-
-    UserResponseModel.find({ email }, function (err, docs) {
-      if (err || docs.length == 0) {
-        console.log('err = ', err);
         return res.sendStatus(401)
-      }
-      let user = docs[0].toJSON();
-      console.log(' ::>> user = ', user);
-      if (user) {
-        
-        try {
-          if (decrypt(password) === decrypt(user.password)) {
-            delete user.password;
-            return res.send(user);
-          }
+      });
 
-        } catch(e) {
-          console.log(' ::>> ------- ', e);
-        }
-
-        console.log(' ::>> user matches, logged in ');
-      }
-      return res.sendStatus(401)
-    });
+    } catch(e) {
+      return res.sendStatus(500, {error: e})
+    }
   }
 );
 
-router.post('/authenticate-token', authenticateToken, function(req, res, next) {
-  try {
-    const authHeader = req.headers['authorization']
-    const token = authHeader && authHeader.split(' ')[1];
-    console.log(' ::>> token = ', token);
-    
-    UserRequestModel.find({}, function (err, docs) {
-      return res.sendStatus(200);
-    });
-  } catch(e) {
-    console.log(' ::>> error ', e);
+router.post('/authenticate-token',
+  authenticateToken,
+  function(req, res, next) {
+    try {
+      UserRequestModel.find({}, function (err, docs) {
+        if (err || docs.length == 0) return res.sendStatus(500, {error: err});
+        return res.sendStatus(200);
+      });
+    } catch(e) {
+      return res.sendStatus(500, {error: e})
+    }
   }
-});
+);
 
 module.exports = router;
