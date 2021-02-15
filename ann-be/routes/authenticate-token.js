@@ -2,10 +2,10 @@ const jwt = require('jsonwebtoken');
 
 const ROLES = require('../enums/roles');
 const AnonymousModel = require('../models/anonymous-model');
-const UserRequestModel = require('../models/user-request-model');
+const UserModel = require('../models/user-model');
 
 const authenticateUser = function(res, next, userId) {
-  UserRequestModel.find({ _id: userId }, function (err, docs) {
+  UserModel.find({ _id: userId }, function (err, docs) {
     const user = docs[0];
     if (user) {
       const decryptedUser = jwt.verify(user.token, 'complete');

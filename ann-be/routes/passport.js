@@ -8,8 +8,7 @@ require('dotenv').config();
 
 
 const RegistrationModel = require('../models/registration-model');
-const UserRequestModel = require('../models/user-request-model');
-const UserResponseModel = require('../models/user-response-model');
+const UserModel = require('../models/user-model');
 const sendEmail = require('../emails/email');
 const {
   authenticateToken,
@@ -95,7 +94,7 @@ router.post(
             function (err) {
               if (err) return res.send(500, {error: err});
 
-              const user_instance = new UserRequestModel(user);
+              const user_instance = new UserModel(user);
               user_instance.save(function (err) {
                 if (err) return res.send(500, {error: err});
                 return res.sendStatus(200);
@@ -124,16 +123,22 @@ router.post(
       
       if (!token || email == null) return res.sendStatus(401);
 
-      UserResponseModel.find({ email }, function (err, docs) {
-        if (err || docs.length == 0) return res.sendStatus(401, {error: err});
+      UserModel
+        .find({ email })
+        .select({ token: 1, role: 1, password: 1 })
+        .then(function (docs, err) {
+          if (err || !docs || docs.length == 0) return res.sendStatus(401, {error: err});
 
-        let user = docs[0].toJSON();
-        if (user && decrypt(password) === decrypt(user.password)) {
-          delete user.password;
-          return res.send(user);
-        }
-        return res.sendStatus(401)
-      });
+          let user = docs[0].toJSON();
+          if (user && decrypt(password) === decrypt(user.password)) {
+            delete user.password;
+            return res.send(user);
+          }
+          return res.sendStatus(401)
+        })
+        .catch(e => {
+          return res.sendStatus(500, {error: e})
+        });
 
     } catch(e) {
       return res.sendStatus(500, {error: e})
@@ -145,7 +150,7 @@ router.post('/authenticate-token',
   authenticateToken,
   function(req, res, next) {
     try {
-      UserRequestModel.find({}, function (err, docs) {
+      UserModel.find({}, function (err, docs) {
         if (err || docs.length == 0) return res.sendStatus(500, {error: err});
         return res.sendStatus(200);
       });

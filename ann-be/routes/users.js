@@ -1,11 +1,12 @@
 var express = require('express');
 var router = express.Router();
 const mongoose = require('mongoose');
-const UserRequestModel = require('../models/user-request-model');
+
+const UserModel = require('../models/user-model');
+const { authenticateToken } = require('./authenticate-token');
 const RegistrationModel = require('../models/registration-model');
 const ObjectID = require('mongodb').ObjectID;
 
-const { authenticateToken } = require('./authenticate-token');
 
 //Set up default mongoose connection
 const mongoDB = 'mongodb://localhost:27017/ann-projector';
@@ -19,7 +20,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 const removeUser = function(req, res) {
   const user = req.body;
-  UserRequestModel.deleteOne(
+  UserModel.deleteOne(
     { _id: user.userId },
     function (err) {
       if (err) return res.send(500, { error: err });
@@ -50,7 +51,7 @@ router.post('/', function(req, res, next) {
       contactNumbers: ["0712569431"]
     };
 
-    var user_instance = new UserRequestModel(myobj);
+    var user_instance = new UserModel(myobj);
     // Save the new model instance, passing a callback
     user_instance.save(function (err) {
       if (err) return res.send(500, {error: err});
@@ -66,7 +67,7 @@ router.post('/', function(req, res, next) {
 /* GET users listing. */
 router.get('/', authenticateToken, function(req, res, next) {
   try {
-    UserRequestModel.find({}, function (err, docs) {
+    UserModel.find({}, function (err, docs) {
       return res.send(docs);
     });
   } catch(e) {
