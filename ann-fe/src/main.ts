@@ -33,6 +33,7 @@ export function configure(aurelia: Aurelia): void {
         }
       })
     })
+    .plugin(PLATFORM.moduleName('aurelia-dialog'))
     .feature(PLATFORM.moduleName('features/index'));
 
   aurelia.use.developmentLogging(environment.debug ? 'debug' : 'warn');

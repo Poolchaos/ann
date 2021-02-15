@@ -1,26 +1,55 @@
-import { autoinject, containerless } from 'aurelia-framework';
+import { autoinject } from 'aurelia-framework';
+import { DialogService } from 'aurelia-dialog';
 
-import { IUser } from 'stores/data-store';
+import { DataStore, IUser } from 'stores/data-store';
 import { UserService } from './users-service';
+import { RemoveUserDialog } from './remove-user-dialog/remove-user-dialog';
 
 @autoinject()
 export class Admin {
   
   public users: IUser[] = [];
 
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private dialogService: DialogService,
+    public dataStore: DataStore
+  ) {}
 
   public bind(): void {
     this.retrieveUsers();
   }
 
   private retrieveUsers(): void {
-    console.log(' ::>> retrieveUsers >>>>> ');
     this.userService
       .retrieveUsers()
       .then((users: IUser[]) => {
-        console.log(' ::>> data >>>> ', users);
         this.users = users;
+      })
+      .catch(() => {
+
+      })
+  }
+
+  public removeUser(user: IUser): void {
+    this.dialogService
+      .open({ viewModel: RemoveUserDialog, model: user })
+      .whenClosed(response => {
+        if (!response.wasCancelled) {
+          this.removeConfirmed(user._id);
+        } else {
+          console.log('dialog cancelled');
+        }
+        console.log(response.output);
+      });
+  }
+
+  private removeConfirmed(userId: string): void {
+    console.log(' ::>> remove user ');
+    this.userService
+      .removeUser(userId)
+      .then(() => {
+        console.log(' ::>> remove user >>>> ');
       })
       .catch(() => {
 

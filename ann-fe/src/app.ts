@@ -7,10 +7,11 @@ import { DataStore, IUser } from 'stores/data-store';
 import { EVENTS } from 'stores/events';
 import { AppRoutes } from 'app-routes';
 import { CookieService } from 'services/cookie-service';
-
-import './includes';
 import { EventsStore } from 'stores/events-store';
 import { DashboardRoutes } from 'dashboard/dashboard-routes';
+import { AuthenticateService } from 'login/authenticate-service';
+
+import './includes';
 
 @autoinject()
 export class App {
@@ -23,8 +24,9 @@ export class App {
     private dataStore: DataStore,
     private eventAggregator: EventAggregator,
     private cookieService: CookieService,
-    private i18n: I18N,
-    private eventsStore: EventsStore
+    private eventsStore: EventsStore,
+    private authenticateService: AuthenticateService,
+    private i18n: I18N
   ) {
     this.locales = [
       { title: "Afrikaans", code: "af" },
@@ -45,6 +47,7 @@ export class App {
     } else {
       this.currentLocale = this.i18n.getLocale();
     }
+    this.init();
   }
 
   public configureRouter(config, router): void {
@@ -57,16 +60,17 @@ export class App {
     this.router = router;
   }
 
-  public activate(): void {
-    this.init();
-  }
-
   private init(): void {
     try {
       let user = JSON.parse(this.cookieService.getCookie('ann-user'));
       if (!user || user === 'null') {
         return;
       }
+
+      this.authenticateService.setHeader(user.token);
+      this.authenticateService
+        .authenticateWithToken()
+        .catch(() => this.logout());
 
       this.eventsStore
       .subscribeAndPublish(
@@ -79,8 +83,6 @@ export class App {
   }
 
   private userValidated(): void {
-
-
     const currentInstruction = location.href.split('/');
     const routeName = currentInstruction[currentInstruction.length - 1];
     const anonymousRoutes = ['login', 'registration', 'complete-registration', 'registration-complete', 'email-sent'];
@@ -119,6 +121,7 @@ export class App {
   public logout(): void {
     this.eventAggregator.publish(EVENTS.USER_LOGGED_OUT);
     this.router.navigate('home');
+    this.authenticateService.logout();
   }
 
   @computedFrom('dataStore.user')
@@ -129,18 +132,13 @@ export class App {
 
 @autoinject()
 export class AuthStep {
-  private showLoader: boolean;
 
-  constructor(
-    private dataStore: DataStore,
-    private cookieService: CookieService
-  ) {}
+  constructor(private cookieService: CookieService) {}
 
   run(navigationInstruction: NavigationInstruction, next: Next): any {
 
     const cookie = this.cookieService.getCookie('ann-user');
     const user: IUser = cookie ? JSON.parse(cookie) : null;
-    console.log(' :>> user ==== ', user);
     /*AUTH*/
     let isAuthRoute: boolean = navigationInstruction.getAllInstructions().some(i => i.config.auth);
     if (isAuthRoute) {

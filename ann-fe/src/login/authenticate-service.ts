@@ -5,7 +5,7 @@ import { UserRegistrationSettings } from 'registration/user-registration-setting
 import { EncryptService } from 'services/encrypt-service';
 
 @autoinject()
-export class LoginService {
+export class AuthenticateService {
 
   constructor(private httpClient: HttpClient) {}
 
@@ -25,14 +25,9 @@ export class LoginService {
         .send()
         .then(
           (response) => {
-            console.log(' ::>> response ', response);
             try {
               const user = JSON.parse(response.response);
-              
-              this.httpClient.configure(req => {
-                req.withHeader('Authorization', 'Bearer ' + user.token);
-              });
-
+              this.setHeader(user.token);
               resolve(user);
             } catch(e) {
               resolve(response.response);
@@ -42,6 +37,35 @@ export class LoginService {
             console.warn(' ::>> error ', error);
           }
         );
+    });
+  }
+  
+  public authenticateWithToken(): Promise<any> {
+
+    return new Promise((resolve, reject) => {
+      this.httpClient.createRequest('http://localhost:3000/passport/authenticate-token')
+        .asPost()
+        .withContent({})
+        .send()
+        .then(() => {
+          console.log(' VALID ::>> is valid user ');
+        })
+        .catch(error => {
+          console.log(' VALID ::>> invalid user ');
+          reject(error);
+        });
+    });
+  }
+
+  public setHeader(token: string): void {
+    this.httpClient.configure(req => {
+      req.withHeader('Authorization', 'Bearer ' + token);
+    });
+  }
+
+  public logout(): void {
+    this.httpClient.configure(req => {
+      req.withHeader('Authorization', '');
     });
   }
 

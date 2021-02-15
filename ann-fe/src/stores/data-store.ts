@@ -68,6 +68,7 @@ export class DataStore {
 }
 
 export interface IUser {
+  _id: string;
   firstName: string;
   surname: string;
   email: string;

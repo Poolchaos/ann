@@ -9,8 +9,10 @@ require('dotenv').config();
 
 const AnonymousModel = require('../models/anonymous-model');
 const RegistrationModel = require('../models/registration-model');
-const UserModel = require('../models/user-model');
+const UserRequestModel = require('../models/user-request-model');
+const UserResponseModel = require('../models/user-response-model');
 const sendEmail = require('../emails/email');
+const { authenticateToken } = require('./authenticate-token');
 
 //Set up default mongoose connection
 const mongoDB = 'mongodb://localhost:27017/ann-projector';
@@ -105,13 +107,13 @@ router.post(
         
         RegistrationModel.findOneAndUpdate(
           { _id: user._id },
-          { ...user, isComplete: true },
+          { ...user, status: 'registration-complete' },
           { upsert: true },
           function (err) {
             if (err) return res.send(500, {error: err});
                 
 
-            var user_instance = new UserModel(user);
+            var user_instance = new UserRequestModel(user);
             user_instance.save(function (err) {
               if (err) return res.send(500, {error: err});
 
@@ -156,7 +158,7 @@ router.post(
     
     if (token == null || email == null) return res.sendStatus(401);
 
-    UserModel.find({ email }, function (err, docs) {
+    UserResponseModel.find({ email }, function (err, docs) {
       if (err || docs.length == 0) {
         console.log('err = ', err);
         return res.sendStatus(401)
@@ -181,5 +183,19 @@ router.post(
     });
   }
 );
+
+router.post('/authenticate-token', authenticateToken, function(req, res, next) {
+  try {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1];
+    console.log(' ::>> token = ', token);
+    
+    UserRequestModel.find({}, function (err, docs) {
+      return res.sendStatus(200);
+    });
+  } catch(e) {
+    console.log(' ::>> error ', e);
+  }
+});
 
 module.exports = router;

@@ -15,8 +15,6 @@ export class UserService {
     return new Promise(resolve => {
       this.httpClient.createRequest('http://localhost:3000/users')
         .asGet()
-        .withParams({})
-        .withHeader('Authorization', `Bearer ${this.dataStore.user.token}`)
         .send()
         .then(
           (response) => {
@@ -26,6 +24,23 @@ export class UserService {
             } catch(e) {
               resolve(response.response);
             }
+          },
+          (error) => {
+            console.warn(' ::>> error ', error);
+          }
+        );
+    });
+  }
+  
+  public removeUser(userId: string): Promise<IUser[]> {
+    return new Promise(resolve => {
+      this.httpClient.createRequest('http://localhost:3000/users')
+        .asDelete()
+        .withContent({ userId })
+        .send()
+        .then(
+          () => {
+            console.log(' ::>> successfully removed member ');
           },
           (error) => {
             console.warn(' ::>> error ', error);

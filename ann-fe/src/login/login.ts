@@ -2,7 +2,7 @@ import { autoinject } from 'aurelia-framework';
 import { Router } from 'aurelia-router';
 import { ValidationControllerFactory, ValidationController, ValidationRules, validateTrigger } from 'aurelia-validation';
 
-import { LoginService } from "./login-service";
+import { AuthenticateService } from "./authenticate-service";
 import { IUser } from 'stores/data-store';
 import { EventsStore } from 'stores/events-store';
 import { EVENTS } from 'stores/events';
@@ -20,7 +20,7 @@ export class Login {
 
   constructor(
     private router: Router,
-    private loginService: LoginService,
+    private AuthenticateService: AuthenticateService,
     private eventsStore: EventsStore,
     validationControllerFactory: ValidationControllerFactory
   ) {
@@ -64,7 +64,7 @@ export class Login {
   }
 
   private triggerLogin(): void {
-    this.loginService
+    this.AuthenticateService
       .authenticate(this.identity, this.password)
       .then(user => this.handleUserAuthenticated(user))
       .catch(error => {

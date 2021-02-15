@@ -1,0 +1,10 @@
+<template>
+  <div style="width: 400px;height: 300px;background-color: gray;">
+    <h4>Remove member</h4>
+    <div>Are you sure you want to remove ${user.firstName} ${surname}</div>
+    <div>
+      <button click.trigger="confirm()">Confirm</button>
+      <button click.trigger="cancel()">Cancel</button>
+    </div>
+  </div>
+</template>

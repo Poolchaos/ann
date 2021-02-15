@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 //Define a schema
 var Schema = mongoose.Schema;
 
-var UserSchema = new Schema({
+var UserRequestSchema = new Schema({
   _id: {
     type: Schema.Types.ObjectId,
     required: [true, 'No identifier specified']
@@ -20,4 +20,4 @@ var UserSchema = new Schema({
   role: String
 }, { collection : 'users' });
 
-module.exports = UserSchema;
+module.exports = UserRequestSchema;

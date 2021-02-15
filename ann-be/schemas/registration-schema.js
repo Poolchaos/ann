@@ -17,7 +17,7 @@ var RegistrationSchema = new Schema({
   token: String,
   number: String,
   role: String,
-  isComplete: Boolean
+  status: String
 }, { collection : 'registration' });
 
 module.exports = RegistrationSchema;
