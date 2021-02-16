@@ -24,7 +24,7 @@ export class Articles {
         this.articles = articles;
       })
   }
-    
+
   public navToCreateArticle(): void {
     this.router.navigate('create-article');
   }

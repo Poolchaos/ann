@@ -31,20 +31,29 @@
       }
     },
     "journalist": {
-
+      "create-article": {
+        "title": "Titel",
+        "category": {
+          "label": "Kategorie",
+          "description": "Kies n artikel vir die artikel",
+          "options": {
+            "news": "Nuus",
+            "sport": "Sport",
+            "politics": "Politiek",
+            "crime": "Misdaad",
+            "technical": "Tegnies",
+            "buniness": "Sake",
+            "travel": "Reis"
+          }
+        },
+        "content": "Artikelinhoud"
+      }
     },
     "voice-over": {
 
     },
     "user": {
       "dashboard": {
-        "news": "Nuus",
-        "sport": "Sport",
-        "politics": "Politiek",
-        "crime": "Misdaad",
-        "technical": "Tegnies",
-        "buniness": "Sake",
-        "travel": "Reis"
       }
     }
   }

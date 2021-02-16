@@ -8,6 +8,10 @@ var ArticleSchema = new Schema({
     type: Schema.Types.ObjectId,
     required: [true, 'No identifier specified.']
   },
+  userId: {
+    type: Schema.Types.ObjectId,
+    required: [true, 'No userid specified.']
+  },
   name: {
     type: String,
     required: [true, 'Please specify an article name.']
@@ -18,9 +22,17 @@ var ArticleSchema = new Schema({
   },
   content: {
     type: String,
-    required: [true, 'Please specify a category.']
+    required: [true, 'Please specify article content.']
   },
-  files: [String]
+  createdTimestamp: [{
+    content: String,
+    type: String
+  }],
+  contentConfirmed: {
+    type: Boolean,
+    required: [true, 'Please validate whether content has been confirmed']
+  },
+  files: [Schema.Types.ObjectId]
 }, { collection : 'articles' });
 
 module.exports = ArticleSchema;

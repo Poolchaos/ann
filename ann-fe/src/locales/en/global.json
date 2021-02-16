@@ -31,20 +31,29 @@
       }
     },
     "journalist": {
-
+      "create-article": {
+        "title": "Title",
+        "category": {
+          "label": "Category",
+          "description": "Choose a category for the article",
+          "options": {
+            "news": "News",
+            "sport": "Sport",
+            "politics": "Politics",
+            "crime": "Crime",
+            "technical": "Technical",
+            "buniness": "Business",
+            "travel": "Travel"
+          }
+        },
+        "content": "Article Content"
+      }
     },
     "voice-over": {
 
     },
     "user": {
       "dashboard": {
-        "news": "News",
-        "sport": "Sport",
-        "politics": "Politics",
-        "crime": "Crime",
-        "technical": "Technical",
-        "buniness": "Business",
-        "travel": "Travel"
       }
     }
   }

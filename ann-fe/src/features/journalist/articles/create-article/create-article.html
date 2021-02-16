@@ -2,22 +2,37 @@
   <div class="container content">
     <form submit.trigger="createArticle($event)">
       <div>
-        *<label>Artikel Titel</label>
+        *<label i18n="page.journalist.create-article.title"></label>
         <input type="text" value.bind="title" />
       </div>
       <div>
-        *<label>Kategorie</label>
-        <input type="text" value.bind="category" />
-        <label class="tiny-font"><i>Kies n kategorie vir die artikel</i></label>
+        *<label i18n="page.journalist.create-article.category.label"></label>
+
+        <select class="o-zdropdown" ref="select" value.bind="category">
+          <option i18n="page.journalist.create-article.category.options.news"></option>
+          <option i18n="page.journalist.create-article.category.options.sport"></option>
+          <option i18n="page.journalist.create-article.category.options.politics"></option>
+          <option i18n="page.journalist.create-article.category.options.crime"></option>
+          <option i18n="page.journalist.create-article.category.options.technical"></option>
+          <option i18n="page.journalist.create-article.category.options.buniness"></option>
+          <option i18n="page.journalist.create-article.category.options.travel"></option>
+        </select>
+
+        <label class="tiny-font">
+          <i i18n="page.journalist.create-article.category.description"></i>
+        </label>
       </div>
       <div>
-        *<label>Artikelinhoud</label>
+        *<label i18n="page.journalist.create-article.content"></label>
         <input id="x" type="hidden" name="content">
         <trix-editor input="x"></trix-editor>
         <label class="tiny-font"><i>Voeg jou artikel by</i></label>
       </div>
       <div>
-        <input type="file" change.delegate="uploadFlow($event)" />
+        <input 
+          type="file" multiple
+          change.delegate="selectionChanged($event)"
+          accept="audio/mp3,audio/wav" />
       </div>
       <button disabled.bind="disable">submit</button>
       <progress id="progressBar" value="0" max="100" style="width:300px;" if.bind="submitted"></progress>

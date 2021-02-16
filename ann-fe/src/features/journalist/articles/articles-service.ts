@@ -1,3 +1,4 @@
+import { rejects } from 'assert';
 import { autoinject } from 'aurelia-framework';
 import { HttpClient } from 'aurelia-http-client';
 
@@ -9,9 +10,9 @@ export class ArticleService {
   public createArticle(
     name: string,
     category: string,
-    content: string,
-    files: string[]
+    content: string
   ): Promise<any> {
+    console.log(' ::>> createArticle >>> ');
 
     return new Promise(resolve => {
       // todo: read environment from .env
@@ -21,13 +22,18 @@ export class ArticleService {
         .withContent({ 
           name,
           category,
-          content,
-          files
+          content
         })
         .send()
         .then(
           (response) => {
             console.log(' ::>> created ', response);
+            try {
+              const article = JSON.parse(response.response);
+              resolve(article);
+            } catch(e) {
+              resolve(response.response);
+            }
           },
           (error) => {
             console.warn(' ::>> error ', error);
@@ -57,5 +63,27 @@ export class ArticleService {
         );
     });
   }
-  
+
+  public uploadAudio(file: {
+    name: string;
+    data: string | ArrayBuffer;
+    type: string;
+    size: string;
+  }, progressCallback: any): Promise<{ articleId: string }> {
+    console.log(' ::>> createArticle >>> ');
+
+    return new Promise((resolve, reject) => {
+      // todo: read environment from .env
+      // todo: make interceptor for httpClient to map response.response
+      this.httpClient.createRequest('http://localhost:3000/audio')
+        .asPost()
+        .withContent(file)
+        .withProgressCallback(progressCallback)
+        .send()
+        .then(
+          (response) => resolve(response.response),
+          (error) => reject(error)
+        );
+    });
+  }
 }
