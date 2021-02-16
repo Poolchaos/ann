@@ -89,9 +89,9 @@ export class CreateArticle {
           this.category,
           messageContent
         )
-        .then(() => {
+        .then((article: { articleId: string }) => {
           console.log(' ::>> article created >>>> ');
-            this.uploadAudio();
+            this.uploadAudio(article.articleId);
         })
         .catch(error => {
           console.log(' ::>> failed to create article >>>> ');
@@ -99,14 +99,17 @@ export class CreateArticle {
     }
   }
 
-  private uploadAudio(): void {
+  private uploadAudio(articleId: string): void {
     if (this.fileContents.length > 0) {
       let uploadCount = 0;
       // todo: base64 
 
       this.fileContents.forEach(file => {
         this.articleService
-          .uploadAudio(file, data => this.fileUploadProgressCallback(data))
+          .uploadAudio(
+            { ...file, articleId },
+            data => this.fileUploadProgressCallback(data)
+          )
           .then(() => {
             console.log(' ::>> uplaoded ');
             uploadCount++;

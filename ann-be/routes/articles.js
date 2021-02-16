@@ -30,14 +30,10 @@ router.post('/', authenticateToken, function(req, res, next) {
     article.userId = new ObjectID(decrypted._id);
     article.contentConfirmed = false;
 
-    const files = article.files;
-    
     var instance = new ArticleModel(article);
-    // todo: upload files
-    // todo: base64 
     instance.save(function (err) {
       if (err) return res.send(500, {error: err});
-      return res.sendStatus(200, { articleId: article._id });
+      return res.send(200, { articleId: article._id });
       // saved!
     });
 

@@ -7,6 +7,9 @@ const fs = require('fs');
 
 const { authenticateToken } = require('./authenticate-token');
 
+const ArticleModel = require('../models/article-model');
+const FileModel = require('../models/file-model');
+
 //Set up default mongoose connection
 const mongoDB = 'mongodb://localhost:27017/ann-projector';
 mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
@@ -25,28 +28,44 @@ router.post('/', authenticateToken, function(req, res, next) {
     const token = authHeader && authHeader.split(' ')[1];
     const decrypted = jwt.verify(token, 'complete');
 
-
-    let file = req.body;
+    const extention = req.body.name.split('.');
+    const generatedName = new ObjectID();
+    const audio = {
+      _id: new ObjectID(),
+      name: req.body.name,
+      location: __dirname + `\\tmp\\${generatedName}.${extention[extention.length - 1]}`,
+      type: req.body.type,
+      articleId: req.body.articleId
+    };
     // article._id = new ObjectID();
     // article.userId = new ObjectID(decrypted._id);
     // article.contentConfirmed = false;
 
-
-    console.log(' ::>> article >>>>> ', {
-      name: file.name, // change to _id
-      type: file.type,
-      size: file.size
-    });
+    console.log(' ::>> article >>>>> ', audio);
     
+    // todo: base64 
     // todo: create a file index
     // file name/path
     // userId
     // _id
     // type
   
-    fs.writeFileSync(__dirname + `\\tmp\\${file.name}`, Buffer.from(file.data.replace(`data:${file.type};base64,`, ''), 'base64'));
+    fs.writeFileSync(audio.location, Buffer.from(req.body.data.replace(`data:${audio.type};base64,`, ''), 'base64'));
 
-    res.sendStatus(200);
+    var instance = new FileModel(audio);
+    instance.save(function (err) {
+      if (err) return res.send(500, {error: err});
+
+      return ArticleModel.findOneAndUpdate(
+        { _id: audio.articleId },
+        { $push: { files: audio._id } },
+        { upsert: true },
+        function (err) {
+          if (err) return res.send(500, {error: err});
+          res.sendStatus(200);
+        }
+      );
+    });
 
   } catch(e) {
     console.log(' ::>> error >>>>> ', e);

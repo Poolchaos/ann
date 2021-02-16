@@ -69,6 +69,7 @@ export class ArticleService {
     data: string | ArrayBuffer;
     type: string;
     size: string;
+    articleId: string
   }, progressCallback: any): Promise<{ articleId: string }> {
     console.log(' ::>> createArticle >>> ');
 
