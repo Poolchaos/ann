@@ -1,31 +1,38 @@
 const jwt = require('jsonwebtoken');
-const ObjectID = require('mongodb').ObjectID;
 
-const ROLES = require('../enums/roles');
 const AnonymousModel = require('../models/anonymous-model');
 const UserModel = require('../models/user-model');
 
-const authenticateUser = function(res, next, user) {
+const authenticateUser = function(res, next, user, rolePermissions) {
   try {
     UserModel.find({ email: user.email }).then(function (docs) {
       const user = docs[0];
       if (user) {
         const decryptedUser = jwt.verify(user.token, 'complete');
         if (decryptedUser && decryptedUser.role === user.role) {
-          return next();
+          if (rolePermissions && rolePermissions.length > 0) {
+            if (rolePermissions.includes(user.role)) {
+              return next();
+            } else {
+              return res.sendStatus(401, { error: 'Unauthorized User' });
+            }
+          } else {
+            return next();
+          }
         }
       }
       return res.sendStatus(401, { error: 'Unauthorized User' });
     })
     .catch(e => {
       console.log(' ::>> failed to get data ', e);
+      return res.sendStatus(500, { error: e });
     });
   } catch(e) {
     return res.sendStatus(500, { error: e });
   }
 };
 
-const authenticateToken = function(req, res, next) {
+const authenticateToken = function(req, res, next, rolePermissions) {
   try {
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1];
@@ -35,7 +42,7 @@ const authenticateToken = function(req, res, next) {
     const decrypted = jwt.verify(token, 'complete');
 
     if (decrypted) {
-      return authenticateUser(res, next, decrypted);
+      return authenticateUser(res, next, decrypted, rolePermissions);
     }
   } catch(e) {
     return res.sendStatus(500, { error: e });

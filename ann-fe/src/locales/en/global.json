@@ -54,6 +54,13 @@
     },
     "user": {
       "dashboard": {
+        "news": "News",
+        "sport": "Sport",
+        "politics": "Politics",
+        "crime": "Crime",
+        "technical": "Technical",
+        "buniness": "Business",
+        "travel": "Travel"
       }
     }
   }

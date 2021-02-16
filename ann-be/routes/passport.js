@@ -147,7 +147,7 @@ router.post(
 );
 
 router.post('/authenticate-token',
-  authenticateToken,
+  (req, res, next) => authenticateToken(req, res, next),
   function(req, res, next) {
     console.log(' ::>> authenticate token ');
     try {
