@@ -136,4 +136,8 @@ export class CreateArticle {
   private fileUploadProgressCallback(data: any): void {
     console.log(' ::>> fileUploadProgressCallback >>>> ', data);
   }
+
+  public cancel(): void {
+    this.router.navigate('articles');
+  }
 }

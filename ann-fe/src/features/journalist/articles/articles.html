@@ -9,7 +9,16 @@
     <div>Name: ${article.name}</div>
     <div>Category: ${article.category}</div>
     <div>Content: ${article.content}</div>
-    <div>Files${article.Files}</div>
+    <div>
+      Files:
+      <div repeat.for="file of article.files">
+        <button
+          click.trigger="playAudio(file, $index)">
+          Attachment ${$index}
+        </button>
+        <audio id="js-audio-${$index}"></audio>
+      </div>
+    </div>
     <hr/>
   </div>
 </template>

@@ -35,6 +35,7 @@
           accept="audio/mp3,audio/wav" />
       </div>
       <button disabled.bind="disable">submit</button>
+      <div click.trigger="cancel()">cancel</div>
       <progress id="progressBar" value="0" max="100" style="width:300px;" if.bind="submitted"></progress>
     </form>
   </div>

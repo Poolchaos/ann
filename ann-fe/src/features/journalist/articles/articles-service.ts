@@ -87,4 +87,18 @@ export class ArticleService {
         );
     });
   }
+
+  public playAudio(file: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      
+      this.httpClient.createRequest('http://localhost:3000/audio')
+        .asPut()
+        .withContent({ audioId: file })
+        .send()
+        .then(
+          (response) => resolve(JSON.parse(response.response)),
+          (error) => reject(error)
+        );
+    });
+  }
 }
