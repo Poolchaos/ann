@@ -1,8 +1,8 @@
 import { autoinject } from 'aurelia-framework';
 import { Router } from 'aurelia-router';
-import { DataStore } from 'stores/data-store';
 
 import { ArticleService } from './articles-service';
+import { DataStore } from 'stores/data-store';
 
 @autoinject()
 export class Articles {
@@ -11,7 +11,8 @@ export class Articles {
 
   constructor(
     private router: Router,
-    private articlesService: ArticleService
+    private articlesService: ArticleService,
+    public dataStore: DataStore
   ) {}
 
   public activate(): void {
@@ -20,7 +21,7 @@ export class Articles {
 
   private retrieveArticles(): void {
     this.articlesService
-      .retrieveArticles()
+      .getArticles()
       .then((articles) => {
         this.articles = articles;
       })
@@ -45,5 +46,17 @@ export class Articles {
     audio.src = base64;
     audio.autoplay = true;
     audio.controls = true;
+  }
+
+  public activateArticle(articleId: string): void {
+    this.articlesService
+      .activateArticle(articleId)
+      .then(() => {
+        console.log(' ::>> successfully activated article ');
+        this.articles = this.articles.filter(article => article._id !== articleId);
+      })
+      .catch(() => {
+        console.log(' ::>> failed to activate article ');
+      });
   }
 }

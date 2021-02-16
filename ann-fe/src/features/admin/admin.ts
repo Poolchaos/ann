@@ -9,4 +9,8 @@ export class Admin {
   public navToMembers(): void {
     this.router.navigate('users');
   }
+
+  public navToReviewArticles(): void {
+    this.router.navigate('articles');
+  }
 }

@@ -13,7 +13,7 @@ export class DashboardRoutes {
       name: 'admin',
       moduleId: PLATFORM.moduleName('features/admin/admin'),
       nav: true,
-      title: 'Admin',
+      title: 'Dashboard',
       auth: true,
       settings: {
         access: ['Admin']
@@ -23,7 +23,7 @@ export class DashboardRoutes {
       name: 'users',
       moduleId: PLATFORM.moduleName('features/admin/users/users'),
       nav: true,
-      title: 'Admin',
+      title: 'Users',
       auth: true,
       settings: {
         access: ['Admin']
@@ -37,7 +37,7 @@ export class DashboardRoutes {
       name: 'journalist',
       moduleId: PLATFORM.moduleName('features/journalist/journalist'),
       nav: true,
-      title: 'Journalist',
+      title: 'Dashboard',
       auth: true,
       settings: {
         access: ['Journalist']
@@ -50,7 +50,7 @@ export class DashboardRoutes {
       title: 'Articles',
       auth: true,
       settings: {
-        access: ['Journalist']
+        access: ['Admin', 'Journalist']
       }
     }, {
       route: 'create-article',
@@ -71,7 +71,7 @@ export class DashboardRoutes {
       name: 'voice-over',
       moduleId: PLATFORM.moduleName('features/voice-over/voice-over'),
       nav: true,
-      title: 'Voice Over',
+      title: 'Dashboard',
       auth: true,
       settings: {
         access: ['Voice-Over']
@@ -85,7 +85,7 @@ export class DashboardRoutes {
       name: 'default_user',
       moduleId: PLATFORM.moduleName('features/default_user/default_user'),
       nav: true,
-      title: 'Default User',
+      title: 'Dashboard',
       auth: true,
       settings: {
         access: ['DEFAULT_USER']

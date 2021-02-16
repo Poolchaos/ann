@@ -19,6 +19,10 @@
         <audio id="js-audio-${$index}"></audio>
       </div>
     </div>
+    <button if.bind="dataStore.isAdmin"
+      click.trigger="activateArticle(article._id)">
+      Activate Article
+    </button>
     <hr/>
   </div>
 </template>

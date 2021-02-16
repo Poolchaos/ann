@@ -2,10 +2,15 @@ import { rejects } from 'assert';
 import { autoinject } from 'aurelia-framework';
 import { HttpClient } from 'aurelia-http-client';
 
+import { DataStore } from 'stores/data-store';
+
 @autoinject()
 export class ArticleService {
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(
+    private httpClient: HttpClient,
+    private dataStore: DataStore
+  ) {}
 
   public createArticle(
     name: string,
@@ -41,9 +46,52 @@ export class ArticleService {
         );
     });
   }
+
+  public activateArticle(articleId: string): Promise<void> {
+    console.log(' ::>> createArticle >>> ');
+
+    return new Promise((resolve, reject) => {
+      // todo: read environment from .env
+      // todo: make interceptor for httpClient to map response.response
+      this.httpClient.createRequest('http://localhost:3000/articles/review')
+        .asPost()
+        .withContent({ articleId })
+        .send()
+        .then(() => resolve())
+        .catch((error) => reject(error));
+    });
+  }
+
+  public getArticles(): Promise<any> {
+    if (this.dataStore.isAdmin) {
+      return this.retrieveArticlesToReview();
+    } else if (this.dataStore.isJournalist) {
+      return this.retrieveArticles();
+    }
+  }
+
+  public retrieveArticlesToReview(): Promise<any> {
+    return new Promise(resolve => {
+      this.httpClient.createRequest('http://localhost:3000/articles/review')
+        .asGet()
+        .send()
+        .then(
+          (response) => {
+            try {
+              const user = JSON.parse(response.response);
+              resolve(user);
+            } catch(e) {
+              resolve(response.response);
+            }
+          },
+          (error) => {
+            console.warn(' ::>> error ', error);
+          }
+        );
+    });
+  }
   
   public retrieveArticles(): Promise<any> {
-
     return new Promise(resolve => {
       this.httpClient.createRequest('http://localhost:3000/articles')
         .asGet()

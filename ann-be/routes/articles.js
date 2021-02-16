@@ -11,6 +11,7 @@ const ROLES = require('../enums/roles');
 //Set up default mongoose connection
 const mongoDB = 'mongodb://localhost:27017/ann-projector';
 mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.set('useFindAndModify', false);
 
 //Get the default connection
 var db = mongoose.connection;
@@ -62,6 +63,48 @@ router.get('/',
       });
     } catch(e) {
       console.log(' ::>> error ', e);
+    }
+  }
+);
+
+router.get('/review',
+  (req, res, next) => authenticateToken(req, res, next, [ROLES.ADMIN]),
+  function(req, res, next) {
+    try {
+      const authHeader = req.headers['authorization']
+      const token = authHeader && authHeader.split(' ')[1];
+      const decrypted = jwt.verify(token, 'complete');
+
+      if (!decrypted) return res.sendStatus(401);
+
+      ArticleModel.find({ contentConfirmed: false }, function (err, docs) {
+        return res.send(docs);
+      });
+    } catch(e) {
+      console.log(' ::>> error ', e);
+    }
+  }
+);
+router.post('/review', 
+  (req, res, next) => authenticateToken(req, res, next, [ROLES.ADMIN]),
+  function(req, res, next) {
+    try {
+      if (!req.body) return res.sendStatus(500, { error: err });
+      const article = req.body;
+
+      return ArticleModel.findOneAndUpdate(
+        { _id: article.articleId },
+        { contentConfirmed: true },
+        { upsert: true },
+        function (err) {
+          if (err) return res.send(500, {error: err});
+          res.sendStatus(200);
+        }
+      );
+
+    } catch(e) {
+      console.log(' ::>> error >>>>> ', e);
+      return res.sendStatus(500, { error: err });
     }
   }
 );

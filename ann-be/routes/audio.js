@@ -13,6 +13,7 @@ const ROLES = require('../enums/roles');
 //Set up default mongoose connection
 const mongoDB = 'mongodb://localhost:27017/ann-projector';
 mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.set('useFindAndModify', false);
 
 //Get the default connection
 var db = mongoose.connection;
