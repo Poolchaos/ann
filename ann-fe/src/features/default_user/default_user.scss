@@ -1,0 +1,13 @@
+.category-wrapper {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  width: 100%;
+
+  .category__item {
+    padding: 100px 0;
+    width: calc(25% - 3px);
+    border: 1px solid green;
+    text-align: center;
+  }
+}

@@ -40,8 +40,8 @@ export class Articles {
   }
 
   private play(response: { type: string, content: string }, index: number):void {
-    let base64 = `data:${response.type};base64,${response.content}`;
-    let audio: HTMLAudioElement = document.querySelector(`#js-audio-${index}`);
+    const base64 = `data:${response.type};base64,${response.content}`;
+    const audio: HTMLAudioElement = document.querySelector(`#js-audio-${index}`);
 
     audio.src = base64;
     audio.autoplay = true;
