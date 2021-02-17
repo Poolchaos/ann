@@ -56,7 +56,7 @@ export class Admin {
   }
 
   // public saveUser(): void {
-  //   this.httpClient.createRequest('http://localhost:3000/users')
+  //   this.httpClient.createRequest('users')
   //     .asPost()
   //     .withContent({  })
   //     .send()

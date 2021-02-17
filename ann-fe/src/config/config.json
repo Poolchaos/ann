@@ -2,7 +2,10 @@
   "default": {
     "apiQueryEndpoint": "http://localhost:3000/"
   },
-  "local": {
+  "debug": {
+    "apiQueryEndpoint": "http://localhost:3000/"
+  },
+  "testing": {
     "apiQueryEndpoint": "http://localhost:3000/"
   },
   "dev1": {

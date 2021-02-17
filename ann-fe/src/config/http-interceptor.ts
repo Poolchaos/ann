@@ -1,4 +1,4 @@
-import {Aurelia, FrameworkConfiguration, LogManager, Container} from 'aurelia-framework';
+import { LogManager,  Container} from 'aurelia-framework';
 import { AureliaConfiguration } from 'aurelia-configuration';
 import { HttpClient, HttpRequestMessage, HttpResponseMessage, RequestBuilder, RequestMessage } from 'aurelia-http-client';
 import { DataStore } from 'stores/data-store';
@@ -7,14 +7,12 @@ const logger = LogManager.getLogger('HttpInterceptor');
 const codes: Array<number> = [500, 501, 502, 503, 504];
 
 let configure = Container.instance.get(AureliaConfiguration);
-const environment = configure.get('environment');
-
-console.log(' ::>> environment >>>> ', environment);
+// @ts-ignore
+const environment = configure.environment;
 
 export default class HttpInterceptor {
 
   private retryInstances = {};
-  private environment: string = '';
 
   constructor(private httpClient: HttpClient, private dataStore: DataStore) {}
 

@@ -20,7 +20,7 @@ export class ArticleService {
     console.log(' ::>> createArticle >>> ');
 
     return new Promise(resolve => {
-      this.httpClient.createRequest('http://localhost:3000/articles')
+      this.httpClient.createRequest('articles')
         .asPost()
         .withContent({ 
           name,
@@ -42,7 +42,7 @@ export class ArticleService {
 
     return new Promise((resolve, reject) => {
       // todo: read environment from .env
-      this.httpClient.createRequest('http://localhost:3000/articles/review')
+      this.httpClient.createRequest('articles/review')
         .asPost()
         .withContent({ articleId })
         .send()
@@ -61,7 +61,7 @@ export class ArticleService {
 
   public retrieveArticlesToReview(): Promise<any> {
     return new Promise(resolve => {
-      this.httpClient.createRequest('http://localhost:3000/articles/review')
+      this.httpClient.createRequest('articles/review')
         .asGet()
         .send()
         .then(
@@ -75,7 +75,7 @@ export class ArticleService {
   
   public retrieveArticles(): Promise<any> {
     return new Promise(resolve => {
-      this.httpClient.createRequest('http://localhost:3000/articles')
+      this.httpClient.createRequest('articles')
         .asGet()
         .send()
         .then(
@@ -98,7 +98,7 @@ export class ArticleService {
 
     return new Promise((resolve, reject) => {
       // todo: read environment from .env
-      this.httpClient.createRequest('http://localhost:3000/audio')
+      this.httpClient.createRequest('audio')
         .asPost()
         .withContent(file)
         .withProgressCallback(progressCallback)
@@ -116,7 +116,7 @@ export class ArticleService {
   public playAudio(file: string): Promise<any> {
     return new Promise((resolve, reject) => {
       
-      this.httpClient.createRequest('http://localhost:3000/audio')
+      this.httpClient.createRequest('audio')
         .asPut()
         .withContent({ audioId: file })
         .send()

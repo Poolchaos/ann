@@ -19,7 +19,7 @@ export class RegistrationService {
     role: string
   ): Promise<void> {
     return new Promise(resolve => {
-      this.httpClient.createRequest('http://localhost:3000/passport/submit')
+      this.httpClient.createRequest('passport/submit')
         .asPost()
         .withContent({ firstName, surname, email, number, role })
         .withHeader('Content-Type', 'application/json')
@@ -46,7 +46,7 @@ export class RegistrationService {
     });
 
     return new Promise(resolve => {
-      this.httpClient.createRequest('http://localhost:3000/passport/complete-registration')
+      this.httpClient.createRequest('passport/complete-registration')
         .asPost()
         .withContent({
           password: encryptedPassword

@@ -13,7 +13,7 @@ export class UserService {
   
   public retrieveUsers(): Promise<IUser[]> {
     return new Promise(resolve => {
-      this.httpClient.createRequest('http://localhost:3000/users')
+      this.httpClient.createRequest('users')
         .asGet()
         .send()
         .then(
@@ -30,7 +30,7 @@ export class UserService {
   
   public removeUser(userId: string): Promise<void> {
     return new Promise(resolve => {
-      this.httpClient.createRequest('http://localhost:3000/users')
+      this.httpClient.createRequest('users')
         .asDelete()
         .withContent({ userId })
         .send()

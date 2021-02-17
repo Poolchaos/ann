@@ -1,8 +1,8 @@
 import {Aurelia} from 'aurelia-framework';
-import * as environment from '../config/environment.json';
 import {PLATFORM} from 'aurelia-pal';
 import {I18N, TCustomAttribute} from 'aurelia-i18n';
 import Backend from 'i18next-xhr-backend';
+import { AureliaConfiguration } from 'aurelia-configuration';
 
 // todo: detect device
 
@@ -11,6 +11,16 @@ const languageCodes = ['af', 'en', 'nr', 'xh', 'zu', 'st', 'nso', 'tn', 'ss', 'v
 export function configure(aurelia: Aurelia): void {
   aurelia.use
     .standardConfiguration()
+    .plugin(PLATFORM.moduleName('aurelia-configuration'), config => {
+
+      config.setEnvironments({
+        'default': ['localhost:8080'],
+        'debug': ['tbd'],
+        'testing': ['tbd'],
+        'dev1': ['tbd'],
+        'prod': ['tbd'],
+      });
+    })
     .plugin(PLATFORM.moduleName('aurelia-validation'))
     .plugin(PLATFORM.moduleName('aurelia-i18n'), (instance) => {
 
@@ -36,9 +46,19 @@ export function configure(aurelia: Aurelia): void {
     .plugin(PLATFORM.moduleName('aurelia-dialog'))
     .feature(PLATFORM.moduleName('features/index'));
 
-  aurelia.use.developmentLogging(environment.debug ? 'debug' : 'warn');
+    
+  let configure = aurelia.container.get(AureliaConfiguration);
+  console.log(' ::>> configure >>>>> ', configure);
+  // @ts-ignore
+  if (configure.environment === 'prod' || configure.environment === 'staging') {
+    // LogManager.setLevel(LogManager.logLevel.warn);
+  }
 
-  if (environment.testing) {
+  // @ts-ignore
+  aurelia.use.developmentLogging(configure.environment.debug ? 'debug' : 'warn');
+
+  // @ts-ignore
+  if (configure.environment.testing) {
     aurelia.use.plugin(PLATFORM.moduleName('aurelia-testing'));
   }
 

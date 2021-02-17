@@ -265,9 +265,10 @@ module.exports = ({ production } = {}, {extractCss, analyze, tests, hmr, port, h
     ...when(!tests, new CopyWebpackPlugin({
       patterns: [
         { from: 'static', to: outDir, globOptions: { ignore: ['.*'] } },
-        { from: 'src/locales/', to: 'locales/' }
+        { from: 'src/locales/', to: 'locales/' },
+        { from: 'src/config/config.json', to: 'config/config.json' }
       ]
-    })), // ignore dot (hidden) files
+    }, { copyUnmodified: true })), // ignore dot (hidden) files
     ...when(analyze, new BundleAnalyzerPlugin()),
     /**
      * Note that the usage of following plugin cleans the webpack output directory before build.

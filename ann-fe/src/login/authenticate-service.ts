@@ -15,7 +15,7 @@ export class AuthenticateService {
     const encryptedPassword = EncryptService.encrypt(password);
 
     return new Promise(resolve => {
-      this.httpClient.createRequest('http://localhost:3000/passport/authenticate')
+      this.httpClient.createRequest('passport/authenticate')
         .asPost()
         .withContent({
           email,
@@ -41,7 +41,7 @@ export class AuthenticateService {
   public authenticateWithToken(): Promise<any> {
 
     return new Promise((resolve, reject) => {
-      this.httpClient.createRequest('http://localhost:3000/passport/authenticate-token')
+      this.httpClient.createRequest('passport/authenticate-token')
         .asPost()
         .withContent({})
         .send()
