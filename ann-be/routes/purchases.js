@@ -56,6 +56,9 @@ router.post('/checkout',
       if (!articleIds || articleIds.length === 0) return res.sendStatus(204);
       
       let purchaseCount = 0;
+
+      //todo: send email
+
       articleIds.forEach(articleId => {
         
         const payload = {

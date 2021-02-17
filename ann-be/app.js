@@ -6,6 +6,7 @@ var logger = require('morgan');
 var cors = require('cors');
 var fileUpload = require('express-fileupload');
 var bodyParser = require('body-parser');
+const rateLimit = require("express-rate-limit");
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -36,6 +37,11 @@ app.use(fileUpload({
   useTempFiles: true,
   tempFileDir: '/tmp/',
   debug: true,
+}));
+
+app.use(rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100 // limit each IP to 100 requests per windowMs
 }));
 
 app.use('/', indexRouter);

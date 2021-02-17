@@ -37,7 +37,11 @@ router.post(
   '/submit',
   authenticateAnonymous,
   function(req, res, next) {
-    try {      
+
+    // todo: security against multiple simultaneous requests
+    // todo: ip checks
+
+    try {
       let user = req.body;
       user._id = new ObjectID();
       let reg_token = jwt.sign({ userId: user._id }, 'completing registration');
