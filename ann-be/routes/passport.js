@@ -48,13 +48,13 @@ router.post(
           
           var user_instance = new RegistrationModel(user);
           user_instance.save(function (err) {
-            if (err) return res.send(500, {error: err});
+            if (err) return res.sendStatus(500, {error: err});
             
             sendEmail(user);
             return res.send(user);
           });
         } else if (docs[0].status === 'removed') {
-          return res.send(500, { error: 'A user with this email has been removed from the system' });
+          return res.sendStatus(500, { error: 'A user with this email has been removed from the system' });
         } else {
           return res.sendStatus(401);
         }
@@ -75,11 +75,11 @@ router.post(
       const token = authHeader && authHeader.split(' ')[1];
       const decrypted = jwt.verify(token, 'completing registration');
 
-      if (!req.body.password) return res.send(500, {error: 'No password specified'});
+      if (!req.body.password) return res.sendStatus(500, {error: 'No password specified'});
     
       // find user entity for new token
       RegistrationModel.find({ _id: decrypted.userId }, function (err, docs) {
-        if (err) return res.send(500, {error: err});
+        if (err) return res.sendStatus(500, {error: err});
     
         let user = docs[0].toJSON();
         if (user) {
@@ -93,11 +93,11 @@ router.post(
             { status: 'registration-complete' },
             { upsert: true },
             function (err) {
-              if (err) return res.send(500, {error: err});
+              if (err) return res.sendStatus(500, {error: err});
 
               const user_instance = new UserModel(user);
               user_instance.save(function (err) {
-                if (err) return res.send(500, {error: err});
+                if (err) return res.sendStatus(500, {error: err});
                 return res.sendStatus(200);
               });
             }
@@ -107,7 +107,7 @@ router.post(
         }
       });
     } catch(e) {console.log(' ::>> error >>>> ', e);
-      res.send(500, {error: e});
+      res.sendStatus(500, {error: e});
     }
   }
 );
@@ -138,10 +138,12 @@ router.post(
           return res.sendStatus(401)
         })
         .catch(e => {
+          console.log(' ::>> error 2 ', e);
           return res.sendStatus(500, {error: e})
         });
 
     } catch(e) {
+      console.log(' ::>> error 1 ', e);
       return res.sendStatus(500, {error: e})
     }
   }

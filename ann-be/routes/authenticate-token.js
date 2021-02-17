@@ -56,7 +56,7 @@ const authenticateAnonymous = function (req, res, next) {
   if (!token) return res.sendStatus(401);
 
   AnonymousModel.find({}, function (err, docs) {
-    if (err) return res.send(500, {error: err});
+    if (err) return res.sendStatus(500, {error: err});
     if (docs[0]) {
       if (token.indexOf(docs[0].anonymous) >= 0) {
         return next();

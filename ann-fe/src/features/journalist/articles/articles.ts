@@ -3,6 +3,7 @@ import { Router } from 'aurelia-router';
 
 import { ArticleService } from './articles-service';
 import { DataStore } from 'stores/data-store';
+import { PurchaseService } from 'features/admin/purchases/purchase-service';
 
 @autoinject()
 export class Articles {
@@ -14,6 +15,7 @@ export class Articles {
   constructor(
     private router: Router,
     private articlesService: ArticleService,
+    private purchaseService: PurchaseService,
     public dataStore: DataStore
   ) {}
 
@@ -62,6 +64,33 @@ export class Articles {
       .then(() => {
         console.log(' ::>> successfully activated article ');
         this.articles = this.articles.filter(article => article._id !== articleId);
+      })
+      .catch(() => {
+        console.log(' ::>> failed to activate article ');
+      });
+  }
+
+  private cart: any[] = [];
+
+  public addToCart(article: any) {
+    const item = {
+      _id: article._id,
+      name: article.name,
+      category: article.category
+    };
+    console.log(' ::>> adding article ', item);
+    this.cart.push(item);
+  }
+
+  public checkout(): void {
+    // todo: add validation
+
+    const articleIds = this.cart.map(item => item._id);
+
+    this.purchaseService
+      .checkout(articleIds)
+      .then(() => {
+        console.log(' ::>> successfully activated article ');
       })
       .catch(() => {
         console.log(' ::>> failed to activate article ');

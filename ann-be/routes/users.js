@@ -24,7 +24,7 @@ const removeUser = function(req, res) {
   UserModel.deleteOne(
     { _id: user.userId },
     function (err) {
-      if (err) return res.send(500, { error: err });
+      if (err) return res.sendStatus(500, { error: err });
       return updateRegistration(res, user)
     }
   );
@@ -36,7 +36,7 @@ const updateRegistration = function(res, user) {
     { status: 'removed' },// todo: set enum deleted
     { upsert: true },
     function (err) {
-      if (err) return res.send(500, {error: err});
+      if (err) return res.sendStatus(500, {error: err});
       return res.sendStatus(200);
     }
   );
@@ -55,7 +55,7 @@ const updateRegistration = function(res, user) {
 //     var user_instance = new UserModel(myobj);
 //     // Save the new model instance, passing a callback
 //     user_instance.save(function (err) {
-//       if (err) return res.send(500, {error: err});
+//       if (err) return res.sendStatus(500, {error: err});
 //       return res.sendStatus(200);
 //       // saved!
 //     });

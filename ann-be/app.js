@@ -12,6 +12,7 @@ var usersRouter = require('./routes/users');
 var passportRouter = require('./routes/passport');
 var articlesRouter = require('./routes/articles');
 var audioRouter = require('./routes/audio');
+var purchasesRouter = require('./routes/purchases');
 
 var app = express();
 app.use(cors());
@@ -42,6 +43,7 @@ app.use('/users', usersRouter);
 app.use('/passport', passportRouter);
 app.use('/articles', articlesRouter);
 app.use('/audio', audioRouter);
+app.use('/purchases', purchasesRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

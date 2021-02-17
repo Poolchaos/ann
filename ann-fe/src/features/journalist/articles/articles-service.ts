@@ -1,4 +1,3 @@
-import { rejects } from 'assert';
 import { autoinject } from 'aurelia-framework';
 import { HttpClient } from 'aurelia-http-client';
 

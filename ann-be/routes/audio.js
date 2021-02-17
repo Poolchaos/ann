@@ -53,14 +53,14 @@ router.post('/',
 
       var instance = new FileModel(audio);
       instance.save(function (err) {
-        if (err) return res.send(500, {error: err});
+        if (err) return res.sendStatus(500, {error: err});
 
         return ArticleModel.findOneAndUpdate(
           { _id: audio.articleId },
           { $push: { files: audio._id } },
           { upsert: true },
           function (err) {
-            if (err) return res.send(500, {error: err});
+            if (err) return res.sendStatus(500, {error: err});
             res.sendStatus(200);
           }
         );
