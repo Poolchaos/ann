@@ -90,6 +90,16 @@ export class DashboardRoutes {
       settings: {
         access: ['DEFAULT_USER']
       }
+    }, {
+      route: 'cart',
+      name: 'cart',
+      moduleId: PLATFORM.moduleName('features/default_user/cart/cart'),
+      nav: true,
+      title: 'Cart',
+      auth: true,
+      settings: {
+        access: ['DEFAULT_USER']
+      }
     }];
   }
 }

@@ -3,6 +3,7 @@ import { EventAggregator } from 'aurelia-event-aggregator';
 
 import { CookieService } from 'services/cookie-service';
 import { EVENTS } from './events';
+import { CartModel, ICartItem } from './cart-model';
 
 @autoinject()
 export class DataStore {
@@ -14,6 +15,7 @@ export class DataStore {
     USER: 'DEFAULT_USER'
   };
   private USER: ILogin | IUser;
+  public cart: CartModel = new CartModel();
 
   constructor(
     private eventAggregator: EventAggregator,
@@ -30,12 +32,16 @@ export class DataStore {
     this.eventAggregator.subscribe(EVENTS.USER_LOGGED_IN, (data: ILogin) => this.user = data);
     this.eventAggregator.subscribe(EVENTS.USER_REHYDRATE, (data: IUser) => this.user = data);
     this.eventAggregator.subscribe(EVENTS.USER_LOGGED_OUT, (data: IUser) => this.user = data);
+    
+    this.eventAggregator.subscribe(EVENTS.ADD_ITEM_TO_CART, (item: ICartItem) => this.cart.add(item));
+    this.eventAggregator.subscribe(EVENTS.REMOVE_ITEM_FROM_CART, (itemId: string) => this.cart.remove(itemId));
+    this.eventAggregator.subscribe(EVENTS.CLEAR_CART, () => this.cart.clear());
   }
 
   public set user(user: ILogin | IUser) {
     this.USER = user;
     if (user) {
-      this.cookieService.setCookie('ann-user', JSON.stringify(user), 3);
+      this.cookieService.setCookie(EVENTS.CACHE.USER, JSON.stringify(user), 3);
     } else {
       this.cookieService.eraseCookie('ann-user');
     }
@@ -67,6 +73,8 @@ export class DataStore {
     return this.USER ? this.USER.role === DataStore.ROLES.USER : false;
   }
 }
+
+
 
 export interface ILogin {
   token: string;

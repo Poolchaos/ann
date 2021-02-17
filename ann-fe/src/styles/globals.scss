@@ -19,6 +19,10 @@ button {
   background: rgba(0, 0, 0, 0);
 }
 
+button:disabled {
+  color: var(--light-gray);
+}
+
 ul {
   margin: 0;
   padding: 0;

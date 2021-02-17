@@ -1,9 +1,10 @@
 import { autoinject } from 'aurelia-framework';
 import { Router } from 'aurelia-router';
+import { EventAggregator } from 'aurelia-event-aggregator';
 
 import { ArticleService } from './articles-service';
 import { DataStore } from 'stores/data-store';
-import { PurchaseService } from 'features/admin/purchases/purchase-service';
+import { EVENTS } from 'stores/events';
 
 @autoinject()
 export class Articles {
@@ -15,7 +16,7 @@ export class Articles {
   constructor(
     private router: Router,
     private articlesService: ArticleService,
-    private purchaseService: PurchaseService,
+    private eventAggregator: EventAggregator,
     public dataStore: DataStore
   ) {}
 
@@ -70,8 +71,6 @@ export class Articles {
       });
   }
 
-  private cart: any[] = [];
-
   public addToCart(article: any) {
     const item = {
       _id: article._id,
@@ -79,21 +78,7 @@ export class Articles {
       category: article.category
     };
     console.log(' ::>> adding article ', item);
-    this.cart.push(item);
-  }
-
-  public checkout(): void {
-    // todo: add validation
-
-    const articleIds = this.cart.map(item => item._id);
-
-    this.purchaseService
-      .checkout(articleIds)
-      .then(() => {
-        console.log(' ::>> successfully activated article ');
-      })
-      .catch(() => {
-        console.log(' ::>> failed to activate article ');
-      });
+    // this.cart.push(item);
+    this.eventAggregator.publish(EVENTS.ADD_ITEM_TO_CART, item);
   }
 }

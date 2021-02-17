@@ -1,0 +1,20 @@
+<template>
+  <div>
+    <h3>Cart</h3>
+    <div  if.bind="!dataStore.cart.hasItems">No items in cart</div>
+    <div repeat.for="item of dataStore.cart.items" if.bind="dataStore.cart.hasItems">
+      <div>Name: ${item.name}</div>
+      <div>Category: ${item.category}</div>
+      <button click.trigger="remove(item._id)">Remove Item</button>
+      <hr/>
+    </div>
+    <button
+      click.trigger="checkout()" disabled.bind="!dataStore.cart.hasItems">
+      Checkout
+    </button>
+    <button
+      click.trigger="clear()" disabled.bind="!dataStore.cart.hasItems">
+      Clear Cart
+    </button>
+  </div>
+</template>

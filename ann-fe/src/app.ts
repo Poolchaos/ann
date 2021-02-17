@@ -46,7 +46,7 @@ export class App {
       { title: "Tshivenda", code: "ve" },
       { title: "Xitsonga", code: "ts" }
     ];
-    const code = this.cookieService.getCookie('ann-locale');
+    const code = this.cookieService.getCookie(EVENTS.CACHE.LOCALE);
     if (code) {
       this.setLocale({ code });
     } else {
@@ -114,7 +114,7 @@ export class App {
     if(this.currentLocale !== code) {
       this.i18n.setLocale(code);
       this.currentLocale = code;
-      this.cookieService.setCookie('ann-locale', code);
+      this.cookieService.setCookie(EVENTS.CACHE.LOCALE, code);
     }
   }
 
@@ -132,6 +132,10 @@ export class App {
 
   public goToDashboard(): void {
     this.router.navigate('dashboard');
+  }
+
+  public viewCart(): void {
+    this.router.navigate('cart');
   }
 
   public logout(): void {
@@ -153,7 +157,7 @@ export class AuthStep {
 
   run(navigationInstruction: NavigationInstruction, next: Next): any {
 
-    const cookie = this.cookieService.getCookie('ann-user');
+    const cookie = this.cookieService.getCookie(EVENTS.CACHE.USER);
     const user: IUser = cookie ? JSON.parse(cookie) : null;
     /*AUTH*/
     let isAuthRoute: boolean = navigationInstruction.getAllInstructions().some(i => i.config.auth);

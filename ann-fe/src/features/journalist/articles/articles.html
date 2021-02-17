@@ -29,16 +29,4 @@
     </button>
     <hr/>
   </div>
-  <div if.bind="cart.length > 0 && dataStore.isUser">
-    <h3>Cart</h3>
-    <div repeat.for="item of cart">
-      <div>Name: ${item.name}</div>
-      <div>Category: ${item.category}</div>
-      <hr/>
-    </div>
-    <button if.bind="dataStore.isUser"
-      click.trigger="checkout()">
-      Checkout
-    </button>
-  </div>
 </template>

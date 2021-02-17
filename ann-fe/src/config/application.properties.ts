@@ -10,12 +10,7 @@ const environment = configure.environment;
 @autoinject()
 export class ApplicationProperties {
 
-  constructor(private config: AureliaConfiguration) {
-    console.log(' ::>> config >>>> ', config);
-    console.log(' ::>> config test ', {
-      debug: this.config.get('debug')
-    });
-  }
+  constructor(private config: AureliaConfiguration) {}
 
   get apiQueryEndpoint() {
     return this.config.get(environment).apiQueryEndpoint;
