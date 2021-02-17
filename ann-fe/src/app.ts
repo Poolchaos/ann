@@ -1,6 +1,7 @@
 import { autoinject, computedFrom } from 'aurelia-framework';
 import { Router, NavigationInstruction, Next, RedirectToRoute, Redirect, RouteConfig } from 'aurelia-router';
 import { EventAggregator } from 'aurelia-event-aggregator';
+import { HttpClient } from 'aurelia-http-client';
 import { I18N } from 'aurelia-i18n';
 
 import { DataStore, IUser } from 'stores/data-store';
@@ -10,6 +11,8 @@ import { CookieService } from 'services/cookie-service';
 import { EventsStore } from 'stores/events-store';
 import { DashboardRoutes } from 'dashboard/dashboard-routes';
 import { AuthenticateService } from 'login/authenticate-service';
+import { ApplicationProperties } from 'config/application.properties';
+import HttpInterceptor from 'config/http-interceptor';
 
 import './includes';
 
@@ -26,7 +29,9 @@ export class App {
     private cookieService: CookieService,
     private eventsStore: EventsStore,
     private authenticateService: AuthenticateService,
-    private i18n: I18N
+    private i18n: I18N,
+    private httpClient: HttpClient,
+    private applicationProperties: ApplicationProperties
   ) {
     this.locales = [
       { title: "Afrikaans", code: "af" },
@@ -47,6 +52,7 @@ export class App {
     } else {
       this.currentLocale = this.i18n.getLocale();
     }
+    this.configureHTTP();
     this.init();
   }
 
@@ -58,6 +64,14 @@ export class App {
     const routeConfigs: RouteConfig[] = [].concat(AppRoutes.routes, DashboardRoutes.routes);
     config.map(routeConfigs);
     this.router = router;
+  }
+
+  private configureHTTP(): void {
+    this.httpClient.configure(req => {
+      // @ts-ignore
+      req.withInterceptor(new HttpInterceptor(this.httpClient, this.dataStore));
+      req.withBaseUrl(this.applicationProperties.apiQueryEndpoint);
+    });
   }
 
   private init(): void {

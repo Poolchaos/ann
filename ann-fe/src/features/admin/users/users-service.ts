@@ -18,12 +18,8 @@ export class UserService {
         .send()
         .then(
           (response) => {
-            try {
-              const user = JSON.parse(response.response);
-              resolve(user);
-            } catch(e) {
-              resolve(response.response);
-            }
+            // @ts-ignore
+            resolve(response);
           },
           (error) => {
             console.warn(' ::>> error ', error);

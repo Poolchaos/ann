@@ -74,7 +74,7 @@ router.post('/',
 );
 
 router.put('/', 
-  (req, res, next) => authenticateToken(req, res, next, [ROLES.JOURNALIST]),
+  (req, res, next) => authenticateToken(req, res, next, [ROLES.ADMIN, ROLES.JOURNALIST]),
   function(req, res, next) {
     try {
       if (!req.body) return res.sendStatus(500, { error: err });

@@ -27,13 +27,8 @@ export class RegistrationService {
         .send()
         .then(
           (response) => {
-            console.log(' ::>> response ', response);
-            try {
-              const user = JSON.parse(response.response);
-              resolve(user);
-            } catch(e) {
-              resolve(response.response);
-            }
+            //@ts-ignore
+            resolve(response);
           },
           (error) => {
             console.warn(' ::>> error ', error);

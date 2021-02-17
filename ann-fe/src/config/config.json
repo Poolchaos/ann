@@ -1,0 +1,14 @@
+{
+  "default": {
+    "apiQueryEndpoint": "http://localhost:3000/"
+  },
+  "local": {
+    "apiQueryEndpoint": "http://localhost:3000/"
+  },
+  "dev1": {
+    "apiQueryEndpoint": "https://api.dev1.zailab.com/"
+  },
+  "prod": {
+    "apiQueryEndpoint": "https://api.zailab.com/"
+  }
+}

@@ -20,8 +20,6 @@ export class ArticleService {
     console.log(' ::>> createArticle >>> ');
 
     return new Promise(resolve => {
-      // todo: read environment from .env
-      // todo: make interceptor for httpClient to map response.response
       this.httpClient.createRequest('http://localhost:3000/articles')
         .asPost()
         .withContent({ 
@@ -31,15 +29,7 @@ export class ArticleService {
         })
         .send()
         .then(
-          (response) => {
-            console.log(' ::>> created ', response);
-            try {
-              const article = JSON.parse(response.response);
-              resolve(article);
-            } catch(e) {
-              resolve(response.response);
-            }
-          },
+          (response) => resolve(response),
           (error) => {
             console.warn(' ::>> error ', error);
           }
@@ -52,7 +42,6 @@ export class ArticleService {
 
     return new Promise((resolve, reject) => {
       // todo: read environment from .env
-      // todo: make interceptor for httpClient to map response.response
       this.httpClient.createRequest('http://localhost:3000/articles/review')
         .asPost()
         .withContent({ articleId })
@@ -76,14 +65,7 @@ export class ArticleService {
         .asGet()
         .send()
         .then(
-          (response) => {
-            try {
-              const user = JSON.parse(response.response);
-              resolve(user);
-            } catch(e) {
-              resolve(response.response);
-            }
-          },
+          (response) => resolve(response),
           (error) => {
             console.warn(' ::>> error ', error);
           }
@@ -97,14 +79,7 @@ export class ArticleService {
         .asGet()
         .send()
         .then(
-          (response) => {
-            try {
-              const user = JSON.parse(response.response);
-              resolve(user);
-            } catch(e) {
-              resolve(response.response);
-            }
-          },
+          (response) => resolve(response),
           (error) => {
             console.warn(' ::>> error ', error);
           }
@@ -123,14 +98,16 @@ export class ArticleService {
 
     return new Promise((resolve, reject) => {
       // todo: read environment from .env
-      // todo: make interceptor for httpClient to map response.response
       this.httpClient.createRequest('http://localhost:3000/audio')
         .asPost()
         .withContent(file)
         .withProgressCallback(progressCallback)
         .send()
         .then(
-          (response) => resolve(response.response),
+          (response) => {
+            // @ts-ignore
+            resolve(response);
+          },
           (error) => reject(error)
         );
     });
@@ -144,7 +121,7 @@ export class ArticleService {
         .withContent({ audioId: file })
         .send()
         .then(
-          (response) => resolve(JSON.parse(response.response)),
+          (response) => resolve(response),
           (error) => reject(error)
         );
     });

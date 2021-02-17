@@ -3,6 +3,7 @@ import { HttpClient } from 'aurelia-http-client';
 
 import { UserRegistrationSettings } from 'registration/user-registration-settings';
 import { EncryptService } from 'services/encrypt-service';
+import { IUser } from 'stores/data-store';
 
 @autoinject()
 export class AuthenticateService {
@@ -25,13 +26,10 @@ export class AuthenticateService {
         .send()
         .then(
           (response) => {
-            try {
-              const user = JSON.parse(response.response);
-              this.setHeader(user.token);
-              resolve(user);
-            } catch(e) {
-              resolve(response.response);
-            }
+            // @ts-ignore
+            const user: IUser = response;
+            this.setHeader(user.token);
+            resolve(user);
           },
           (error) => {
             console.warn(' ::>> error ', error);
