@@ -50,7 +50,7 @@ export class DashboardRoutes {
       title: 'Articles',
       auth: true,
       settings: {
-        access: ['Admin', 'Journalist']
+        access: ['Admin', 'Journalist', 'DEFAULT_USER']
       }
     }, {
       route: 'create-article',

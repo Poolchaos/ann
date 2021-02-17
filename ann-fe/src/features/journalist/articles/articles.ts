@@ -9,22 +9,30 @@ export class Articles {
 
   public articles = [];
 
+  private params: { [key: string]: string };
+
   constructor(
     private router: Router,
     private articlesService: ArticleService,
     public dataStore: DataStore
   ) {}
 
-  public activate(): void {
+  public activate(params?: any): void {
+    this.params = params;
     this.retrieveArticles();
   }
 
   private retrieveArticles(): void {
-    this.articlesService
-      .getArticles()
-      .then((articles) => {
-        this.articles = articles;
-      })
+    try {
+      this.articlesService
+        .getArticles(this.params)
+        .then((articles) => {
+          this.articles = articles;
+        });
+      } catch(e) {
+        console.warn('Unauthorised access. Routing to dashboard.');
+        // this.router.navigate('dashboard');
+      }
   }
 
   public navToCreateArticle(): void {

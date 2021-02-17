@@ -7,6 +7,8 @@ import { DataStore } from 'stores/data-store';
 @autoinject()
 export class ArticleService {
 
+  private route: string = 'articles';
+
   constructor(
     private httpClient: HttpClient,
     private dataStore: DataStore
@@ -20,7 +22,7 @@ export class ArticleService {
     console.log(' ::>> createArticle >>> ');
 
     return new Promise(resolve => {
-      this.httpClient.createRequest('articles')
+      this.httpClient.createRequest(this.route)
         .asPost()
         .withContent({ 
           name,
@@ -42,7 +44,7 @@ export class ArticleService {
 
     return new Promise((resolve, reject) => {
       // todo: read environment from .env
-      this.httpClient.createRequest('articles/review')
+      this.httpClient.createRequest(this.route + '/review')
         .asPost()
         .withContent({ articleId })
         .send()
@@ -51,17 +53,19 @@ export class ArticleService {
     });
   }
 
-  public getArticles(): Promise<any> {
+  public getArticles(params?: { [key: string]: string }): Promise<any> {
     if (this.dataStore.isAdmin) {
       return this.retrieveArticlesToReview();
     } else if (this.dataStore.isJournalist) {
       return this.retrieveArticles();
+    } else if (this.dataStore.isUser) {
+      return this.retrieveCateredArticles(params);
     }
   }
 
   public retrieveArticlesToReview(): Promise<any> {
     return new Promise(resolve => {
-      this.httpClient.createRequest('articles/review')
+      this.httpClient.createRequest(this.route + '/review')
         .asGet()
         .send()
         .then(
@@ -75,8 +79,26 @@ export class ArticleService {
   
   public retrieveArticles(): Promise<any> {
     return new Promise(resolve => {
-      this.httpClient.createRequest('articles')
+      this.httpClient.createRequest(this.route)
         .asGet()
+        .send()
+        .then(
+          (response) => resolve(response),
+          (error) => {
+            console.warn(' ::>> error ', error);
+          }
+        );
+    });
+  }
+  
+  public retrieveCateredArticles(params: { [key: string]: string }): Promise<any> {
+    console.log(' ::>> params >>>> ', params);
+    return new Promise(resolve => {
+      // resolve([]);
+
+      this.httpClient.createRequest(this.route + '/category')
+        .asGet()
+        .withParams(params)
         .send()
         .then(
           (response) => resolve(response),

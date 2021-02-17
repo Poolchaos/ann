@@ -7,6 +7,7 @@ const ObjectID = require('mongodb').ObjectID;
 const { authenticateToken } = require('./authenticate-token');
 const ArticleModel = require('../models/article-model');
 const ROLES = require('../enums/roles');
+const CATEGORIES = require('../enums/categories');
 
 //Set up default mongoose connection
 const mongoDB = 'mongodb://localhost:27017/ann-projector';
@@ -85,12 +86,40 @@ router.get('/review',
     }
   }
 );
+
+router.get('/category',
+  (req, res, next) => authenticateToken(req, res, next, [ROLES.ADMIN, ROLES.JOURNALIST, ROLES.DEFAULT_USER]),
+  function(req, res, next) {
+    try {
+      const authHeader = req.headers['authorization']
+      const token = authHeader && authHeader.split(' ')[1];
+      const decrypted = jwt.verify(token, 'complete');
+
+      if (!decrypted) return res.sendStatus(401);
+      if (!req.query.category) return res.sendStatus(500, 'No category specified');
+      if (!CATEGORIES.includes(req.query.category)) return res.sendStatus(500);
+
+      const params = {
+        ...req.query,
+        contentConfirmed: true
+      };
+      ArticleModel.find(params, function (err, docs) {
+        return res.send(docs);
+      });
+    } catch(e) {
+      console.log(' ::>> error ', e);
+    }
+  }
+);
+
 router.post('/review', 
   (req, res, next) => authenticateToken(req, res, next, [ROLES.ADMIN]),
   function(req, res, next) {
     try {
       if (!req.body) return res.sendStatus(500, { error: err });
       const article = req.body;
+
+      // todo: add creator, createdDate
 
       return ArticleModel.findOneAndUpdate(
         { _id: article.articleId },

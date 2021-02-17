@@ -1,12 +1,26 @@
 <template>
   User dashboard
   <div class="category-wrapper">
-    <div class="category__item" i18n="page.user.dashboard.news"></div>
-    <div class="category__item" i18n="page.user.dashboard.sport"></div>
-    <div class="category__item" i18n="page.user.dashboard.politics"></div>
-    <div class="category__item" i18n="page.user.dashboard.crime"></div>
-    <div class="category__item" i18n="page.user.dashboard.technical"></div>
-    <div class="category__item" i18n="page.user.dashboard.buniness"></div>
-    <div class="category__item" i18n="page.user.dashboard.travel"></div>
+    <div class="category__item"
+      i18n="page.user.dashboard.news"
+      click.trigger="viewArticleByCategory('News')"></div>
+    <div class="category__item"
+      i18n="page.user.dashboard.sport"
+      click.trigger="viewArticleByCategory('Sport')"></div>
+    <div class="category__item"
+      i18n="page.user.dashboard.politics"
+      click.trigger="viewArticleByCategory('Politics')"></div>
+    <div class="category__item"
+      i18n="page.user.dashboard.crime"
+      click.trigger="viewArticleByCategory('Crime')"></div>
+    <div class="category__item"
+      i18n="page.user.dashboard.technical"
+      click.trigger="viewArticleByCategory('Technical')"></div>
+    <div class="category__item"
+      i18n="page.user.dashboard.buniness"
+      click.trigger="viewArticleByCategory('Business')"></div>
+    <div class="category__item"
+      i18n="page.user.dashboard.travel"
+      click.trigger="viewArticleByCategory('Travel')"></div>
   </div>
 </template>
