@@ -39,10 +39,7 @@ export class ArticleService {
   }
 
   public removeArticle(articleId: string): Promise<void> {
-    console.log(' ::>> createArticle >>> ');
-
     return new Promise((resolve, reject) => {
-      // todo: read environment from .env
       this.httpClient.createRequest(this.route)
         .asDelete()
         .withContent({ articleId })
@@ -53,10 +50,7 @@ export class ArticleService {
   }
 
   public activateArticle(articleId: string): Promise<void> {
-    console.log(' ::>> createArticle >>> ');
-
     return new Promise((resolve, reject) => {
-      // todo: read environment from .env
       this.httpClient.createRequest(this.route + '/review')
         .asPost()
         .withContent({ articleId })
@@ -129,10 +123,7 @@ export class ArticleService {
     size: string;
     articleId: string
   }, progressCallback: any): Promise<{ articleId: string }> {
-    console.log(' ::>> createArticle >>> ');
-
     return new Promise((resolve, reject) => {
-      // todo: read environment from .env
       this.httpClient.createRequest('audio')
         .asPost()
         .withContent(file)

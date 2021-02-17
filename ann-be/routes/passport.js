@@ -38,7 +38,6 @@ router.post(
   authenticateAnonymous,
   function(req, res, next) {
 
-    // todo: security against multiple simultaneous requests
     // todo: ip checks
     // block source requests by ip
     

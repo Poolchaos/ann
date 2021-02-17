@@ -161,8 +161,6 @@ router.delete('/',
 
       if (!decrypted || !req.body.articleId) return res.sendStatus(401);
 
-      // todo: keep track of data removals
-
       ArticleModel.deleteOne(
         { _id: req.body.articleId },
         function (err) {

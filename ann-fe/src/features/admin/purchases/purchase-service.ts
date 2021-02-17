@@ -9,10 +9,7 @@ export class PurchaseService {
   constructor(private httpClient: HttpClient) {}
 
   public checkout(articles: string[]): Promise<void> {
-    console.log(' ::>> createArticle >>> ');
-
     return new Promise((resolve, reject) => {
-      // todo: read environment from .env
       this.httpClient.createRequest(this.route + '/checkout')
         .asPost()
         .withContent(articles)
