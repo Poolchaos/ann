@@ -52,6 +52,7 @@ export class App {
     } else {
       this.currentLocale = this.i18n.getLocale();
     }
+    this.configureHTTP();
     this.init();
   }
 
@@ -65,7 +66,7 @@ export class App {
     this.router = router;
   }
 
-  public activate(): void {
+  private configureHTTP(): void {
     console.log(' ::>> this.applicationProperties.apiQueryEndpoint >>>>> ', this.applicationProperties.apiQueryEndpoint);
 
     this.httpClient.configure(req => {

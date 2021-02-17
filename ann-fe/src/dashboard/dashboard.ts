@@ -15,11 +15,8 @@ export class Dashboard {
   public activate(): void {
     if (this.dataStore.user) {
       const routes = DashboardRoutes.routes;
-      console.log(' ::>> this.dataStore.user.role.toLowerCase() >>> ', this.dataStore.user.role.toLowerCase());
       routes.forEach(route => {
-        console.log(' ::>> route.name ', route.name);
         if (this.dataStore.user.role.toLowerCase() === route.name) {
-          console.log(' ::>> routing to ', route.name);
           this.router.navigate(route.name);
         }
       });
