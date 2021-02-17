@@ -102,16 +102,14 @@ export class CreateArticle {
   private uploadAudio(articleId: string): void {
     if (this.fileContents.length > 0) {
       let uploadCount = 0;
-      // todo: base64 
 
       this.fileContents.forEach(file => {
         this.articleService
           .uploadAudio(
-            { ...file, articleId },
+            {name: file.name, data: file.data, type: file.type, size: file.size, articleId},
             data => this.fileUploadProgressCallback(data)
           )
           .then(() => {
-            console.log(' ::>> uplaoded ');
             uploadCount++;
 
             if (uploadCount >= this.fileContents.length) {
@@ -129,8 +127,7 @@ export class CreateArticle {
   }
 
   private handleArticleCreated(): void {
-    // todo: do something here. Route or notify of upload complete
-    // this.router.navigate('articles');
+    this.router.navigate('articles');
   }
 
   private fileUploadProgressCallback(data: any): void {

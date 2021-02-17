@@ -1,7 +1,7 @@
 <template>
   articles
   
-  <div if.bind="dataStore.isAdmin">
+  <div if.bind="dataStore.isJournalist">
     <button click.trigger="navToCreateArticle()">Create New Article</button>
   </div>
 
@@ -19,6 +19,10 @@
         <audio id="js-audio-${$index}"></audio>
       </div>
     </div>
+    <button if.bind="dataStore.isJournalist"
+      click.trigger="removeArticle(article._id)">
+      Remove Article
+    </button>
     <button if.bind="dataStore.isAdmin"
       click.trigger="activateArticle(article._id)">
       Activate Article

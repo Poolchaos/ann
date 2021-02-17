@@ -71,7 +71,7 @@ router.get('/category',
       if (!CATEGORIES.includes(req.query.category)) return res.sendStatus(500);
 
       const params = {
-        ...req.query,
+        category: req.query.category,
         contentConfirmed: true
       };
       ArticleModel.find(params, function (err, docs) {
@@ -139,17 +139,31 @@ router.post('/review',
   }
 );
 
-// router.delete('/', authenticateToken, function(req, res, next) {
-//   try {
-//     console.log(' ::>> req >>> ', req.body);
+router.delete('/',
+  (req, res, next) => authenticateToken(req, res, next, [ROLES.JOURNALIST]),
+  function(req, res, next) {
+    try {
+      const authHeader = req.headers['authorization']
+      const token = authHeader && authHeader.split(' ')[1];
+      const decrypted = jwt.verify(token, 'complete');
 
-//     if (!req.body || !req.body.userId) {
-//       return res.sendStatus(500, { error: err });
-//     }
-//     return removeUser(req, res);
-//   } catch(e) {
-//     console.log(' ::>> error ', e);
-//   }
-// });
+      console.log(' ::>> req.body.articleId >>>> ', req.body.articleId);
+
+      if (!decrypted || !req.body.articleId) return res.sendStatus(401);
+
+      // todo: keep track of data removals
+
+      ArticleModel.deleteOne(
+        { _id: req.body.articleId },
+        function (err) {
+          if (err) return res.sendStatus(500, { error: err });
+          res.sendStatus(200);
+        }
+      );
+    } catch(e) {
+      console.log(' ::>> error ', e);
+    }
+  }
+);
 
 module.exports = router;

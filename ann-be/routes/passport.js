@@ -40,6 +40,7 @@ router.post(
 
     // todo: security against multiple simultaneous requests
     // todo: ip checks
+    // block source requests by ip
 
     try {
       let user = req.body;

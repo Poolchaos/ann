@@ -59,6 +59,18 @@ export class Articles {
     audio.controls = true;
   }
 
+  public removeArticle(articleId: string): void {
+    this.articlesService
+      .removeArticle(articleId)
+      .then(() => {
+        console.log(' ::>> successfully activated article ');
+        this.articles = this.articles.filter(article => article._id !== articleId);
+      })
+      .catch(() => {
+        console.log(' ::>> failed to activate article ');
+      });
+  }
+
   public activateArticle(articleId: string): void {
     this.articlesService
       .activateArticle(articleId)

@@ -38,6 +38,20 @@ export class ArticleService {
     });
   }
 
+  public removeArticle(articleId: string): Promise<void> {
+    console.log(' ::>> createArticle >>> ');
+
+    return new Promise((resolve, reject) => {
+      // todo: read environment from .env
+      this.httpClient.createRequest(this.route)
+        .asDelete()
+        .withContent({ articleId })
+        .send()
+        .then(() => resolve())
+        .catch((error) => reject(error));
+    });
+  }
+
   public activateArticle(articleId: string): Promise<void> {
     console.log(' ::>> createArticle >>> ');
 
