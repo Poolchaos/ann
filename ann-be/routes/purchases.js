@@ -5,10 +5,9 @@ const mongoose = require('mongoose');
 const ObjectID = require('mongodb').ObjectID;
 
 const { authenticateToken } = require('./authenticate-token');
-const ArticleModel = require('../models/article-model');
 const PurchaseModel = require('../models/purchase-model');
 const ROLES = require('../enums/roles');
-const CATEGORIES = require('../enums/categories');
+const logger = require('../logger');
 
 //Set up default mongoose connection
 const mongoDB = 'mongodb://localhost:27017/ann-projector';
@@ -20,25 +19,6 @@ var db = mongoose.connection;
 
 //Bind connection to error event (to get notification of connection errors)
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-
-// router.get('/',
-//   (req, res, next) => authenticateToken(req, res, next, [ROLES.JOURNALIST]),
-//   function(req, res, next) {
-//     try {
-//       const authHeader = req.headers['authorization']
-//       const token = authHeader && authHeader.split(' ')[1];
-//       const decrypted = jwt.verify(token, 'complete');
-
-//       if (!decrypted) return res.sendStatus(401);
-
-//       PurchaseModel.find({ userId: decrypted._id }, function (err, docs) {
-//         return res.send(docs);
-//       });
-//     } catch(e) {
-//       console.log(' ::>> error ', e);
-//     }
-//   }
-// );
 
 router.post('/checkout', 
   (req, res, next) => authenticateToken(req, res, next, [ROLES.DEFAULT_USER]),
@@ -73,6 +53,7 @@ router.post('/checkout',
           if (err) return res.sendStatus(500, {error: err});
           // saved!
           purchaseCount ++;
+          log('Article purchased', articleId, decrypted._id)
 
           if (purchaseCount >= articleIds.length) {
             return res.sendStatus(200);
@@ -85,5 +66,13 @@ router.post('/checkout',
     }
   }
 );
+
+const log = function(message, articleId, userId) {
+  logger.info(message, {
+    articleId,
+    userId,
+    domain: 'purchases'
+  });
+}
 
 module.exports = router;

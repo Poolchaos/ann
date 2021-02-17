@@ -23,6 +23,7 @@
     "morgan": "~1.9.1",
     "node-jsencrypt": "^1.0.0",
     "nodemailer": "^6.4.18",
-    "uuidv4": "^6.2.6"
+    "uuidv4": "^6.2.6",
+    "winston": "^3.3.3"
   }
 }

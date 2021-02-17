@@ -1,12 +1,13 @@
 var express = require('express');
 var router = express.Router();
 const mongoose = require('mongoose');
+var jwt = require('jsonwebtoken');
 
 const UserModel = require('../models/user-model');
 const { authenticateToken } = require('./authenticate-token');
 const RegistrationModel = require('../models/registration-model');
 const ROLES = require('../enums/roles');
-
+const logger = require('../logger');
 
 //Set up default mongoose connection
 const mongoDB = 'mongodb://localhost:27017/ann-projector';
@@ -25,18 +26,24 @@ const removeUser = function(req, res) {
     { _id: user.userId },
     function (err) {
       if (err) return res.sendStatus(500, { error: err });
-      return updateRegistration(res, user)
+      return updateRegistration(req, res, user)
     }
   );
 }
 
-const updateRegistration = function(res, user) {
+const updateRegistration = function(req, res, user) {
   RegistrationModel.findOneAndUpdate(
     { _id: user.userId },
     { status: 'removed' },// todo: set enum deleted
     { upsert: true },
     function (err) {
       if (err) return res.sendStatus(500, {error: err});
+      const authHeader = req.headers['authorization']
+      const token = authHeader && authHeader.split(' ')[1];
+      if (!token) return res.sendStatus(401);
+  
+      const decrypted = jwt.verify(token, 'complete');
+      log('User removed', decrypted.email, user.userId);
       return res.sendStatus(200);
     }
   );
@@ -92,5 +99,13 @@ router.delete('/',
     }
   }
 );
+
+const log = function(message, email, removedUser) {
+  logger.info(message, {
+    email,
+    removedUser,
+    domain: 'users'
+  });
+}
 
 module.exports = router;

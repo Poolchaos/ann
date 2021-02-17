@@ -4,6 +4,7 @@ const router = express.Router();
 const nodemailer = require('nodemailer');
 const fs = require('fs')
 const path = require('path')
+const logger = require('../logger');
 
 const CONFIRM_REGISTRATION = fs.readFileSync(path.resolve(__dirname, './confirm-registration.html'), 'utf8')
 
@@ -27,11 +28,21 @@ function sendEmail(user) {
   };
 
   transporter.sendMail(mailData, function (err, info) {
-    if(err)
+    if(err) {
       console.log(err)
-    else
+    } else {
       console.log(info);
+      log('Confirm registration email sent', user.email, user._id);
+    }
  });
+}
+
+const log = function(message, email, userId) {
+  logger.info(message, {
+    email,
+    userId,
+    domain: 'email'
+  });
 }
 
 module.exports = sendEmail;

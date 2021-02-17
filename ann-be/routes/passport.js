@@ -6,7 +6,6 @@ var jwt = require('jsonwebtoken');
 let JSEncrypt = require('node-jsencrypt');
 require('dotenv').config();
 
-
 const RegistrationModel = require('../models/registration-model');
 const UserModel = require('../models/user-model');
 const sendEmail = require('../emails/email');
@@ -15,6 +14,7 @@ const {
   authenticateAnonymous,
   tokenValidate
 } = require('./authenticate-token');
+const logger = require('../logger');
 
 //Set up default mongoose connection
 const mongoDB = 'mongodb://localhost:27017/ann-projector';
@@ -41,6 +41,12 @@ router.post(
     // todo: security against multiple simultaneous requests
     // todo: ip checks
     // block source requests by ip
+    
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1];
+    const decrypted = jwt.verify(token, 'anonymous');
+
+    console.log(' ::>> decrypted >>>> ', decrypted);
 
     try {
       let user = req.body;
@@ -54,7 +60,7 @@ router.post(
           var user_instance = new RegistrationModel(user);
           user_instance.save(function (err) {
             if (err) return res.sendStatus(500, {error: err});
-            
+            log('Submit registration', user.email, user._id, decrypted.anonymous);
             sendEmail(user);
             return res.send(user);
           });
@@ -103,6 +109,7 @@ router.post(
               const user_instance = new UserModel(user);
               user_instance.save(function (err) {
                 if (err) return res.sendStatus(500, {error: err});
+                log('Registration Complete', user.email);
                 return res.sendStatus(200);
               });
             }
@@ -138,6 +145,7 @@ router.post(
           let user = docs[0].toJSON();
           if (user && decrypt(password) === decrypt(user.password)) {
             delete user.password;
+            log('User authenticated', email);
             return res.send(user);
           }
           return res.sendStatus(401)
@@ -157,10 +165,16 @@ router.post(
 router.post('/authenticate-token',
   (req, res, next) => authenticateToken(req, res, next),
   function(req, res, next) {
-    console.log(' ::>> authenticate token ');
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1];
+    
+    if (!token) return res.sendStatus(401);
+
+    const decrypted = jwt.verify(token, 'complete');
     try {
       UserModel.find({}, function (err, docs) {
         if (err || docs.length == 0) return res.sendStatus(500, {error: err});
+        log('User authenticated via token', decrypted.email);
         return res.sendStatus(200);
       });
     } catch(e) {
@@ -168,5 +182,14 @@ router.post('/authenticate-token',
     }
   }
 );
+
+const log = function(message, email, userId, decrypted) {
+  logger.info(message, {
+    email,
+    userId,
+    decrypted,
+    domain: 'passport'
+  });
+}
 
 module.exports = router;

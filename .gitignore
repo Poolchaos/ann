@@ -1,3 +1,6 @@
 .vscode
 node_modules
+
 tmp
+ann-be/combined.log
+ann-be/error.log

@@ -8,6 +8,7 @@ const { authenticateToken } = require('./authenticate-token');
 const ArticleModel = require('../models/article-model');
 const ROLES = require('../enums/roles');
 const CATEGORIES = require('../enums/categories');
+const logger = require('../logger');
 
 //Set up default mongoose connection
 const mongoDB = 'mongodb://localhost:27017/ann-projector';
@@ -35,6 +36,7 @@ router.get('/',
       });
     } catch(e) {
       console.log(' ::>> error ', e);
+      return res.sendStatus(500);
     }
   }
 );
@@ -54,6 +56,7 @@ router.get('/review',
       });
     } catch(e) {
       console.log(' ::>> error ', e);
+      return res.sendStatus(500);
     }
   }
 );
@@ -79,6 +82,7 @@ router.get('/category',
       });
     } catch(e) {
       console.log(' ::>> error ', e);
+      return res.sendStatus(500);
     }
   }
 );
@@ -94,7 +98,8 @@ router.post('/',
       const decrypted = jwt.verify(token, 'complete');
 
       if (!decrypted) return res.sendStatus(401);
-      // todo: add creator and date
+      // todo: add creator/editor and date
+      // todo: add ability to edit article
 
       let article = req.body;
       article._id = new ObjectID();
@@ -104,8 +109,8 @@ router.post('/',
       var instance = new ArticleModel(article);
       instance.save(function (err) {
         if (err) return res.sendStatus(500, {error: err});
+        log('Article added', article._id, article.userId);
         return res.send({ articleId: article._id });
-        // saved!
       });
 
     } catch(e) {
@@ -119,8 +124,14 @@ router.post('/review',
   (req, res, next) => authenticateToken(req, res, next, [ROLES.ADMIN]),
   function(req, res, next) {
     try {
+      const authHeader = req.headers['authorization']
+      const token = authHeader && authHeader.split(' ')[1];
+      const decrypted = jwt.verify(token, 'complete');
+
+      if (!decrypted) return res.sendStatus(401);
       if (!req.body) return res.sendStatus(500, { error: err });
       const article = req.body;
+      // todo: add reviewed by
 
       return ArticleModel.findOneAndUpdate(
         { _id: article.articleId },
@@ -128,7 +139,8 @@ router.post('/review',
         { upsert: true },
         function (err) {
           if (err) return res.sendStatus(500, {error: err});
-          res.sendStatus(200);
+          log('Article reviewed', article._id, decrypted._id);
+          return res.sendStatus(200);
         }
       );
 
@@ -147,8 +159,6 @@ router.delete('/',
       const token = authHeader && authHeader.split(' ')[1];
       const decrypted = jwt.verify(token, 'complete');
 
-      console.log(' ::>> req.body.articleId >>>> ', req.body.articleId);
-
       if (!decrypted || !req.body.articleId) return res.sendStatus(401);
 
       // todo: keep track of data removals
@@ -157,13 +167,23 @@ router.delete('/',
         { _id: req.body.articleId },
         function (err) {
           if (err) return res.sendStatus(500, { error: err });
-          res.sendStatus(200);
+          log('Article removed', req.body.articleId, decrypted._id);
+          return res.sendStatus(200);
         }
       );
     } catch(e) {
       console.log(' ::>> error ', e);
+      return res.sendStatus(500);
     }
   }
 );
+
+const log = function(message, articleId, userId) {
+  logger.info(message, {
+    articleId,
+    userId,
+    domain: 'articles'
+  });
+}
 
 module.exports = router;

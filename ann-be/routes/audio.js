@@ -9,6 +9,7 @@ const { authenticateToken } = require('./authenticate-token');
 const ArticleModel = require('../models/article-model');
 const FileModel = require('../models/file-model');
 const ROLES = require('../enums/roles');
+const logger = require('../logger');
 
 //Set up default mongoose connection
 const mongoDB = 'mongodb://localhost:27017/ann-projector';
@@ -40,13 +41,7 @@ router.post('/',
         type: req.body.type,
         articleId: req.body.articleId
       };
-      // article._id = new ObjectID();
-      // article.userId = new ObjectID(decrypted._id);
-      // article.contentConfirmed = false;
 
-      console.log(' ::>> article >>>>> ', audio);
-      
-      // todo: base64 
       // todo: check against format enums [mp3 and wav]
     
       fs.writeFileSync(audio.location, Buffer.from(req.body.data.replace(`data:${audio.type};base64,`, ''), 'base64'));
@@ -54,6 +49,7 @@ router.post('/',
       var instance = new FileModel(audio);
       instance.save(function (err) {
         if (err) return res.sendStatus(500, {error: err});
+        log('Audio uploaded', audio._id, audio.articleId, decrypted._id);
 
         return ArticleModel.findOneAndUpdate(
           { _id: audio.articleId },
@@ -61,7 +57,8 @@ router.post('/',
           { upsert: true },
           function (err) {
             if (err) return res.sendStatus(500, {error: err});
-            res.sendStatus(200);
+            log('Audio added to article', audio._id, audio.articleId, decrypted._id);
+            return res.sendStatus(200);
           }
         );
       });
@@ -92,6 +89,7 @@ router.put('/',
           
           fs.readFile(doc.location, (error, data) => {
             if (error) return res.sendStatus(500, { error });
+            log('Streaming audio', req.body.audioId, decrypted._id);
             return res.send({
               type: doc.type,
               content: Buffer.from(data, 'binary').toString('base64')
@@ -107,5 +105,14 @@ router.put('/',
     }
   }
 );
+
+const log = function(message, audioId, articleId, userId) {
+  logger.info(message, {
+    audioId,
+    articleId,
+    userId,
+    domain: 'audio'
+  });
+}
 
 module.exports = router;
