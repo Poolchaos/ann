@@ -109,12 +109,12 @@ router.post('/',
       var instance = new ArticleModel(article);
       instance.save(function (err) {
         if (err) return res.sendStatus(500, {error: err});
-        log('Article added', article._id, article.userId);
+        log('Article created', article._id, article.userId);
         return res.send({ articleId: article._id });
       });
 
     } catch(e) {
-      console.log(' ::>> error >>>>> ', e);
+      error('Failed to create article', token, req.body, e);
       return res.sendStatus(500, { error: err });
     }
   }
@@ -123,9 +123,10 @@ router.post('/',
 router.post('/review', 
   (req, res, next) => authenticateToken(req, res, next, [ROLES.ADMIN]),
   function(req, res, next) {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1];
+
     try {
-      const authHeader = req.headers['authorization']
-      const token = authHeader && authHeader.split(' ')[1];
       const decrypted = jwt.verify(token, 'complete');
 
       if (!decrypted) return res.sendStatus(401);
@@ -145,7 +146,7 @@ router.post('/review',
       );
 
     } catch(e) {
-      console.log(' ::>> error >>>>> ', e);
+      error('Failed to review article', token, req.body, e);
       return res.sendStatus(500, { error: err });
     }
   }
@@ -154,9 +155,10 @@ router.post('/review',
 router.delete('/',
   (req, res, next) => authenticateToken(req, res, next, [ROLES.JOURNALIST]),
   function(req, res, next) {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1];
+
     try {
-      const authHeader = req.headers['authorization']
-      const token = authHeader && authHeader.split(' ')[1];
       const decrypted = jwt.verify(token, 'complete');
 
       if (!decrypted || !req.body.articleId) return res.sendStatus(401);
@@ -170,7 +172,7 @@ router.delete('/',
         }
       );
     } catch(e) {
-      console.log(' ::>> error ', e);
+      error('Failed to delete article', token, req.body, e);
       return res.sendStatus(500);
     }
   }
@@ -180,6 +182,15 @@ const log = function(message, articleId, userId) {
   logger.info(message, {
     articleId,
     userId,
+    domain: 'articles'
+  });
+}
+
+const error = function(message, token, body, error) {
+  logger.error(message, {
+    token,
+    body,
+    error: Object.getOwnPropertyDescriptors(new Error(error)).message,
     domain: 'articles'
   });
 }

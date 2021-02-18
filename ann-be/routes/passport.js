@@ -43,14 +43,12 @@ router.post(
     
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1];
-    const decrypted = jwt.verify(token, 'anonymous');
-
-    console.log(' ::>> decrypted >>>> ', decrypted);
 
     try {
+      const decrypted = jwt.verify(token, 'anonymous');
       let user = req.body;
       user._id = new ObjectID();
-      let reg_token = jwt.sign({ userId: user._id }, 'completing registration');
+      const reg_token = jwt.sign({ userId: user._id }, 'completing registration');
       user.token = reg_token;
 
       RegistrationModel.find({ email: user.email }, function (err, docs) {
@@ -71,7 +69,8 @@ router.post(
       });
 
     } catch(e) {
-      console.log(' ::>> failed to register due to ', e);
+      error('Failed to submit registration', token, req.body, e);
+      res.sendStatus(500, {error: e});
     }
   }
 );
@@ -117,7 +116,8 @@ router.post(
           return res.sendStatus(401)
         }
       });
-    } catch(e) {console.log(' ::>> error >>>> ', e);
+    } catch(e) {
+      error('Failed to complete registration', token, req.body, e);
       res.sendStatus(500, {error: e});
     }
   }
@@ -127,9 +127,10 @@ router.post(
   '/authenticate',
   authenticateAnonymous,
   function (req, res, next) {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1];
+
     try {
-      const authHeader = req.headers['authorization']
-      const token = authHeader && authHeader.split(' ')[1];
       const email = req.body ? req.body.email : null;
       const password = req.body ? req.body.password : null;
       
@@ -155,7 +156,7 @@ router.post(
         });
 
     } catch(e) {
-      console.log(' ::>> error 1 ', e);
+      error('Failed to authenticate login', token, req.body, e);
       return res.sendStatus(500, {error: e})
     }
   }
@@ -166,17 +167,17 @@ router.post('/authenticate-token',
   function(req, res, next) {
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1];
-    
     if (!token) return res.sendStatus(401);
 
-    const decrypted = jwt.verify(token, 'complete');
     try {
+      const decrypted = jwt.verify(token, 'complete');
       UserModel.find({}, function (err, docs) {
         if (err || docs.length == 0) return res.sendStatus(500, {error: err});
         log('User authenticated via token', decrypted.email);
         return res.sendStatus(200);
       });
     } catch(e) {
+      error('Failed to authenticate token', token, req.body, e);
       return res.sendStatus(500, {error: e})
     }
   }
@@ -187,6 +188,15 @@ const log = function(message, email, userId, decrypted) {
     email,
     userId,
     decrypted,
+    domain: 'passport'
+  });
+}
+
+const error = function(message, token, body, error) {
+  logger.error(message, {
+    token,
+    body,
+    error: Object.getOwnPropertyDescriptors(new Error(error)).message,
     domain: 'passport'
   });
 }

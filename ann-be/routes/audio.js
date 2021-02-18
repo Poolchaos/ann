@@ -25,11 +25,11 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 router.post('/',
   (req, res, next) => authenticateToken(req, res, next, [ROLES.JOURNALIST]),
   function(req, res, next) {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1];
+
     try {
       if (!req.body) return res.sendStatus(500, { error: err });
-
-      const authHeader = req.headers['authorization']
-      const token = authHeader && authHeader.split(' ')[1];
       const decrypted = jwt.verify(token, 'complete');
 
       const extention = req.body.name.split('.');
@@ -64,7 +64,7 @@ router.post('/',
       });
 
     } catch(e) {
-      console.log(' ::>> error >>>>> ', e);
+      error('Failed to upload audio', token, req.body, e);
       return res.sendStatus(500, { error: err });
     }
   }
@@ -73,13 +73,12 @@ router.post('/',
 router.put('/', 
   (req, res, next) => authenticateToken(req, res, next, [ROLES.ADMIN, ROLES.JOURNALIST]),
   function(req, res, next) {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1];
+
     try {
       if (!req.body) return res.sendStatus(500, { error: err });
-
-      const authHeader = req.headers['authorization']
-      const token = authHeader && authHeader.split(' ')[1];
       const decrypted = jwt.verify(token, 'complete');
-      
       if (!decrypted) return res.sendStatus(401);
 
       FileModel.find({ _id: req.body.audioId }, function (err, docs) {
@@ -100,7 +99,7 @@ router.put('/',
         }
       });
     } catch(e) {
-      console.log(' ::>> error >>>>> ', e);
+      error('Failed to stream audio', token, req.body, e);
       return res.sendStatus(500, { error: err });
     }
   }
@@ -111,6 +110,15 @@ const log = function(message, audioId, articleId, userId) {
     audioId,
     articleId,
     userId,
+    domain: 'audio'
+  });
+}
+
+const error = function(message, token, body, error) {
+  logger.error(message, {
+    token,
+    body,
+    error: Object.getOwnPropertyDescriptors(new Error(error)).message,
     domain: 'audio'
   });
 }

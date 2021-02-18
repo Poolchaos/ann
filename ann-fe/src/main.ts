@@ -37,7 +37,7 @@ export function configure(aurelia: Aurelia): void {
         fallbackNS: false,
         attributes: aliases,
         lng: 'en',
-        debug: true,
+        debug: false,
         backend: {                                  
           loadPath: './locales/{{lng}}/{{ns}}.json'
         }

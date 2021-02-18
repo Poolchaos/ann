@@ -29,9 +29,8 @@ function sendEmail(user) {
 
   transporter.sendMail(mailData, function (err, info) {
     if(err) {
-      console.log(err)
+      error('Failed to send email', user.email, user._id, e);
     } else {
-      console.log(info);
       log('Confirm registration email sent', user.email, user._id);
     }
  });
@@ -41,6 +40,15 @@ const log = function(message, email, userId) {
   logger.info(message, {
     email,
     userId,
+    domain: 'email'
+  });
+}
+
+const error = function(message, email, userId, error) {
+  logger.error(message, {
+    email,
+    userId,
+    error: Object.getOwnPropertyDescriptors(new Error(error)).message,
     domain: 'email'
   });
 }

@@ -23,13 +23,12 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 router.post('/checkout', 
   (req, res, next) => authenticateToken(req, res, next, [ROLES.DEFAULT_USER]),
   function(req, res, next) {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1];
+
     try {
       if (!req.body) return res.sendStatus(500, { error: err });
-
-      const authHeader = req.headers['authorization']
-      const token = authHeader && authHeader.split(' ')[1];
       const decrypted = jwt.verify(token, 'complete');
-
       if (!decrypted) return res.sendStatus(401);
 
       const articleIds = req.body;
@@ -61,7 +60,7 @@ router.post('/checkout',
         });
       });
     } catch(e) {
-      console.log(' ::>> error >>>>> ', e);
+      error('Failed to checkout cart', token, req.body, e);
       return res.sendStatus(500, { error: err });
     }
   }
@@ -71,6 +70,15 @@ const log = function(message, articleId, userId) {
   logger.info(message, {
     articleId,
     userId,
+    domain: 'purchases'
+  });
+}
+
+const error = function(message, token, body, error) {
+  logger.error(message, {
+    token,
+    body,
+    error: Object.getOwnPropertyDescriptors(new Error(error)).message,
     domain: 'purchases'
   });
 }

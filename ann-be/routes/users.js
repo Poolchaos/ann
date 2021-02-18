@@ -49,29 +49,6 @@ const updateRegistration = function(req, res, user) {
   );
 }
 
-// router.post('/', function(req, res, next) {
-//   try {
-//     var myobj = {
-//       _id: new ObjectID(),
-//       firstName: "phillip-juan",
-//       surname: "van der Berg",
-//       email: "bt1phillip@gmail.com",
-//       contactNumbers: ["0712569431"]
-//     };
-
-//     var user_instance = new UserModel(myobj);
-//     // Save the new model instance, passing a callback
-//     user_instance.save(function (err) {
-//       if (err) return res.sendStatus(500, {error: err});
-//       return res.sendStatus(200);
-//       // saved!
-//     });
-
-//   } catch(e) {
-//     console.log(' ::>> error ', e);
-//   }
-// });
-
 /* GET users listing. */
 router.get('/',
   (req, res, next) => authenticateToken(req, res, next, [ROLES.ADMIN]),
@@ -89,13 +66,17 @@ router.get('/',
 router.delete('/',
   (req, res, next) => authenticateToken(req, res, next, [ROLES.ADMIN]),
   function(req, res, next) {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1];
+    
     try {
       if (!req.body || !req.body.userId) {
         return res.sendStatus(500, { error: err });
       }
       return removeUser(req, res);
     } catch(e) {
-      console.log(' ::>> error ', e);
+      error('Failed to delete user', token, req.body, e);
+      return res.sendStatus(500);
     }
   }
 );
@@ -104,6 +85,15 @@ const log = function(message, email, removedUser) {
   logger.info(message, {
     email,
     removedUser,
+    domain: 'users'
+  });
+}
+
+const error = function(message, token, body, error) {
+  logger.error(message, {
+    token,
+    body,
+    error: Object.getOwnPropertyDescriptors(new Error(error)).message,
     domain: 'users'
   });
 }
