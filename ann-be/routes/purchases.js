@@ -6,8 +6,10 @@ const ObjectID = require('mongodb').ObjectID;
 
 const { authenticateToken } = require('./authenticate-token');
 const PurchaseModel = require('../models/purchase-model');
+const ArticleModel = require('../models/article-model');
 const ROLES = require('../enums/roles');
 const logger = require('../logger');
+const { sendPurchasedEmail } = require('../emails/email');
 
 //Set up default mongoose connection
 const mongoDB = 'mongodb://localhost:27017/ann-projector';
@@ -35,6 +37,7 @@ router.post('/checkout',
       if (!articleIds || articleIds.length === 0) return res.sendStatus(204);
       
       let purchaseCount = 0;
+      let articles = [];
 
       //todo: send email
 
@@ -53,10 +56,16 @@ router.post('/checkout',
           // saved!
           purchaseCount ++;
           log('Article purchased', articleId, decrypted._id)
+          
+          ArticleModel.find({ _id: articleId }, function (err, docs) {
+            if (!docs || !docs.length) return res.sendStatus(500);
+            articles.push(docs[0]);
 
-          if (purchaseCount >= articleIds.length) {
-            return res.sendStatus(200);
-          }
+            if (purchaseCount >= articleIds.length) {
+              sendPurchasedEmail(decrypted, articles);
+              return res.sendStatus(200);
+            }
+          });
         });
       });
     } catch(e) {

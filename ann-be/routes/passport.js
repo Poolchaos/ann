@@ -8,7 +8,10 @@ require('dotenv').config();
 
 const RegistrationModel = require('../models/registration-model');
 const UserModel = require('../models/user-model');
-const sendEmail = require('../emails/email');
+const {
+  sendRegisterConfirmationEmail,
+  sendRegistrationCompleteEmail
+} = require('../emails/email');
 const {
   authenticateToken,
   authenticateAnonymous,
@@ -58,7 +61,7 @@ router.post(
           user_instance.save(function (err) {
             if (err) return res.sendStatus(500, {error: err});
             log('Submit registration', user.email, user._id, decrypted.anonymous);
-            sendEmail(user);
+            sendRegisterConfirmationEmail(user);
             return res.send(user);
           });
         } else if (docs[0].status === 'removed') {
@@ -107,6 +110,7 @@ router.post(
               const user_instance = new UserModel(user);
               user_instance.save(function (err) {
                 if (err) return res.sendStatus(500, {error: err});
+                sendRegistrationCompleteEmail(user);
                 log('Registration Complete', user.email);
                 return res.sendStatus(200);
               });

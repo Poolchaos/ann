@@ -1,24 +1,24 @@
 const express = require("express");
-const app = express();
-const router = express.Router();
 const nodemailer = require('nodemailer');
 const fs = require('fs')
 const path = require('path')
 const logger = require('../logger');
 
-const CONFIRM_REGISTRATION = fs.readFileSync(path.resolve(__dirname, './confirm-registration.html'), 'utf8')
+const CONFIRM_REGISTRATION = fs.readFileSync(path.resolve(__dirname, './email-confirm-registration.html'), 'utf8');
+const REGISTRATION_COMPLETED = fs.readFileSync(path.resolve(__dirname, './email-registration-complete.html'), 'utf8');
+const PURCHASE_CONFIRMED = fs.readFileSync(path.resolve(__dirname, './email-purchase.html'), 'utf8');
+const PURCHASE_TEMPLATE = fs.readFileSync(path.resolve(__dirname, './email-purchase-template.html'), 'utf8');
 
 var transporter = nodemailer.createTransport({
   host: "smtp.mailtrap.io",
   port: 2525,
   auth: {
-    user: "37195f8d35d947", // move to dontenv
+    user: "37195f8d35d947", // todo: move to dontenv
     pass: "56a6b4f73e969c"
   }
 });
 
-
-function sendEmail(user) {
+function sendRegisterConfirmationEmail(user) {
   
   let mailData = {
     from: 'noreply@ann.com',
@@ -29,11 +29,61 @@ function sendEmail(user) {
 
   transporter.sendMail(mailData, function (err, info) {
     if(err) {
-      error('Failed to send email', user.email, user._id, e);
+      error('Failed to send registration confirmation email', user.email, user._id, e);
     } else {
       log('Confirm registration email sent', user.email, user._id);
     }
- });
+  });
+}
+
+function sendRegistrationCompleteEmail(user) {
+  
+  let mailData = {
+    from: 'noreply@ann.com',
+    to: user.email,
+    subject: 'noreply',
+    html: REGISTRATION_COMPLETED,
+  };
+
+  transporter.sendMail(mailData, function (err, info) {
+    if(err) {
+      error('Failed to send complete registration email', user.email, user._id, e);
+    } else {
+      log('Registration completed email sent', user.email, user._id);
+    }
+  });
+}
+
+function sendPurchasedEmail(user, articles) {
+
+  let _articles = '';
+  if (articles && Array.isArray(articles)) {
+    articles.forEach(item => {
+      let template = PURCHASE_TEMPLATE;
+      template = template.replace('${name}', item.name);
+      template = template.replace('${category}', item.category);
+      template = template.replace('${content}', item.content);
+
+      _articles += template;
+    });
+  }
+
+  let template = PURCHASE_CONFIRMED.replace('${purchases}', _articles);
+  
+  let mailData = {
+    from: 'noreply@ann.com',
+    to: user.email,
+    subject: 'noreply',
+    html: template,
+  };
+
+  transporter.sendMail(mailData, function (err, info) {
+    if(err) {
+      error('Failed to send purchase email', user.email, user._id, e);
+    } else {
+      log('Purchase email sent', user.email, user._id);
+    }
+  });
 }
 
 const log = function(message, email, userId) {
@@ -53,4 +103,8 @@ const error = function(message, email, userId, error) {
   });
 }
 
-module.exports = sendEmail;
+module.exports = {
+  sendRegisterConfirmationEmail,
+  sendRegistrationCompleteEmail,
+  sendPurchasedEmail
+};
