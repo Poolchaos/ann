@@ -27,6 +27,7 @@ var ArticleSchema = new Schema({
   },
   created: updateSchema,
   updated: [updateSchema],
+  reviewer: updateSchema,
   contentConfirmed: {
     type: Boolean,
     required: [true, 'Please validate whether content has been confirmed']

@@ -41,7 +41,7 @@ router.get('/',
   }
 );
 
-router.get('/:id',
+router.get('/edit',
   (req, res, next) => authenticateToken(req, res, next, [ROLES.JOURNALIST]),
   function(req, res, next) {
     try {
@@ -210,19 +210,21 @@ router.post('/review',
 
       if (!decrypted) return res.sendStatus(401);
       if (!req.body) return res.sendStatus(500, { error: err });
-      const article = req.body;
-      // todo: add reviewed by
+      
+      ArticleModel.findById(req.body.articleId, function (err, doc) {
+        if (err) return res.sendStatus(500, {error: err});
 
-      return ArticleModel.findOneAndUpdate(
-        { _id: article.articleId },
-        { contentConfirmed: true },
-        { upsert: true },
-        function (err) {
-          if (err) return res.sendStatus(500, {error: err});
-          log('Article reviewed', article._id, decrypted._id);
-          return res.sendStatus(200);
-        }
-      );
+        doc.contentConfirmed = true;
+        doc.reviewer = {
+          userId: decrypted._id,
+          timestamp: Date.now()
+        };
+        doc.save();
+
+        log('Article reviewed', req.body.articleId, decrypted._id);
+        return res.send({ articleId: req.body.articleId });
+      });
+
 
     } catch(e) {
       error('Failed to review article', token, req.body, e);
