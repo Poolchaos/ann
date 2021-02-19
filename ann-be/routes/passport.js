@@ -100,22 +100,20 @@ router.post(
           user.token = jwt.sign(user, 'complete');
           user.password = password;
           
-          RegistrationModel.findOneAndUpdate(
-            { _id: user._id },
-            { status: 'registration-complete' },
-            { upsert: true },
-            function (err) {
-              if (err) return res.sendStatus(500, {error: err});
+          RegistrationModel.findById(user._id, function (err, doc) {
+            if (err) return res.sendStatus(500, {error: err});
 
-              const user_instance = new UserModel(user);
-              user_instance.save(function (err) {
-                if (err) return res.sendStatus(500, {error: err});
-                sendRegistrationCompleteEmail(user);
-                log('Registration Complete', user.email);
-                return res.sendStatus(200);
-              });
-            }
-          );
+            doc.status = 'registration-complete';
+            doc.save();
+            
+            const user_instance = new UserModel(user);
+            user_instance.save(function (err) {
+              if (err) return res.sendStatus(500, {error: err});
+              sendRegistrationCompleteEmail(user);
+              log('Registration Complete', user.email);
+              return res.sendStatus(200);
+            });
+          });
         } else {
           return res.sendStatus(401)
         }

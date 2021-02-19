@@ -32,21 +32,19 @@ const removeUser = function(req, res) {
 }
 
 const updateRegistration = function(req, res, user) {
-  RegistrationModel.findOneAndUpdate(
-    { _id: user.userId },
-    { status: 'removed' },// todo: set enum deleted
-    { upsert: true },
-    function (err) {
-      if (err) return res.sendStatus(500, {error: err});
-      const authHeader = req.headers['authorization']
-      const token = authHeader && authHeader.split(' ')[1];
-      if (!token) return res.sendStatus(401);
-  
-      const decrypted = jwt.verify(token, 'complete');
-      log('User removed', decrypted.email, user.userId);
-      return res.sendStatus(200);
-    }
-  );
+  RegistrationModel.findById(user.userId, function (err, doc) {
+    if (err) return res.sendStatus(500, {error: err});
+    doc.status = 'removed';
+    doc.save();
+
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1];
+    if (!token) return res.sendStatus(401);
+
+    const decrypted = jwt.verify(token, 'complete');
+    log('User removed', decrypted.email, user.userId);
+    return res.sendStatus(200);
+  });
 }
 
 /* GET users listing. */

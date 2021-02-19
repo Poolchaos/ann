@@ -73,16 +73,14 @@ router.put('/',
   (req, res, next) => authenticateToken(req, res, next, [ROLES.ADMIN, ROLES.JOURNALIST]),
   function(req, res, next) {
     const authHeader = req.headers['authorization']
-    console.log(' ::>> authHeader >>>> ', authHeader);
     const token = authHeader && authHeader.split(' ')[1];
-    console.log(' ::>> token >>>> ', token);
 
     try {
       if (!req.body) return res.sendStatus(500, { error: err });
       const decrypted = jwt.verify(token, 'complete');
       if (!decrypted) return res.sendStatus(401);
 
-      FileModel.find({ _id: req.body.audioId }, function (err, docs) {
+      FileModel.findById(req.body.audioId, function (err, docs) {
         if (docs && docs.length > 0) {
 
           const doc = docs[0];

@@ -174,6 +174,8 @@ export class CreateArticle {
         return this.handleArticleCreated();
       }
 
+      // todo: cater for removing an audio file
+
       this.fileContents.forEach(file => {
         if (!this.originalFileContents.includes(file)) {
 
