@@ -49,10 +49,17 @@ router.post(
 
     try {
       const decrypted = jwt.verify(token, 'anonymous');
-      let user = req.body;
-      user._id = new ObjectID();
-      const reg_token = jwt.sign({ userId: user._id }, 'completing registration');
-      user.token = reg_token;
+      const id = new ObjectID();
+      const reg_token = jwt.sign({ userId: id }, 'completing registration');
+      let user = {
+        _id: id,
+        firstName: req.body.firstName,
+        surname: req.body.surname,
+        email: req.body.email,
+        number: req.body.number,
+        role: req.body.role,
+        token: reg_token
+      };
 
       RegistrationModel.find({ email: user.email }, function (err, docs) {
         if (docs.length === 0) {

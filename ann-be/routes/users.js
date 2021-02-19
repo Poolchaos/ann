@@ -21,18 +21,18 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 const removeUser = function(req, res) {
-  const user = req.body;
+  const userId = req.body.userId;
   UserModel.deleteOne(
-    { _id: user.userId },
+    { _id: userId },
     function (err) {
       if (err) return res.sendStatus(500, { error: err });
-      return updateRegistration(req, res, user)
+      return updateRegistration(req, res, userId)
     }
   );
 }
 
-const updateRegistration = function(req, res, user) {
-  RegistrationModel.findById(user.userId, function (err, doc) {
+const updateRegistration = function(req, res, userId) {
+  RegistrationModel.findById(userId, function (err, doc) {
     if (err) return res.sendStatus(500, {error: err});
     doc.status = 'removed';
     doc.save();
@@ -42,7 +42,7 @@ const updateRegistration = function(req, res, user) {
     if (!token) return res.sendStatus(401);
 
     const decrypted = jwt.verify(token, 'complete');
-    log('User removed', decrypted.email, user.userId);
+    log('User removed', decrypted.email, userId);
     return res.sendStatus(200);
   });
 }

@@ -34,12 +34,13 @@ router.post('/checkout',
       if (!decrypted) return res.sendStatus(401);
 
       const articleIds = req.body;
-      if (!articleIds || articleIds.length === 0) return res.sendStatus(204);
+      if (!articleIds || !Array.isArray(req.body) || articleIds.length === 0) return res.sendStatus(204);
       
       let purchaseCount = 0;
       let articles = [];
 
       articleIds.forEach(articleId => {
+        if (!articleId) return res.sendStatus(500);
         
         const payload = {
           _id: new ObjectID(),

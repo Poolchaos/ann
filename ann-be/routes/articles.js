@@ -139,11 +139,10 @@ router.post('/',
         },
         contentConfirmed: false
       };
-      // todo: manage all new Objectid mappings
 
       var instance = new ArticleModel(article);
       instance.save(function (err) {
-        // handle errors passed through to FE
+        // todo: handle errors passed through to FE
         if (err) {
           console.log(' ::>> error ', err);
           return res.sendStatus(500, {error: err});
@@ -164,8 +163,6 @@ router.put('/',
   function(req, res, next) {
     try {
       if (!req.body) return res.sendStatus(500, { error: err });
-
-      // todo: don't map req.body directly ever
 
       const authHeader = req.headers['authorization']
       const token = authHeader && authHeader.split(' ')[1];
