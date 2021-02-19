@@ -50,10 +50,10 @@ router.get('/edit',
       const decrypted = jwt.verify(token, 'complete');
 
       if (!decrypted) return res.sendStatus(401);
-      if (!req.params || !req.params.id) return res.sendStatus(500);
+      if (!req.query || !req.query.articleId) return res.sendStatus(500);
 
       const params = {
-        _id: req.params.id,
+        _id: req.query.articleId,
         'created.userId': decrypted._id
       };
 

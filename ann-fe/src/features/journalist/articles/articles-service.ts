@@ -127,7 +127,7 @@ export class ArticleService {
 
   public retrieveArticle(articleId: string): Promise<any> {
     return new Promise(resolve => {
-      this.httpClient.createRequest(this.route)
+      this.httpClient.createRequest(this.route + '/edit')
         .asGet()
         .withParams({ articleId })
         .send()

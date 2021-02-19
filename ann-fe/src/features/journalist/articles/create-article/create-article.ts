@@ -22,6 +22,12 @@ export class CreateArticle {
     type: string;
     size: string;
   }[] = [];
+  private originalFileContents: {
+    name: string;
+    data: string | ArrayBuffer;
+    type: string;
+    size: string;
+  }[] = [];
   private validation: ValidationController;
   private ready: boolean = false;
 
@@ -56,6 +62,7 @@ export class CreateArticle {
         
         this.title = article.name;
         this.category = article.category;
+        this.originalFileContents = [].concat(article.files);
         this.fileContents = article.files;
 
         let element: any = document.querySelector('#x');
@@ -151,7 +158,7 @@ export class CreateArticle {
         )
         .then((article: { articleId: string }) => {
           console.log(' ::>> article created >>>> ');
-            this.uploadAudio(article.articleId);
+          this.uploadAudio(article.articleId);
         })
         .catch(error => {
           console.log(' ::>> failed to create article >>>> ');
@@ -163,23 +170,30 @@ export class CreateArticle {
     if (this.fileContents.length > 0) {
       let uploadCount = 0;
 
+      if (JSON.stringify(this.originalFileContents) === JSON.stringify(this.fileContents)) {
+        return this.handleArticleCreated();
+      }
+
       this.fileContents.forEach(file => {
-        this.articleService
-          .uploadAudio(
-            {name: file.name, data: file.data, type: file.type, size: file.size, articleId},
-            data => this.fileUploadProgressCallback(data)
-          )
-          .then(() => {
-            uploadCount++;
+        if (!this.originalFileContents.includes(file)) {
 
-            if (uploadCount >= this.fileContents.length) {
-              this.handleArticleCreated();
-            }
+          this.articleService
+            .uploadAudio(
+              {name: file.name, data: file.data, type: file.type, size: file.size, articleId},
+              data => this.fileUploadProgressCallback(data)
+            )
+            .then(() => {
+              uploadCount++;
 
-          })
-          .catch(() => {
-            console.log(' ::>> failed to uplaod ');
-          });
+              if (uploadCount >= this.fileContents.length) {
+                this.handleArticleCreated();
+              }
+
+            })
+            .catch(() => {
+              console.log(' ::>> failed to uplaod ');
+            });
+        }
       });
     } else {
       this.handleArticleCreated();

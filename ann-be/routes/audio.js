@@ -50,17 +50,16 @@ router.post('/',
       instance.save(function (err) {
         if (err) return res.sendStatus(500, {error: err});
         log('Audio uploaded', audio._id, audio.articleId, decrypted._id);
+        
+        ArticleModel.findById(audio.articleId, function (err, doc) {
+          if (err) return res.sendStatus(500, {error: err});
+          if (!doc) return res.sendStatus(404, {error: 'Article not found'});
+          doc.files.addToSet(audio._id);
+          doc.save();
 
-        return ArticleModel.findOneAndUpdate(
-          { _id: audio.articleId },
-          { $push: { files: audio._id } },
-          { upsert: true },
-          function (err) {
-            if (err) return res.sendStatus(500, {error: err});
-            log('Audio added to article', audio._id, audio.articleId, decrypted._id);
-            return res.sendStatus(200);
-          }
-        );
+          log('Article reviewed', req.body.articleId, decrypted._id);
+          return res.send({ articleId: req.body.articleId });
+        });
       });
 
     } catch(e) {
@@ -74,7 +73,9 @@ router.put('/',
   (req, res, next) => authenticateToken(req, res, next, [ROLES.ADMIN, ROLES.JOURNALIST]),
   function(req, res, next) {
     const authHeader = req.headers['authorization']
+    console.log(' ::>> authHeader >>>> ', authHeader);
     const token = authHeader && authHeader.split(' ')[1];
+    console.log(' ::>> token >>>> ', token);
 
     try {
       if (!req.body) return res.sendStatus(500, { error: err });
