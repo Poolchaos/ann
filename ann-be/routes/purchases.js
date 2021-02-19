@@ -55,9 +55,9 @@ router.post('/checkout',
           purchaseCount ++;
           log('Article purchased', articleId, decrypted._id)
           
-          ArticleModel.find({ _id: articleId }, function (err, docs) {
-            if (!docs || !docs.length) return res.sendStatus(500);
-            articles.push(docs[0]);
+          ArticleModel.findById(articleId, function (err, doc) {
+            if (!doc) return res.sendStatus(404);
+            articles.push(docs);
 
             if (purchaseCount >= articleIds.length) {
               sendPurchasedEmail(decrypted, articles);

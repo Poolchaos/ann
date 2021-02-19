@@ -173,8 +173,6 @@ router.put('/',
 
       if (!decrypted) return res.sendStatus(401);
 
-      // todo: clean up requests by id
-
       ArticleModel.findById(req.body.articleId, function (err, doc) {
         if (err) return res.sendStatus(500, {error: err});
 

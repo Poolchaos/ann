@@ -89,30 +89,25 @@ router.post(
 
       if (!req.body.password) return res.sendStatus(500, {error: 'No password specified'});
     
-      // find user entity for new token
-      RegistrationModel.find({ _id: decrypted.userId }, function (err, docs) {
+      RegistrationModel.findById(decrypted.userId, function (err, doc) {
         if (err) return res.sendStatus(500, {error: err});
     
-        let user = docs[0].toJSON();
+        let user = doc.toJSON();
         if (user) {
           const password = req.body ? req.body.password : null;
           user.token = null;
           user.token = jwt.sign(user, 'complete');
           user.password = password;
-          
-          RegistrationModel.findById(user._id, function (err, doc) {
-            if (err) return res.sendStatus(500, {error: err});
 
-            doc.status = 'registration-complete';
-            doc.save();
+          doc.status = 'registration-complete';
+          doc.save();
             
-            const user_instance = new UserModel(user);
-            user_instance.save(function (err) {
-              if (err) return res.sendStatus(500, {error: err});
-              sendRegistrationCompleteEmail(user);
-              log('Registration Complete', user.email);
-              return res.sendStatus(200);
-            });
+          const user_instance = new UserModel(user);
+          user_instance.save(function (err) {
+            if (err) return res.sendStatus(500, {error: err});
+            sendRegistrationCompleteEmail(user);
+            log('Registration Complete', user.email);
+            return res.sendStatus(200);
           });
         } else {
           return res.sendStatus(401)
@@ -153,7 +148,6 @@ router.post(
           return res.sendStatus(401)
         })
         .catch(e => {
-          console.log(' ::>> error 2 ', e);
           return res.sendStatus(500, {error: e})
         });
 

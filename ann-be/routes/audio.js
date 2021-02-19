@@ -80,11 +80,8 @@ router.put('/',
       const decrypted = jwt.verify(token, 'complete');
       if (!decrypted) return res.sendStatus(401);
 
-      FileModel.findById(req.body.audioId, function (err, docs) {
-        if (docs && docs.length > 0) {
-
-          const doc = docs[0];
-          
+      FileModel.findById(req.body.audioId, function (err, doc) {
+        if (doc) {
           fs.readFile(doc.location, (error, data) => {
             if (error) return res.sendStatus(500, { error });
             log('Streaming audio', req.body.audioId, decrypted._id);
