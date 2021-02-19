@@ -38,6 +38,33 @@ export class ArticleService {
     });
   }
 
+  public updateArticle(
+    articleId: string,
+    name: string,
+    category: string,
+    content: string
+  ): Promise<any> {
+    console.log(' ::>> updateArticle >>> ');
+
+    return new Promise(resolve => {
+      this.httpClient.createRequest(this.route)
+        .asPut()
+        .withContent({ 
+          articleId,
+          name,
+          category,
+          content
+        })
+        .send()
+        .then(
+          (response) => resolve(response),
+          (error) => {
+            console.warn(' ::>> error ', error);
+          }
+        );
+    });
+  }
+
   public removeArticle(articleId: string): Promise<void> {
     return new Promise((resolve, reject) => {
       this.httpClient.createRequest(this.route)
@@ -88,6 +115,21 @@ export class ArticleService {
     return new Promise(resolve => {
       this.httpClient.createRequest(this.route)
         .asGet()
+        .send()
+        .then(
+          (response) => resolve(response),
+          (error) => {
+            console.warn(' ::>> error ', error);
+          }
+        );
+    });
+  }
+
+  public retrieveArticle(articleId: string): Promise<any> {
+    return new Promise(resolve => {
+      this.httpClient.createRequest(this.route + '/' + articleId)
+        .asGet()
+        .withParams({ articleId })
         .send()
         .then(
           (response) => resolve(response),

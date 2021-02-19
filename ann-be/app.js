@@ -36,7 +36,7 @@ app.use(fileUpload({
   abortOnLimit: true,
   useTempFiles: true,
   tempFileDir: '/tmp/',
-  debug: true,
+  debug: false
 }));
 
 app.use(rateLimit({

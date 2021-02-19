@@ -39,8 +39,6 @@ router.post('/checkout',
       let purchaseCount = 0;
       let articles = [];
 
-      //todo: send email
-
       articleIds.forEach(articleId => {
         
         const payload = {

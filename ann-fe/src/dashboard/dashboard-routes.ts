@@ -62,6 +62,16 @@ export class DashboardRoutes {
       settings: {
         access: ['Journalist']
       }
+    }, {
+      route: 'edit-article',
+      name: 'edit-article',
+      moduleId: PLATFORM.moduleName('features/journalist/articles/create-article/create-article'),
+      nav: true,
+      title: 'Edit Article',
+      auth: true,
+      settings: {
+        access: ['Journalist']
+      }
     }];
   }
 

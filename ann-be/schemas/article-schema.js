@@ -3,14 +3,15 @@ var mongoose = require('mongoose');
 //Define a schema
 var Schema = mongoose.Schema;
 
+var updateSchema = new Schema({
+  userId: Schema.Types.ObjectId,
+  timestamp: Date
+})
+
 var ArticleSchema = new Schema({
   _id: {
     type: Schema.Types.ObjectId,
     required: [true, 'No identifier specified.']
-  },
-  userId: {
-    type: Schema.Types.ObjectId,
-    required: [true, 'No userid specified.']
   },
   name: {
     type: String,
@@ -24,10 +25,8 @@ var ArticleSchema = new Schema({
     type: String,
     required: [true, 'Please specify article content.']
   },
-  createdTimestamp: [{
-    content: String,
-    type: String
-  }],
+  created: updateSchema,
+  updated: [updateSchema],
   contentConfirmed: {
     type: Boolean,
     required: [true, 'Please validate whether content has been confirmed']

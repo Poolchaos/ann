@@ -15,7 +15,7 @@ export class Articles {
 
   constructor(
     private router: Router,
-    private articlesService: ArticleService,
+    private articleService: ArticleService,
     private eventAggregator: EventAggregator,
     public dataStore: DataStore
   ) {}
@@ -27,7 +27,7 @@ export class Articles {
 
   private retrieveArticles(): void {
     try {
-      this.articlesService
+      this.articleService
         .getArticles(this.params)
         .then((articles) => {
           this.articles = articles;
@@ -43,7 +43,7 @@ export class Articles {
   }
 
   public playAudio(file: string, index: number): void {
-    this.articlesService
+    this.articleService
       .playAudio(file)
       .then((response: { type: string, content: any }) => {
         this.play(response, index);
@@ -59,8 +59,14 @@ export class Articles {
     audio.controls = true;
   }
 
+  public editArticle(articleId: string): void {
+    this.router.navigate(`edit-article?articleId=${articleId}`);
+  }
+
   public removeArticle(articleId: string): void {
-    this.articlesService
+    // todo: add confirm remove
+    
+    this.articleService
       .removeArticle(articleId)
       .then(() => {
         console.log(' ::>> successfully activated article ');
@@ -72,7 +78,7 @@ export class Articles {
   }
 
   public activateArticle(articleId: string): void {
-    this.articlesService
+    this.articleService
       .activateArticle(articleId)
       .then(() => {
         console.log(' ::>> successfully activated article ');

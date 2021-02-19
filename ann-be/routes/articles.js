@@ -31,8 +31,38 @@ router.get('/',
 
       if (!decrypted) return res.sendStatus(401);
 
-      ArticleModel.find({ userId: decrypted._id }, function (err, docs) {
+      ArticleModel.find({ 'created.userId': decrypted._id }, function (err, docs) {
         return res.send(docs);
+      });
+    } catch(e) {
+      console.log(' ::>> error ', e);
+      return res.sendStatus(500);
+    }
+  }
+);
+
+router.get('/:id',
+  (req, res, next) => authenticateToken(req, res, next, [ROLES.JOURNALIST]),
+  function(req, res, next) {
+    try {
+      const authHeader = req.headers['authorization']
+      const token = authHeader && authHeader.split(' ')[1];
+      const decrypted = jwt.verify(token, 'complete');
+
+      if (!decrypted) return res.sendStatus(401);
+      if (!req.params || !req.params.id) return res.sendStatus(500);
+
+      const params = {
+        _id: req.params.id,
+        'created.userId': decrypted._id
+      };
+
+      ArticleModel.find(params, function (err, docs) {
+        if (!docs || docs.length === 0) {
+          return res.sendStatus(404);
+        }
+
+        return res.send(docs[0]);
       });
     } catch(e) {
       console.log(' ::>> error ', e);
@@ -98,19 +128,68 @@ router.post('/',
       const decrypted = jwt.verify(token, 'complete');
 
       if (!decrypted) return res.sendStatus(401);
-      // todo: add creator/editor and date
-      // todo: add ability to edit article
-
-      let article = req.body;
-      article._id = new ObjectID();
-      article.userId = new ObjectID(decrypted._id);
-      article.contentConfirmed = false;
+      const article = {
+        _id: new ObjectID(),
+        name: req.body.name,
+        category: req.body.category,
+        content: req.body.content,
+        created: {
+          userId: decrypted._id,
+          timestamp: Date.now()
+        },
+        contentConfirmed: false
+      };
+      // todo: manage all new Objectid mappings
 
       var instance = new ArticleModel(article);
       instance.save(function (err) {
-        if (err) return res.sendStatus(500, {error: err});
+        // handle errors passed through to FE
+        if (err) {
+          console.log(' ::>> error ', err);
+          return res.sendStatus(500, {error: err});
+        }
         log('Article created', article._id, article.userId);
         return res.send({ articleId: article._id });
+      });
+
+    } catch(e) {
+      error('Failed to create article', token, req.body, e);
+      return res.sendStatus(500, { error: err });
+    }
+  }
+);
+
+router.put('/', 
+  (req, res, next) => authenticateToken(req, res, next, [ROLES.JOURNALIST]),
+  function(req, res, next) {
+    try {
+      if (!req.body) return res.sendStatus(500, { error: err });
+
+      // todo: don't map req.body directly ever
+
+      const authHeader = req.headers['authorization']
+      const token = authHeader && authHeader.split(' ')[1];
+      const decrypted = jwt.verify(token, 'complete');
+
+      if (!decrypted) return res.sendStatus(401);
+
+      // todo: clean up requests by id
+      // todo: change findOneAndUpdate to findy doc.save
+
+      ArticleModel.findById(req.body.articleId, function (err, doc) {
+        if (err) return res.sendStatus(500, {error: err});
+
+        doc.name = req.body.name;
+        doc.category = req.body.category;
+        doc.content = req.body.content;
+        doc.updated.addToSet({
+          userId: decrypted._id,
+          timestamp: Date.now()
+        });
+        doc.save();
+
+        log('Article created', req.body.articleId, decrypted._id);
+        return res.send({ articleId: req.body.articleId });
       });
 
     } catch(e) {

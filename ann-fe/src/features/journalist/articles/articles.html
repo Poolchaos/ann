@@ -20,6 +20,10 @@
       </div>
     </div>
     <button if.bind="dataStore.isJournalist"
+      click.trigger="editArticle(article._id)">
+      Edit Article
+    </button>
+    <button if.bind="dataStore.isJournalist"
       click.trigger="removeArticle(article._id)">
       Remove Article
     </button>

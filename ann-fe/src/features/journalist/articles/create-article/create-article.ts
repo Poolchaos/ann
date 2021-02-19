@@ -7,10 +7,12 @@ import {
 import { Router } from 'aurelia-router';
 
 import { ArticleService } from '../articles-service';
+import { DataStore } from 'stores/data-store';
 
 @autoinject()
 export class CreateArticle {
 
+  private articleId: string;
   public title: string;
   public category: string;
   public submitted: boolean = false;
@@ -20,16 +22,48 @@ export class CreateArticle {
     type: string;
     size: string;
   }[] = [];
-  
   private validation: ValidationController;
+  private ready: boolean = false;
 
   constructor(
     private articleService: ArticleService,
     private router: Router,
+    private dataStore: DataStore,
     validationControllerFactory: ValidationControllerFactory
   ) {
     this.validation = validationControllerFactory.createForCurrentScope();
     this.validation.validateTrigger = validateTrigger.change;
+  }
+
+  public activate(params?: { articleId: string }): any {
+    if (location.href.includes('/edit-article?') && this.dataStore.isJournalist) {
+      this.articleId = params.articleId;
+      this.retrieveArticle();
+    } else {
+      this.ready = true;
+    }
+  }
+
+  private retrieveArticle() {
+    if (!this.articleId) {
+      return this.router.navigate('dashboard')
+    }
+    
+    this.articleService
+      .retrieveArticle(this.articleId)
+      .then((article) => {
+        console.log(' ::>> article retrieved >>>> ', article);
+        
+        this.title = article.name;
+        this.category = article.category;
+        this.fileContents = article.files;
+
+        let element: any = document.querySelector('#x');
+        console.log(' ::>> element >>>> ', element);
+        element.value = article.content;
+
+        this.ready = true;
+      });
   }
 
   public selectionChanged(event: Event): void {
@@ -60,13 +94,21 @@ export class CreateArticle {
           }
         }
         reader.onerror = (evt: any) =>  {
-            console.warn('::>> Failed to upload file ', evt);
+          console.warn('::>> Failed to upload file ', evt);
         }
       });
     }
   }
+
+  public submitForm(): void {
+    if (this.dataStore.isJournalist && location.href.includes('/edit-article?') && this.articleId) {
+      this.updateArticle();
+    } else {
+      this.createArticle();
+    }
+  }
   
-  public createArticle(): void {
+  private createArticle(): void {
     let element: any = document.querySelector('#x');
     let content = element.value;
 
@@ -74,17 +116,35 @@ export class CreateArticle {
 
     if (content) {
       const messageContent = content.replace(/<div>|<\/div>/gi, '');
-      const payload = {
-        title: this.title,
-        category: this.category,
-        content: messageContent,
-        files: this.fileContents
-      };
-
-      console.log(' ::>> payload >>> ', payload);
 
       this.articleService
         .createArticle(
+          this.title,
+          this.category,
+          messageContent
+        )
+        .then((article: { articleId: string }) => {
+          console.log(' ::>> article created >>>> ');
+            this.uploadAudio(article.articleId);
+        })
+        .catch(error => {
+          console.log(' ::>> failed to create article >>>> ');
+        });
+    }
+  }
+
+  private updateArticle(): void {
+    let element: any = document.querySelector('#x');
+    let content = element.value;
+    
+    // todo: validate
+
+    if (content) {
+      const messageContent = content.replace(/<div>|<\/div>/gi, '');
+     
+      this.articleService
+        .updateArticle(
+          this.articleId,
           this.title,
           this.category,
           messageContent
@@ -132,6 +192,7 @@ export class CreateArticle {
 
   private fileUploadProgressCallback(data: any): void {
     console.log(' ::>> fileUploadProgressCallback >>>> ', data);
+    // todo: implement file upload progress
   }
 
   public cancel(): void {
