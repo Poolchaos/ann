@@ -89,10 +89,13 @@ router.put('/enable',
       if (!req.body || !req.body.userId) return res.sendStatus(500, { error: err });
 
       UserModel.findById(req.body.userId, function (err, doc) {
-        return res.sendStatus(200);
+        doc.permissions = true;
+        doc.save();
+        log('Enable user access', token, req.body);
+        return res.send({ userId: doc._id, permissions: doc.permissions });
       });
     } catch(e) {
-      error('Failed to delete user', token, req.body, e);
+      error('Failed to enable user access', token, req.body, e);
       return res.sendStatus(500);
     }
   }

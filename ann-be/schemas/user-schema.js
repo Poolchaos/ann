@@ -35,9 +35,10 @@ var UserSchema = new Schema({
     type: String,
     required: [true, 'No role specified.']
   },
-  premissions: [{
-    type: String
-  }]
+  permissions: {
+    type: Boolean,
+    required: [true, 'No permissions.']
+  }
 }, { collection : 'users' });
 
 module.exports = UserSchema;

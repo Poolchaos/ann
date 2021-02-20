@@ -89,4 +89,5 @@ export interface IUser {
   token: string;
   number: string;
   role: string;
+  permissions: boolean;
 }

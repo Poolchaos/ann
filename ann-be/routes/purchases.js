@@ -39,6 +39,8 @@ router.post('/checkout',
       let purchaseCount = 0;
       let articles = [];
 
+      console.log(' ::>> articleIds >>>> ', articleIds);
+
       articleIds.forEach(articleId => {
         if (!articleId) return res.sendStatus(500);
         
@@ -49,16 +51,22 @@ router.post('/checkout',
           date: Date.now()
         };
 
-        var instance = new PurchaseModel(payload);
-        instance.save(function (err) {
-          if (err) return res.sendStatus(500, {error: err});
-          // saved!
-          purchaseCount ++;
-          log('Article purchased', articleId, decrypted._id)
-          
-          ArticleModel.findById(articleId, function (err, doc) {
-            if (!doc) return res.sendStatus(404);
-            articles.push(docs);
+        // todo: change into a waterfall
+        ArticleModel.findById(articleId, function (err, doc) {
+          if (!doc) {
+            console.log(' ::>> doc not found ', articleId, err, doc);
+            // return res.sendStatus(404);
+            return;
+          }
+          articles.push(doc);
+            
+          var instance = new PurchaseModel(payload);
+          instance.save(function (err) {
+            if (err) return res.sendStatus(500, {error: err});
+            // saved!
+            log('Article purchased', articleId, decrypted._id);
+            console.log(' ::>> purchase aricle ', articleId);
+            purchaseCount ++;
 
             if (purchaseCount >= articleIds.length) {
               sendPurchasedEmail(decrypted, articles);

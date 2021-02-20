@@ -7,6 +7,7 @@ const logger = require('../logger');
 const CONFIRM_REGISTRATION = fs.readFileSync(path.resolve(__dirname, './email-confirm-registration.html'), 'utf8');
 const REGISTRATION_COMPLETED = fs.readFileSync(path.resolve(__dirname, './email-registration-complete.html'), 'utf8');
 const PURCHASE_CONFIRMED = fs.readFileSync(path.resolve(__dirname, './email-purchase.html'), 'utf8');
+const PURCHASE_TEMPLATE = fs.readFileSync(path.resolve(__dirname, './email-purchase-template.html'), 'utf8');
 
 const REQUEST_PASSWORD_RESET_VALID = fs.readFileSync(path.resolve(__dirname, './email-password-reset-request-valid.html'), 'utf8');
 const REQUEST_PASSWORD_RESET_INVALID = fs.readFileSync(path.resolve(__dirname, './email-password-reset-request-invalid.html'), 'utf8');
@@ -57,8 +58,6 @@ function sendRegistrationCompleteEmail(user) {
   });
 }
 
-// REQUEST_PASSWORD_RESET_VALID, REQUEST_PASSWORD_RESET_INVALID, PASSWORD_RESET
-
 function sendValidPasswordResetRequest(user) {
   
   let mailData = {
@@ -95,8 +94,23 @@ function sendInValidPasswordResetRequest(user) {
   });
 }
 
+function sendPasswordReset(user) {
+  
+  let mailData = {
+    from: 'noreply@ann.com',
+    to: user.email,
+    subject: 'noreply',
+    html: PASSWORD_RESET
+  };
 
-
+  transporter.sendMail(mailData, function (err, info) {
+    if(err) {
+      error('Failed to send request password reset email', user.email, null, err);
+    } else {
+      log('Password reset email sent', user.email);
+    }
+  });
+}
 
 function sendPurchasedEmail(user, articles) {
 
@@ -152,5 +166,6 @@ module.exports = {
   sendRegistrationCompleteEmail,
   sendPurchasedEmail,
   sendValidPasswordResetRequest,
-  sendInValidPasswordResetRequest
+  sendInValidPasswordResetRequest,
+  sendPasswordReset
 };

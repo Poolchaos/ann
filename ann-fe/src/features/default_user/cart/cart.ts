@@ -1,5 +1,6 @@
 import { autoinject } from 'aurelia-framework';
 import { EventAggregator } from 'aurelia-event-aggregator';
+import { Router } from 'aurelia-router';
 
 import { DataStore } from 'stores/data-store';
 import { PurchaseService } from 'features/admin/purchases/purchase-service';
@@ -10,7 +11,8 @@ export class Cart {
   constructor(
     public dataStore: DataStore,
     private purchaseService: PurchaseService,
-    private eventAggregator: EventAggregator
+    private eventAggregator: EventAggregator,
+    private router: Router
   ) {}
 
   public checkout(): void {
@@ -25,6 +27,8 @@ export class Cart {
       .checkout(articleIds)
       .then(() => {
         console.log(' ::>> successfully activated article ');
+        this.clear();
+        this.router.navigate('purchases');
       })
       .catch(() => {
         console.log(' ::>> failed to activate article ');
@@ -37,7 +41,6 @@ export class Cart {
 
   public clear(): void {
     if (!this.dataStore.cart.hasItems) return;
-    
     this.eventAggregator.publish(EVENTS.CLEAR_CART);
   }
 }

@@ -70,8 +70,8 @@ router.post(
           var user_instance = new RegistrationModel(user);
           user_instance.save(function (err) {
             if (err) return res.sendStatus(500, {error: err});
-            log('Submit registration', user.email, user._id, decrypted.anonymous);
             sendRegisterConfirmationEmail(user);
+            log('Submit registration', user.email, user._id, decrypted.anonymous);
             return res.send(user);
           });
         } else if (docs[0].status === 'removed') {
@@ -108,6 +108,7 @@ router.post(
           user.token = null;
           user.token = jwt.sign(user, 'complete');
           user.password = password;
+          user.permissions = user.role === ROLES.ADMIN;
 
           doc.status = 'registration-complete';
           doc.save();
@@ -181,11 +182,11 @@ router.post('/authenticate-token',
       const decrypted = jwt.verify(token, 'complete');
       UserModel.find({ email }, function (err, docs) {
         if (err || docs.length == 0) return res.sendStatus(500, {error: 'No email specified.'});
-        log('Triggered a password reset', email);
+        log('Token authenticated for password reset', email);
         return res.sendStatus(200);
       });
     } catch(e) {
-      error('Failed to trigger password reset', token, req.body, e);
+      error('Failed to authenticate token for password reset', token, req.body, e);
       return res.sendStatus(200)
     }
   }
@@ -249,6 +250,7 @@ router.put('/reset-password',
           doc.password = password;
           doc.save();
 
+          sendPasswordReset(user);
           log('Confirm password reset', token);
           return res.sendStatus(200);
         }
@@ -284,10 +286,10 @@ router.post('/token',
           return res.sendStatus(500, {error: err});
         }
         if (doc) {
-          error('Confirm password reset token is valid', token);
+          log('Confirm password reset token is valid', token);
           return res.send(doc.token);
         }
-        return res.sendStatus(500, {error: err});
+        return res.sendStatus(500);
       });
     } catch(e) {
       console.log(' ::>> error ', e);

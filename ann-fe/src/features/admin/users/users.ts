@@ -36,8 +36,8 @@ export class Admin {
 
     this.userService
       .enableAccess(user._id)
-      .then(() => {
-
+      .then((_user) => {
+        user.permissions = _user.permissions;
       })
       .catch(() => {
         console.log(' Failed to give access to user ');
