@@ -29,6 +29,8 @@ router.post('/',
     const token = authHeader && authHeader.split(' ')[1];
 
     try {
+      const acceptedTypes = ['audio/wav', 'audio/mpeg'];
+      if (!req.body.type || !acceptedTypes.includes(req.body.type)) return res.sendStatus(500);
       if (!req.body) return res.sendStatus(500, { error: err });
       const decrypted = jwt.verify(token, 'complete');
 
@@ -63,7 +65,8 @@ router.post('/',
       });
 
     } catch(e) {
-      error('Failed to upload audio', token, req.body, e);
+      console.log(' ::>> err ', e);
+      error('Failed to upload audio', token, req.body.type, e);
       return res.sendStatus(500, { error: err });
     }
   }
