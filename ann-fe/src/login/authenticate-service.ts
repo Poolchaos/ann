@@ -1,5 +1,5 @@
 import { autoinject } from 'aurelia-framework';
-import { HttpClient } from 'aurelia-http-client';
+import { HttpClient, HttpResponseMessage } from 'aurelia-http-client';
 
 import { UserRegistrationSettings } from 'registration/user-registration-settings';
 import { EncryptService } from 'services/encrypt-service';
@@ -55,6 +55,48 @@ export class AuthenticateService {
     });
   }
 
+  public requestPasswordReset(email: string): Promise<void> {
+    
+    return new Promise((resolve, reject) => {
+      this.httpClient.createRequest('passport/reset-password')
+        .withHeader('Authorization', UserRegistrationSettings.ANONYMOUS_TOKEN)
+        .asPost()
+        .withContent({ email })
+        .send()
+        .then(() => {
+          console.log(' VALID ::>> is valid user ');
+        })
+        .catch(error => {
+          console.log(' VALID ::>> invalid user ');
+          reject(error);
+        });
+    });
+  }
+
+  public validateToken(token: string): Promise<any> {
+    
+    return this.httpClient.createRequest('passport/token')
+      .withHeader('Authorization', UserRegistrationSettings.ANONYMOUS_TOKEN)
+      .asPost()
+      .withContent({ token })
+      .send();
+  }
+
+  public resetPassword(token: string, password: string): Promise<any> {
+
+    const encryptedPassword = EncryptService.encrypt(password);
+
+    return this.httpClient
+      .createRequest('passport/reset-password')
+      .asPut()
+      .withContent({
+        password: encryptedPassword
+      })
+      .withHeader('Content-Type', 'application/json')
+      .withHeader('Authorization', `Bearer ${token}`)
+      .send();
+  }
+
   public setHeader(token: string): void {
     this.httpClient.configure(req => {
       req.withHeader('Authorization', 'Bearer ' + token);
@@ -63,7 +105,7 @@ export class AuthenticateService {
 
   public logout(): void {
     this.httpClient.configure(req => {
-      req.withHeader('Authorization', '');
+      req.withHeader('Authorization', UserRegistrationSettings.ANONYMOUS_TOKEN);
     });
   }
 

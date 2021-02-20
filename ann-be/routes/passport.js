@@ -10,13 +10,16 @@ const RegistrationModel = require('../models/registration-model');
 const UserModel = require('../models/user-model');
 const {
   sendRegisterConfirmationEmail,
-  sendRegistrationCompleteEmail
+  sendRegistrationCompleteEmail,
+  sendValidPasswordResetRequest,
+  sendInValidPasswordResetRequest
 } = require('../emails/email');
 const {
   authenticateToken,
   authenticateAnonymous,
   tokenValidate
 } = require('./authenticate-token');
+const ROLES = require('../enums/roles');
 const logger = require('../logger');
 
 //Set up default mongoose connection
@@ -137,6 +140,10 @@ router.post(
     try {
       const email = req.body ? req.body.email : null;
       const password = req.body ? req.body.password : null;
+
+      console.log(' ::>> token >>>> ', token);
+      console.log(' ::>> email >>>> ', email);
+      console.log(' ::>> password >>>> ', password);
       
       if (!token || email == null) return res.sendStatus(401);
 
@@ -144,6 +151,7 @@ router.post(
         .find({ email })
         .select({ token: 1, role: 1, password: 1 })
         .then(function (docs, err) {
+          console.log(' ::>> docs >>>> ', { docs, err });
           if (err || !docs || docs.length == 0) return res.sendStatus(401, {error: err});
 
           let user = docs[0].toJSON();
@@ -168,20 +176,140 @@ router.post(
 router.post('/authenticate-token',
   (req, res, next) => authenticateToken(req, res, next),
   function(req, res, next) {
+
+    // const authHeader = req.headers['authorization']
+    // const token = authHeader && authHeader.split(' ')[1];
+    // if (!token) return res.sendStatus(401);
+
+    // todo: remove unused token check kills like above
+
+    try {
+      const email = req.body.email;
+      if (!email)  return res.sendStatus(500, {error: 'No email specified.'});
+
+      const decrypted = jwt.verify(token, 'complete');
+      UserModel.find({ email }, function (err, docs) {
+        if (err || docs.length == 0) {
+
+        };
+        log('Triggered a password reset', email);
+        return res.sendStatus(200);
+      });
+    } catch(e) {
+      error('Failed to trigger password reset', token, req.body, e);
+      return res.sendStatus(200)
+    }
+  }
+);
+
+
+
+
+
+router.post('/reset-password',
+  authenticateAnonymous,
+  function (req, res, next) {
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1];
+    console.log(' ::>>> token >>> ', token);
     if (!token) return res.sendStatus(401);
 
     try {
-      const decrypted = jwt.verify(token, 'complete');
-      UserModel.find({}, function (err, docs) {
-        if (err || docs.length == 0) return res.sendStatus(500, {error: err});
-        log('User authenticated via token', decrypted.email);
+      let user = {
+        email: req.body.email
+      };
+
+      UserModel.find(user, function (err, docs) {
+        if (err || docs.length == 0) {
+          // todo: send invalid email
+          // todo: check for duplicate entities
+          sendInValidPasswordResetRequest(user);
+          error('Confirm password reset token is invalid', token);
+        } else {
+          // todo: send valid email
+          user._id = docs[0]._id;
+          let date = new Date();
+          date.setHours(date.getHours() + 1);
+          user.validBy = date;
+          user.token = jwt.sign(user, 'password-reset-request');
+
+          sendValidPasswordResetRequest(user);
+          log('Confirm password reset token is valid', token);
+        }
         return res.sendStatus(200);
       });
     } catch(e) {
       error('Failed to authenticate token', token, req.body, e);
       return res.sendStatus(500, {error: e})
+    }
+  }
+);
+
+router.put('/reset-password',
+(req, res, next) => authenticateToken(req, res, next, [ROLES.ADMIN, ROLES.JOURNALIST, ROLES.VOICE_OVER, ROLES.DEFAULT_USER]),
+  function (req, res, next) {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1];
+
+    try {
+      const password = req.body.password;
+      const decrypted = jwt.verify(token, 'complete');
+      if (!password || !decrypted) return res.sendStatus(500);
+
+      // todo: pull verify, sign key into enums + 20 digit encryption
+      UserModel.findById(decrypted._id, function (err, doc) {
+        if (err) {
+          error('Confirm password reset | user not found', null, token, err);
+          return res.sendStatus(204, {error: err});
+        }
+        if (doc) {
+          doc.password = password;
+          doc.save();
+
+          log('Confirm password reset', token);
+          return res.sendStatus(200);
+        }
+        return res.sendStatus(500, {error: err});
+      });
+    } catch(e) {
+      error('Confirm password reset', null, token, e);
+      return res.sendStatus(500, {error: e});
+    }
+  }
+);
+
+router.post('/token',
+  authenticateAnonymous,
+  function (req, res, next) {
+    const token = req.body.token;
+    if (!token) return res.sendStatus(500);
+
+    try {
+      const decrypted = jwt.verify(token, 'password-reset-request');
+      // todo: check best server-side date implementation
+
+      const dateToCheck = new Date(decrypted.validBy);
+      const currentDate = new Date();
+
+      if (!decrypted.validBy || dateToCheck.getTime() < currentDate.getTime()) {
+        return res.sendStatus(500, {error: 'Not valid time'});
+      }
+
+      UserModel.findById(decrypted._id, function (err, doc) {
+        if (err) {
+          error('Password reset token auth failed | user not found', token, null, err);
+          return res.sendStatus(500, {error: err});
+        }
+        if (doc) {
+          error('Confirm password reset token is valid', token);
+          return res.send(doc.token);
+        }
+        return res.sendStatus(500, {error: err});
+      });
+    } catch(e) {
+      console.log(' ::>> error ', e);
+      error('Confirm password reset token error', null, token, e);
+      return res.sendStatus(500, {error: e});
     }
   }
 );

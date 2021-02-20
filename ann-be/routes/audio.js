@@ -29,6 +29,7 @@ router.post('/',
     const token = authHeader && authHeader.split(' ')[1];
 
     try {
+      //todo: move to enum
       const acceptedTypes = ['audio/wav', 'audio/mpeg'];
       if (!req.body.type || !acceptedTypes.includes(req.body.type)) return res.sendStatus(500);
       if (!req.body) return res.sendStatus(500, { error: err });
@@ -43,8 +44,6 @@ router.post('/',
         type: req.body.type,
         articleId: req.body.articleId
       };
-
-      // todo: check against format enums [mp3 and wav]
     
       fs.writeFileSync(audio.location, Buffer.from(req.body.data.replace(`data:${audio.type};base64,`, ''), 'base64'));
 

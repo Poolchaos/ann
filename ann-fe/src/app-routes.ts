@@ -18,9 +18,21 @@ export class AppRoutes {
       nav: true,
       title: 'Login',
       auth: false
-    }
-    // todo: add forgot password
-    ];
+    }, {
+      route: 'forgot-password',
+      name: 'forgot-password',
+      moduleId: PLATFORM.moduleName('login/forgot-password/forgot-password'),
+      nav: true,
+      title: 'Forgot Password',
+      auth: false
+    }, {
+      route: 'reset-password',
+      name: 'reset-password',
+      moduleId: PLATFORM.moduleName('login/reset-password/reset-password'),
+      nav: true,
+      title: 'Reset Password',
+      auth: false
+    }];
   }
 
   private static registrationRoutes(): RouteConfig[] {

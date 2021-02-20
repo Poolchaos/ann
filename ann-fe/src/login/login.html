@@ -16,6 +16,11 @@
     </ul>
     <div>
       <button disabled.bind="submitted" click.trigger="login()" i18n="page.login.form.login-button"></button>
+      <!-- todo: implement i18n -->
+      <button click.trigger="forgotPassword()">Forgot Password</button>
+    </div>
+    <div>
+      New to Ann, <a click.trigger="navToRegister()">register</a> now.
     </div>
   </form>
 </template>

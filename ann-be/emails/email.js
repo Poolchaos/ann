@@ -7,7 +7,10 @@ const logger = require('../logger');
 const CONFIRM_REGISTRATION = fs.readFileSync(path.resolve(__dirname, './email-confirm-registration.html'), 'utf8');
 const REGISTRATION_COMPLETED = fs.readFileSync(path.resolve(__dirname, './email-registration-complete.html'), 'utf8');
 const PURCHASE_CONFIRMED = fs.readFileSync(path.resolve(__dirname, './email-purchase.html'), 'utf8');
-const PURCHASE_TEMPLATE = fs.readFileSync(path.resolve(__dirname, './email-purchase-template.html'), 'utf8');
+
+const REQUEST_PASSWORD_RESET_VALID = fs.readFileSync(path.resolve(__dirname, './email-password-reset-request-valid.html'), 'utf8');
+const REQUEST_PASSWORD_RESET_INVALID = fs.readFileSync(path.resolve(__dirname, './email-password-reset-request-invalid.html'), 'utf8');
+const PASSWORD_RESET = fs.readFileSync(path.resolve(__dirname, './email-password-reset.html'), 'utf8');
 
 var transporter = nodemailer.createTransport({
   host: "smtp.mailtrap.io",
@@ -24,7 +27,7 @@ function sendRegisterConfirmationEmail(user) {
     from: 'noreply@ann.com',
     to: user.email,
     subject: 'noreply',
-    html: CONFIRM_REGISTRATION.replace('${ann_token}', user.token),
+    html: CONFIRM_REGISTRATION.replace('${ann_token}', user.token)
   };
 
   transporter.sendMail(mailData, function (err, info) {
@@ -42,17 +45,58 @@ function sendRegistrationCompleteEmail(user) {
     from: 'noreply@ann.com',
     to: user.email,
     subject: 'noreply',
-    html: REGISTRATION_COMPLETED,
+    html: REGISTRATION_COMPLETED
   };
 
   transporter.sendMail(mailData, function (err, info) {
     if(err) {
-      error('Failed to send complete registration email', user.email, user._id, e);
+      error('Failed to send complete registration email', user.email, user._id, err);
     } else {
       log('Registration completed email sent', user.email, user._id);
     }
   });
 }
+
+// REQUEST_PASSWORD_RESET_VALID, REQUEST_PASSWORD_RESET_INVALID, PASSWORD_RESET
+
+function sendValidPasswordResetRequest(user) {
+  
+  let mailData = {
+    from: 'noreply@ann.com',
+    to: user.email,
+    subject: 'noreply',
+    html: REQUEST_PASSWORD_RESET_VALID.replace('${ann_token}', user.token)
+  };
+
+  transporter.sendMail(mailData, function (err, info) {
+    if(err) {
+      error('Failed to send request password reset email', user.email, user._id, err);
+    } else {
+      log('Request password reset email sent', user.email, user._id);
+    }
+  });
+}
+
+function sendInValidPasswordResetRequest(user) {
+  
+  let mailData = {
+    from: 'noreply@ann.com',
+    to: user.email,
+    subject: 'noreply',
+    html: REQUEST_PASSWORD_RESET_INVALID
+  };
+
+  transporter.sendMail(mailData, function (err, info) {
+    if(err) {
+      error('Failed to send request password reset email', user.email, null, err);
+    } else {
+      log('Request password reset email sent', user.email);
+    }
+  });
+}
+
+
+
 
 function sendPurchasedEmail(user, articles) {
 
@@ -79,7 +123,7 @@ function sendPurchasedEmail(user, articles) {
 
   transporter.sendMail(mailData, function (err, info) {
     if(err) {
-      error('Failed to send purchase email', user.email, user._id, e);
+      error('Failed to send purchase email', user.email, user._id, err);
     } else {
       log('Purchase email sent', user.email, user._id);
     }
@@ -106,5 +150,7 @@ const error = function(message, email, userId, error) {
 module.exports = {
   sendRegisterConfirmationEmail,
   sendRegistrationCompleteEmail,
-  sendPurchasedEmail
+  sendPurchasedEmail,
+  sendValidPasswordResetRequest,
+  sendInValidPasswordResetRequest
 };

@@ -25,15 +25,13 @@ export class RegistrationService {
         .withHeader('Content-Type', 'application/json')
         .withHeader('Authorization', UserRegistrationSettings.ANONYMOUS_TOKEN)
         .send()
-        .then(
-          (response) => {
-            //@ts-ignore
-            resolve(response);
-          },
-          (error) => {
-            console.warn(' ::>> error ', error);
-          }
-        );
+        .then((response) => {
+          //@ts-ignore
+          resolve(response);
+        })
+        .catch((error) => {
+          console.warn(' ::>> error ', error);
+        });
     })
   }
 

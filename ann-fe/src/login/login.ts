@@ -20,7 +20,7 @@ export class Login {
 
   constructor(
     private router: Router,
-    private AuthenticateService: AuthenticateService,
+    private authenticateService: AuthenticateService,
     private eventsStore: EventsStore,
     validationControllerFactory: ValidationControllerFactory
   ) {
@@ -47,7 +47,17 @@ export class Login {
       .on(this);
   }
 
+  public forgotPassword(): void {
+    this.router.navigate('forgot-password');
+  }
+
+  public navToRegister(): void {
+    this.router.navigate('register');
+  }
+
   public login(): void {
+    if (this.submitted) return;
+
     this.validation
       .validate()
       .then(validation => {
@@ -57,14 +67,15 @@ export class Login {
           return;
         }
         this.triggerLogin();
-      }, () => {
+      })
+      .catch(() => {
         this.submitted = false;
         this.error = 'Email or password is incorrect. Please try again.';
       });
   }
 
   private triggerLogin(): void {
-    this.AuthenticateService
+    this.authenticateService
       .authenticate(this.identity, this.password)
       .then(user => this.handleUserAuthenticated(user))
       .catch(error => {
