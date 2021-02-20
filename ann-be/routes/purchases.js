@@ -82,6 +82,62 @@ router.post('/checkout',
   }
 );
 
+router.get('/all',
+  (req, res, next) => authenticateToken(req, res, next, [ROLES.ADMIN]),
+  function(req, res, next) {
+    try {
+      PurchaseModel.find({}, function (err, docs) {
+        let count = 0;
+        let list = [];
+
+        docs.forEach(item => {
+          ArticleModel.findById(item.articleId, function (err, doc) {
+            if (err) return;
+            list.push(doc);
+            count++;
+            if (count >= docs.length) {
+              return res.send(list);
+            }
+          });
+        });
+      });
+    } catch(e) {
+      console.log(' ::>> error ', e);
+    }
+  }
+);
+
+router.get('/',
+  (req, res, next) => authenticateToken(req, res, next, [ROLES.ADMIN, ROLES.DEFAULT_USER]),
+  function(req, res, next) {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1];
+
+    try {
+      const decrypted = jwt.verify(token, 'complete');
+      if (!decrypted) return res.sendStatus(401);
+
+      PurchaseModel.find({ userId: decrypted._id }, function (err, docs) {
+        let count = 0;
+        let list = [];
+
+        docs.forEach(item => {
+          ArticleModel.findById(item.articleId, function (err, doc) {
+            if (err) return;
+            list.push(doc);
+            count++;
+            if (count >= docs.length) {
+              return res.send(list);
+            }
+          });
+        });
+      });
+    } catch(e) {
+      console.log(' ::>> error ', e);
+    }
+  }
+);
+
 const log = function(message, articleId, userId) {
   logger.info(message, {
     articleId,

@@ -6,7 +6,7 @@ export class Journalist {
 
   constructor(private router: Router) {}
 
-  public navToArticles(): void {
+  public goToArticles(): void {
     this.router.navigate('articles');
   }
 

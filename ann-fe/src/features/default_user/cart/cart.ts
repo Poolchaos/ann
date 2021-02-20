@@ -3,7 +3,7 @@ import { EventAggregator } from 'aurelia-event-aggregator';
 import { Router } from 'aurelia-router';
 
 import { DataStore } from 'stores/data-store';
-import { PurchaseService } from 'features/admin/purchases/purchase-service';
+import { PurchaseService } from 'features/default_user/purchases/purchase-service';
 import { EVENTS } from 'stores/events';
 
 @autoinject()
@@ -20,7 +20,6 @@ export class Cart {
     if (!this.dataStore.cart.hasItems) return;
     // todo: add validation
 
-    // const articleIds = this.dataStore.cart.items.map(item => item._id);
     const articleIds = this.dataStore.cart.checkout();
 
     this.purchaseService

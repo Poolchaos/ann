@@ -38,7 +38,7 @@ export class Articles {
     }
   }
 
-  public navToCreateArticle(): void {
+  public goToCreateArticle(): void {
     this.router.navigate('create-article');
   }
 

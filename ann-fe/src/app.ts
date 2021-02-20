@@ -75,17 +75,16 @@ export class App {
       this.authenticateService.setHeader(user.token);
       this.authenticateService
         .authenticateWithToken()
-        .then(() => {
-          
-          this.eventsStore
-          .subscribeAndPublish(
-            EVENTS.USER_REHYDRATE,
-            EVENTS.USER_UPDATED,
-            user,
-            () => this.userValidated()
-          );
-        })
+        .then(() => {})
         .catch(() => this.logout());
+
+      this.eventsStore
+        .subscribeAndPublish(
+          EVENTS.USER_REHYDRATE,
+          EVENTS.USER_UPDATED,
+          user,
+        () => this.userValidated()
+      );
     } catch(e) {}
   }
 
@@ -123,6 +122,10 @@ export class App {
 
   public goToDashboard(): void {
     this.router.navigate('dashboard');
+  }
+
+  public goToPurchases(): void {
+    this.router.navigate('purchases');
   }
 
   public viewCart(): void {

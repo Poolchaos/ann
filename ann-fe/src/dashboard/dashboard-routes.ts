@@ -110,6 +110,16 @@ export class DashboardRoutes {
       settings: {
         access: ['DEFAULT_USER']
       }
+    }, {
+      route: 'purchases',
+      name: 'purchases',
+      moduleId: PLATFORM.moduleName('features/default_user/purchases/purchases'),
+      nav: true,
+      title: 'Purchases',
+      auth: true,
+      settings: {
+        access: ['Admin', 'DEFAULT_USER']
+      }
     }];
   }
 }

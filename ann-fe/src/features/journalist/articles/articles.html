@@ -2,7 +2,7 @@
   <h4>articles</h4>
   
   <div if.bind="dataStore.isJournalist">
-    <button click.trigger="navToCreateArticle()">Create New Article</button>
+    <button click.trigger="goToCreateArticle()">Create New Article</button>
   </div>
 
   <div repeat.for="article of articles">

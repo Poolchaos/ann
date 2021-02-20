@@ -51,7 +51,7 @@ export class Login {
     this.router.navigate('forgot-password');
   }
 
-  public navToRegister(): void {
+  public goToRegister(): void {
     this.router.navigate('register');
   }
 

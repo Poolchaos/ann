@@ -74,8 +74,6 @@ export class DataStore {
   }
 }
 
-
-
 export interface ILogin {
   token: string;
   role: string;

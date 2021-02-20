@@ -6,11 +6,11 @@ export class Admin {
   
   constructor(private router: Router) {}
 
-  public navToMembers(): void {
+  public goToMembers(): void {
     this.router.navigate('users');
   }
 
-  public navToReviewArticles(): void {
+  public goToReviewArticles(): void {
     this.router.navigate('articles');
   }
 }

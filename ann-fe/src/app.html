@@ -24,6 +24,9 @@
       <li style="float:right; padding: 10px 20px" class="hoverable" if.bind="isAuthenticated && dataStore.isUser" click.trigger="viewCart()">
         cart ${dataStore.cart.itemsCount}
       </li>
+      <li style="float:right;" class="hoverable" if.bind="dataStore.isAdmin || dataStore.isUser">
+        <button click.trigger="goToPurchases()">Purchases</button>
+      </li>
     </ul>
   </div>
   <router-view></router-view>
