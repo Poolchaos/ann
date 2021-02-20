@@ -32,27 +32,27 @@ export class Articles {
         .then((articles) => {
           this.articles = articles;
         });
-      } catch(e) {
-        console.warn('Unauthorised access. Routing to dashboard.');
-        // this.router.navigate('dashboard');
-      }
+    } catch(e) {
+      console.warn('Unauthorised access. Routing to dashboard.');
+      // this.router.navigate('dashboard');
+    }
   }
 
   public navToCreateArticle(): void {
     this.router.navigate('create-article');
   }
 
-  public playAudio(file: string, index: number): void {
+  public playAudio(file: string, parentIndex: number, index: number): void {
     this.articleService
       .playAudio(file)
       .then((response: { type: string, content: any }) => {
-        this.play(response, index);
+        this.play(response, parentIndex, index);
       });
   }
 
-  private play(response: { type: string, content: string }, index: number):void {
+  private play(response: { type: string, content: string }, parentIndex: number, index: number):void {
     const base64 = `data:${response.type};base64,${response.content}`;
-    const audio: HTMLAudioElement = document.querySelector(`#js-audio-${index}`);
+    const audio: HTMLAudioElement = document.querySelector(`#js-audio-${parentIndex}-${index}`);
 
     audio.src = base64;
     audio.autoplay = true;

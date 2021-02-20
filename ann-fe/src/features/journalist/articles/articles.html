@@ -13,10 +13,10 @@
       Files: ${article.files.length === 0 ? '0 files' : ''}
       <div repeat.for="file of article.files">
         <button
-          click.trigger="playAudio(file, $index)">
+          click.trigger="playAudio(file, $parent.$index, $index)">
           Attachment ${$index}
         </button>
-        <audio id="js-audio-${$index}"></audio>
+        <audio id="js-audio-${$parent.$index}-${$index}"></audio>
       </div>
     </div>
     <button if.bind="dataStore.isJournalist"
