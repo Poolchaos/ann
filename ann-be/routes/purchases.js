@@ -38,14 +38,6 @@ router.post('/checkout',
       const articleIds = req.body;
       if (!articleIds || !Array.isArray(req.body) || articleIds.length === 0) return res.sendStatus(204);
 
-      console.log(' ::>> articleIds >>>> ', articleIds);
-
-      // waterfall
-      // get every article | save purchase
-      // get every attachment per article
-      // send purchased email
-      try {
-
         function findArticle(articleId) {
           return new Promise((resolve, reject) => {
             ArticleModel.findById(articleId, function (err, doc) {
@@ -134,9 +126,6 @@ router.post('/checkout',
         }
 
         startWaterfall();
-      } catch(e) {
-        console.log(' ::?> waterfall error >>>>> ', e);
-    }
     } catch(e) {
       error('Failed to checkout cart', token, req.body, e);
       return res.sendStatus(500, { error: err });
