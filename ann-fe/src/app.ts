@@ -15,6 +15,7 @@ import { ApplicationProperties } from 'config/application.properties';
 import HttpInterceptor from 'config/http-interceptor';
 
 import './includes';
+import { LOCALES } from 'locales';
 
 @autoinject()
 export class App {
@@ -33,19 +34,7 @@ export class App {
     private httpClient: HttpClient,
     private applicationProperties: ApplicationProperties
   ) {
-    this.locales = [
-      { title: "Afrikaans", code: "af" },
-      { title: "English", code: "en" },
-      { title: "isiNdebele", code: "nr" },
-      { title: "isiXhosa", code: "xh" },
-      { title: "isiZulu", code: "zu" },
-      { title: "Sesotho", code: "st" },
-      { title: "Sepedi", code: "nso" },
-      { title: "Setswana", code: "tn" },
-      { title: "siSwati", code: "ss" },
-      { title: "Tshivenda", code: "ve" },
-      { title: "Xitsonga", code: "ts" }
-    ];
+    this.locales = LOCALES;
     const code = this.cookieService.getCookie(EVENTS.CACHE.LOCALE);
     if (code) {
       this.setLocale({ code });
@@ -86,15 +75,17 @@ export class App {
       this.authenticateService.setHeader(user.token);
       this.authenticateService
         .authenticateWithToken()
+        .then(() => {
+          
+          this.eventsStore
+          .subscribeAndPublish(
+            EVENTS.USER_REHYDRATE,
+            EVENTS.USER_UPDATED,
+            user,
+            () => this.userValidated()
+          );
+        })
         .catch(() => this.logout());
-
-      this.eventsStore
-      .subscribeAndPublish(
-        EVENTS.USER_REHYDRATE,
-        EVENTS.USER_UPDATED,
-        user,
-        () => this.userValidated()
-      );
     } catch(e) {}
   }
 

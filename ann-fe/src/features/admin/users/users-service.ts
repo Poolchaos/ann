@@ -45,4 +45,23 @@ export class UserService {
         );
     });
   }
+  
+  public enableAccess(userId: string): Promise<void> {
+    return new Promise(resolve => {
+      // todo: abstract all routes
+      this.httpClient.createRequest('users/enable')
+        .asPut()
+        .withContent({ userId })
+        .send()
+        .then(
+          () => {
+            console.log(' ::>> successfully removed member ');
+            resolve();
+          },
+          (error) => {
+            console.warn(' ::>> error ', error);
+          }
+        );
+    });
+  }
 }

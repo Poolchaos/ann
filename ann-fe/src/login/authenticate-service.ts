@@ -45,13 +45,8 @@ export class AuthenticateService {
         .asPost()
         .withContent({})
         .send()
-        .then(() => {
-          console.log(' VALID ::>> is valid user ');
-        })
-        .catch(error => {
-          console.log(' VALID ::>> invalid user ');
-          reject(error);
-        });
+        .then(resolve)
+        .catch(reject);
     });
   }
 
@@ -99,6 +94,7 @@ export class AuthenticateService {
 
   public setHeader(token: string): void {
     this.httpClient.configure(req => {
+      req.withHeader('Content-Type', 'application/json');
       req.withHeader('Authorization', 'Bearer ' + token);
     });
   }

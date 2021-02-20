@@ -140,18 +140,12 @@ router.post(
     try {
       const email = req.body ? req.body.email : null;
       const password = req.body ? req.body.password : null;
-
-      console.log(' ::>> token >>>> ', token);
-      console.log(' ::>> email >>>> ', email);
-      console.log(' ::>> password >>>> ', password);
-      
       if (!token || email == null) return res.sendStatus(401);
 
       UserModel
         .find({ email })
         .select({ token: 1, role: 1, password: 1 })
         .then(function (docs, err) {
-          console.log(' ::>> docs >>>> ', { docs, err });
           if (err || !docs || docs.length == 0) return res.sendStatus(401, {error: err});
 
           let user = docs[0].toJSON();
@@ -177,21 +171,16 @@ router.post('/authenticate-token',
   (req, res, next) => authenticateToken(req, res, next),
   function(req, res, next) {
 
-    // const authHeader = req.headers['authorization']
-    // const token = authHeader && authHeader.split(' ')[1];
-    // if (!token) return res.sendStatus(401);
-
-    // todo: remove unused token check kills like above
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1];
+    if (!token) return res.sendStatus(401);
 
     try {
-      const email = req.body.email;
-      if (!email)  return res.sendStatus(500, {error: 'No email specified.'});
+      const email = decrypted.email;
 
       const decrypted = jwt.verify(token, 'complete');
       UserModel.find({ email }, function (err, docs) {
-        if (err || docs.length == 0) {
-
-        };
+        if (err || docs.length == 0) return res.sendStatus(500, {error: 'No email specified.'});
         log('Triggered a password reset', email);
         return res.sendStatus(200);
       });
@@ -201,10 +190,6 @@ router.post('/authenticate-token',
     }
   }
 );
-
-
-
-
 
 router.post('/reset-password',
   authenticateAnonymous,
@@ -221,12 +206,10 @@ router.post('/reset-password',
 
       UserModel.find(user, function (err, docs) {
         if (err || docs.length == 0) {
-          // todo: send invalid email
           // todo: check for duplicate entities
           sendInValidPasswordResetRequest(user);
           error('Confirm password reset token is invalid', token);
         } else {
-          // todo: send valid email
           user._id = docs[0]._id;
           let date = new Date();
           date.setHours(date.getHours() + 1);

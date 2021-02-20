@@ -79,6 +79,25 @@ router.delete('/',
   }
 );
 
+router.put('/enable',
+  (req, res, next) => authenticateToken(req, res, next, [ROLES.ADMIN]),
+  function(req, res, next) {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1];
+    
+    try {
+      if (!req.body || !req.body.userId) return res.sendStatus(500, { error: err });
+
+      UserModel.findById(req.body.userId, function (err, doc) {
+        return res.sendStatus(200);
+      });
+    } catch(e) {
+      error('Failed to delete user', token, req.body, e);
+      return res.sendStatus(500);
+    }
+  }
+);
+
 const log = function(message, email, removedUser) {
   logger.info(message, {
     email,

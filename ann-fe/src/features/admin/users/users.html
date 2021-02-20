@@ -9,6 +9,7 @@
         <td i18n="page.register.form.contactNumber"></td>
         <td i18n="page.register.form.role"></td>
         <td></td>
+        <td></td>
       </tr>
     </thead>
     <tbody>
@@ -18,6 +19,9 @@
         <td>${user.surname}</td>
         <td>${user.number}</td>
         <td>${user.role}</td>
+        <td if.bind="!user.isAdmin">
+          <button click.trigger="enableAccess(user)">Remove</button>
+        </td>
         <td if.bind="user._id !== dataStore.user._id">
           <button click.trigger="removeUser(user)">Remove</button>
         </td>

@@ -31,6 +31,19 @@ export class Admin {
       })
   }
 
+  public enableAccess(user: IUser): void {
+    if (!user) return;
+
+    this.userService
+      .enableAccess(user._id)
+      .then(() => {
+
+      })
+      .catch(() => {
+        console.log(' Failed to give access to user ');
+      });
+  }
+
   public removeUser(user: IUser): void {
     this.dialogService
       .open({ viewModel: RemoveUserDialog, model: user })
