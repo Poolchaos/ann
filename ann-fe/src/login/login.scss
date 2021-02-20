@@ -1,0 +1,23 @@
+.box {
+  background: white;
+  border-radius: 20px;
+}
+
+
+.login-form {
+  width: 50%;
+  padding-top: 40px;
+
+  .row {
+
+    input {
+      width: 70%;
+      border-radius: 0 10px 10px 10px;
+    }
+
+    a {
+      width: 20%;
+      text-align: center;
+    }
+  }
+}

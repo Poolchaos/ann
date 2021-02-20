@@ -1,11 +1,14 @@
 html, body {
-  background: rgb(38, 38, 38);
-  color: rgb(172, 172, 172)!important;
+  background: #073f63;
+  color: black!important;
 }
 
 button {
   background-color: rgb(172, 172, 172)!important;
   padding: 5px 10px;
+}
+.nav > li {
+  display: inline-block;
 }
 
 body {
@@ -22,4 +25,21 @@ li {
   list-style-type: none;
   padding: 0;
   margin: 0;
+}
+
+.locales {
+  position: relative;
+
+  ul {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    padding: 10px 20px;
+    border-radius: 10px 0 10px 10px;
+
+    li:hover {
+      color: #545454;
+    }
+  }
 }

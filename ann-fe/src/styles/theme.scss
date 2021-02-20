@@ -43,9 +43,10 @@
 //   src: local('Calibri Light'), url('../fonts/calibril.woff') format('woff');
 // }
 
-// html, body, div, a, button, li {
-//   font-family: 'Calibri light', 'Roboto'!important;
-// }
+html, body, div, a, button, li {
+  font-family: 'Arial', 'Roboto'!important;
+  // font-family: 'Calibri light', 'Roboto'!important;
+}
 
 /*------------------------------------*\
   #THEME FONT CLASSES

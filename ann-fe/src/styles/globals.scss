@@ -32,8 +32,20 @@ li {
   list-style-type: none;
 }
 
+input {
+  padding: 0 5px;
+  line-height: 24px;
+  font-size: var(--tiny);
+}
+
 .wrapper {
-  width: 100%;
+  width: 1000px;
+  margin: auto;
+}
+
+.small-wrapper {
+  width: 500px;
+  margin: auto;
 }
 
 .container {
@@ -60,6 +72,14 @@ li {
 
 .centered {
   text-align: center;
+}
+
+.left {
+  text-align: left;
+}
+
+.right {
+  text-align: right;
 }
 
 .underlined {
@@ -97,4 +117,19 @@ li {
 .content {
   width: 60%;
   margin: auto;
+}
+
+.spacer {
+  &.big {
+    height: 100px;
+  }
+}
+
+.flex {
+  display: flex;
+}
+
+.row {
+  width: 100%;
+  padding: 0 0 10px 0;
 }

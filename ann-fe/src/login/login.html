@@ -1,26 +1,30 @@
 <template>
-  <h1 i18n="page.login.title"></h1>
-  <form>
-    <div>
-      <label i18n="page.login.form.email"></label>:
-      <input type="text" value.bind="identity & validate" />
+  <div class="spacer big"></div>
+  <div class="small-wrapper container box centered">
+    <h1 i18n="page.login.title"></h1>
+    <div class="flex">
+      <img src="../../static/ios-application-placeholder-2-601407.png" width="220px" height="220px" />
+
+      <div class="login-form left">
+        <label i18n="page.login.form.email"></label>
+        <div class="row">
+          <input type="text" value.bind="identity & validate" />
+        </div>
+        <label i18n="page.login.form.password"></label>
+        <div class="row">
+          <input type="password" value.bind="password & validate" />
+          <a click.trigger="forgotPassword()">I Forgot</a>
+        </div class="row">
+        <ul if.bind="validation.errors">
+          <li repeat.for="error of validation.errors">
+            ${error.message}
+          </li>
+        </ul>
+        <div>
+          <button disabled.bind="submitted" click.trigger="login()" i18n="page.login.form.login-button"></button>
+          New to Ann, <a click.trigger="goToRegister()">register</a> now.
+        </div>
+      </div>
     </div>
-    <div>
-      <label i18n="page.login.form.password"></label>:
-      <input type="password" value.bind="password & validate" />
-    </div>
-    <ul if.bind="validation.errors">
-      <li repeat.for="error of validation.errors">
-        ${error.message}
-      </li>
-    </ul>
-    <div>
-      <button disabled.bind="submitted" click.trigger="login()" i18n="page.login.form.login-button"></button>
-      <!-- todo: implement i18n -->
-      <button click.trigger="forgotPassword()">Forgot Password</button>
-    </div>
-    <div>
-      New to Ann, <a click.trigger="goToRegister()">register</a> now.
-    </div>
-  </form>
+  </div>
 </template>
