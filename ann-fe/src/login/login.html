@@ -6,24 +6,24 @@
       <img src="../../static/ios-application-placeholder-2-601407.png" width="220px" height="220px" />
 
       <div class="login-form left">
-        <label i18n="page.login.form.email"></label>
-        <div class="row">
-          <input type="text" value.bind="identity & validate" />
-        </div>
-        <label i18n="page.login.form.password"></label>
-        <div class="row">
-          <input type="password" value.bind="password & validate" />
-          <a click.trigger="forgotPassword()">I Forgot</a>
-        </div class="row">
-        <ul if.bind="validation.errors">
-          <li repeat.for="error of validation.errors">
-            ${error.message}
-          </li>
-        </ul>
-        <div>
+        <form>
+          <label i18n="page.login.form.email"></label>
+          <div class="row">
+            <input type="text" value.bind="identity & validate" />
+          </div>
+          <label i18n="page.login.form.password"></label>
+          <div class="row">
+            <input type="password" value.bind="password & validate" />
+            <a click.trigger="forgotPassword()">I Forgot</a>
+          </div class="row">
+          <ul if.bind="validation.errors">
+            <li repeat.for="error of validation.errors">
+              ${error.message}
+            </li>
+          </ul>
           <button disabled.bind="submitted" click.trigger="login()" i18n="page.login.form.login-button"></button>
           New to Ann, <a click.trigger="goToRegister()">register</a> now.
-        </div>
+        </form>
       </div>
     </div>
   </div>
