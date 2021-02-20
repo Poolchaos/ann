@@ -3,10 +3,12 @@ var router = express.Router();
 var jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const ObjectID = require('mongodb').ObjectID;
+var async = require("async");
 
 const { authenticateToken } = require('./authenticate-token');
 const PurchaseModel = require('../models/purchase-model');
 const ArticleModel = require('../models/article-model');
+const FileModel = require('../models/file-model');
 const ROLES = require('../enums/roles');
 const logger = require('../logger');
 const { sendPurchasedEmail } = require('../emails/email');
@@ -35,46 +37,106 @@ router.post('/checkout',
 
       const articleIds = req.body;
       if (!articleIds || !Array.isArray(req.body) || articleIds.length === 0) return res.sendStatus(204);
-      
-      let purchaseCount = 0;
-      let articles = [];
 
       console.log(' ::>> articleIds >>>> ', articleIds);
 
-      articleIds.forEach(articleId => {
-        if (!articleId) return res.sendStatus(500);
-        
-        const payload = {
-          _id: new ObjectID(),
-          articleId: articleId,
-          userId: decrypted._id,
-          date: Date.now()
-        };
+      // waterfall
+      // get every article | save purchase
+      // get every attachment per article
+      // send purchased email
+      try {
 
-        // todo: change into a waterfall
-        ArticleModel.findById(articleId, function (err, doc) {
-          if (!doc) {
-            console.log(' ::>> doc not found ', articleId, err, doc);
-            // return res.sendStatus(404);
-            return;
-          }
-          articles.push(doc);
-            
-          var instance = new PurchaseModel(payload);
-          instance.save(function (err) {
-            if (err) return res.sendStatus(500, {error: err});
-            // saved!
-            log('Article purchased', articleId, decrypted._id);
-            console.log(' ::>> purchase aricle ', articleId);
-            purchaseCount ++;
-
-            if (purchaseCount >= articleIds.length) {
-              sendPurchasedEmail(decrypted, articles);
-              return res.sendStatus(200);
-            }
+        function findArticle(articleId) {
+          return new Promise((resolve, reject) => {
+            ArticleModel.findById(articleId, function (err, doc) {
+              if (doc) resolve(doc);
+            });
           });
-        });
-      });
+        }
+
+        function findAudio(audioId) {
+          return new Promise((resolve, reject) => {
+            FileModel.findById(audioId, function (err, doc) {
+              if (doc) resolve(doc);
+            });
+          });
+        }
+
+        function findFiles(article) {
+          return new Promise(resolve => {
+          
+            if (article.files.length === 0) resolve(article);
+            let filePromises = [];
+
+            article.files.forEach(file => filePromises.push(findAudio(file)));
+            Promise.all(filePromises).then((values) => {
+              article.files = values;
+              resolve(article);
+            });
+          })
+        }
+
+        function startWaterfall() {
+          return async.parallel([
+            (cb) => {
+              async.waterfall([
+                (callback) => {
+                  let promises = [];
+                  articleIds.forEach(articleId => promises.push(findArticle(articleId)));
+                  
+                  Promise.all(promises).then((values) => {
+                    callback(null, values)
+                  });
+                },
+                (articles, callback) => {
+                  let articlePromises = [];
+                  articles.forEach(article => articlePromises.push(findFiles(article)));
+
+                  Promise.all(articlePromises).then((values) => {
+                    callback(null, values)
+                  });
+                }
+              ], function (err, articles, callback) {
+                sendPurchasedEmail(decrypted, articles);
+                cb();
+              });
+            },
+            (cb) => {
+              function updatePurchase(articleId) {
+                return new Promise(resolve => {
+                  const payload = {
+                    _id: new ObjectID(),
+                    articleId: articleId,
+                    userId: decrypted._id,
+                    date: Date.now()
+                  };
+
+                  var instance = new PurchaseModel(payload);
+                  instance.save(function (err) {
+                    if (err) return res.sendStatus(500, {error: err});
+                    log('Article purchased', articleId, decrypted._id);
+                    resolve();
+                  });
+                });
+              }
+
+              let promises = [];
+              articleIds.forEach(articleId => promises.push(updatePurchase(articleId)));
+              
+              Promise.all(promises).then((values) => {
+                cb(null, values)
+              });
+
+            }
+          ], function (err, result) {
+            return res.sendStatus(200);
+          });
+        }
+
+        startWaterfall();
+      } catch(e) {
+        console.log(' ::?> waterfall error >>>>> ', e);
+    }
     } catch(e) {
       error('Failed to checkout cart', token, req.body, e);
       return res.sendStatus(500, { error: err });

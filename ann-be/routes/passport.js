@@ -177,16 +177,15 @@ router.post('/authenticate-token',
     if (!token) return res.sendStatus(401);
 
     try {
-      const email = decrypted.email;
-
       const decrypted = jwt.verify(token, 'complete');
+      const email = decrypted.email;
       UserModel.find({ email }, function (err, docs) {
         if (err || docs.length == 0) return res.sendStatus(500, {error: 'No email specified.'});
-        log('Token authenticated for password reset', email);
+        log('Token authenticated', email);
         return res.sendStatus(200);
       });
     } catch(e) {
-      error('Failed to authenticate token for password reset', token, req.body, e);
+      error('Failed to authenticate token', token, req.body, e);
       return res.sendStatus(200)
     }
   }

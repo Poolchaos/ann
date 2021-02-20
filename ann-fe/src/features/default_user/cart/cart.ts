@@ -26,8 +26,8 @@ export class Cart {
       .checkout(articleIds)
       .then(() => {
         console.log(' ::>> successfully activated article ');
-        this.clear();
-        this.router.navigate('purchases');
+        // this.clear();
+        // this.router.navigate('purchases');
       })
       .catch(() => {
         console.log(' ::>> failed to activate article ');
