@@ -32,6 +32,13 @@ export class AppRoutes {
       nav: true,
       title: 'Reset Password',
       auth: false
+    }, {
+      route: 'unauthorised',
+      name: 'unauthorised',
+      moduleId: PLATFORM.moduleName('unauthorised/unauthorised'),
+      nav: true,
+      title: 'Unauthorised',
+      auth: false
     }];
   }
 

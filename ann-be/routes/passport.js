@@ -145,7 +145,7 @@ router.post(
 
       UserModel
         .find({ email })
-        .select({ token: 1, role: 1, password: 1 })
+        .select({ token: 1, role: 1, password: 1, permissions: 1 }) // todo: check for other data mappings
         .then(function (docs, err) {
           if (err || !docs || docs.length == 0) return res.sendStatus(401, {error: err});
 

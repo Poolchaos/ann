@@ -173,10 +173,14 @@ export class AuthStep {
     const access: any = currentInstruction ? currentInstruction.config.settings.access : null;
 
     if (access && user && user.role) {
+      if (!user.permissions) {
+        return next.cancel(new Redirect('/unauthorised'));
+      }
+
       let hasAccess = false;
 
       for (const role of access) {
-        if (role === user.role) {
+        if (role === user.role && user.permissions) {
           hasAccess = true;
         }
       }

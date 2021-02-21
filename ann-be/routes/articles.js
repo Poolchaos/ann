@@ -7,7 +7,7 @@ require('dotenv').config();
 
 const { authenticateToken } = require('./authenticate-token');
 const ArticleModel = require('../models/article-model');
-const ROLES = require('../enums/roles');
+const ROLES = require('../enums/roles'); // todo: change all default exports to named exports
 const CATEGORIES = require('../enums/categories');
 const logger = require('../logger');
 
