@@ -1,8 +1,9 @@
 <template>
   <div>
-    <h3>Cart</h3>
+    <h3>Purchase History</h3>
     <div  if.bind="!purchases.length">No items in cart</div>
     <div repeat.for="item of purchases">
+      <!-- todo: add user for admin -->
       <div>Name: ${item.name}</div>
       <div>Category: ${item.category}</div>
       <div>Content: ${item.content}</div>

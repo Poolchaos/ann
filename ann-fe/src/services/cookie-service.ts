@@ -1,4 +1,10 @@
+import { EVENTS } from "stores/events";
+
 export class CookieService {
+
+  public allow(): void {
+    this.setCookie(EVENTS.CACHE.CONFIRMED, 'true');
+  }
 
   public setCookie(name: string, value: string, days?: number): void {
     var expires = "";

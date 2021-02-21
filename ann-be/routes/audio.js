@@ -4,6 +4,7 @@ var jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const ObjectID = require('mongodb').ObjectID;
 const fs = require('fs');
+require('dotenv').config();
 
 const { authenticateToken } = require('./authenticate-token');
 const ArticleModel = require('../models/article-model');
@@ -33,7 +34,7 @@ router.post('/',
       const acceptedTypes = ['audio/wav', 'audio/mpeg'];
       if (!req.body.type || !acceptedTypes.includes(req.body.type)) return res.sendStatus(500);
       if (!req.body) return res.sendStatus(500, { error: err });
-      const decrypted = jwt.verify(token, 'complete');
+      const decrypted = jwt.verify(token, process.env.COMPLETE_KEY);
 
       const extention = req.body.name.split('.');
       const generatedName = new ObjectID();
@@ -79,7 +80,7 @@ router.put('/',
 
     try {
       if (!req.body) return res.sendStatus(500, { error: err });
-      const decrypted = jwt.verify(token, 'complete');
+      const decrypted = jwt.verify(token, process.env.COMPLETE_KEY);
       if (!decrypted) return res.sendStatus(401);
 
       FileModel.findById(req.body.audioId, function (err, doc) {

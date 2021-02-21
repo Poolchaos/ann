@@ -4,6 +4,7 @@ var jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const ObjectID = require('mongodb').ObjectID;
 var async = require("async");
+require('dotenv').config();
 
 const { authenticateToken } = require('./authenticate-token');
 const PurchaseModel = require('../models/purchase-model');
@@ -32,7 +33,7 @@ router.post('/checkout',
 
     try {
       if (!req.body) return res.sendStatus(500, { error: err });
-      const decrypted = jwt.verify(token, 'complete');
+      const decrypted = jwt.verify(token, process.env.COMPLETE_KEY);
       if (!decrypted) return res.sendStatus(401);
 
       const articleIds = req.body;
@@ -165,7 +166,7 @@ router.get('/',
     const token = authHeader && authHeader.split(' ')[1];
 
     try {
-      const decrypted = jwt.verify(token, 'complete');
+      const decrypted = jwt.verify(token, process.env.COMPLETE_KEY);
       if (!decrypted) return res.sendStatus(401);
 
       PurchaseModel.find({ userId: decrypted._id }, function (err, docs) {

@@ -8,12 +8,6 @@ import { CartModel, ICartItem } from './cart-model';
 @autoinject()
 export class DataStore {
 
-  private static ROLES = {
-    ADMIN: 'Admin',
-    JOURNALIST: 'Journalist',
-    VOICE_OVER: 'Voice-Over',
-    USER: 'DEFAULT_USER'
-  };
   private USER: ILogin | IUser;
   public cart: CartModel = new CartModel();
 
@@ -43,7 +37,7 @@ export class DataStore {
     if (user) {
       this.cookieService.setCookie(EVENTS.CACHE.USER, JSON.stringify(user), 3);
     } else {
-      this.cookieService.eraseCookie('ann-user');
+      this.cookieService.eraseCookie(EVENTS.CACHE.USER);
     }
     this.dataUpdated(EVENTS.USER_UPDATED);
   }
@@ -53,28 +47,29 @@ export class DataStore {
     return this.USER;
   }
 
-  @computedFrom('USER.roles')
+  @computedFrom('USER.role')
   public get isAdmin(): boolean {
-    return this.USER ? this.USER.role === DataStore.ROLES.ADMIN : false;
+    return this.USER ? this.USER.role === EVENTS.ROLES.ADMIN : false;
   }
 
-  @computedFrom('USER.roles')
+  @computedFrom('USER.role')
   public get isJournalist(): boolean {
-    return this.USER ? this.USER.role === DataStore.ROLES.JOURNALIST : false;
+    return this.USER ? this.USER.role === EVENTS.ROLES.JOURNALIST : false;
   }
 
-  @computedFrom('USER.roles')
+  @computedFrom('USER.role')
   public get isVoiceOver(): boolean {
-    return this.USER ? this.USER.role === DataStore.ROLES.VOICE_OVER : false;
+    return this.USER ? this.USER.role === EVENTS.ROLES.VOICE_OVER : false;
   }
 
-  @computedFrom('USER.roles')
+  @computedFrom('USER.role')
   public get isUser(): boolean {
-    return this.USER ? this.USER.role === DataStore.ROLES.USER : false;
+    return this.USER ? this.USER.role === EVENTS.ROLES.USER : false;
   }
 }
 
 export interface ILogin {
+  _id: string;
   token: string;
   role: string;
 }

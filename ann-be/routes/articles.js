@@ -3,6 +3,7 @@ var router = express.Router();
 var jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const ObjectID = require('mongodb').ObjectID;
+require('dotenv').config();
 
 const { authenticateToken } = require('./authenticate-token');
 const ArticleModel = require('../models/article-model');
@@ -27,7 +28,7 @@ router.get('/',
     try {
       const authHeader = req.headers['authorization']
       const token = authHeader && authHeader.split(' ')[1];
-      const decrypted = jwt.verify(token, 'complete');
+      const decrypted = jwt.verify(token, process.env.COMPLETE_KEY);
 
       if (!decrypted) return res.sendStatus(401);
 
@@ -47,7 +48,7 @@ router.get('/edit',
     try {
       const authHeader = req.headers['authorization']
       const token = authHeader && authHeader.split(' ')[1];
-      const decrypted = jwt.verify(token, 'complete');
+      const decrypted = jwt.verify(token, process.env.COMPLETE_KEY);
 
       if (!decrypted) return res.sendStatus(401);
       if (!req.query || !req.query.articleId) return res.sendStatus(500);
@@ -77,7 +78,7 @@ router.get('/review',
     try {
       const authHeader = req.headers['authorization']
       const token = authHeader && authHeader.split(' ')[1];
-      const decrypted = jwt.verify(token, 'complete');
+      const decrypted = jwt.verify(token, process.env.COMPLETE_KEY);
 
       if (!decrypted) return res.sendStatus(401);
 
@@ -97,7 +98,7 @@ router.get('/category',
     try {
       const authHeader = req.headers['authorization']
       const token = authHeader && authHeader.split(' ')[1];
-      const decrypted = jwt.verify(token, 'complete');
+      const decrypted = jwt.verify(token, process.env.COMPLETE_KEY);
 
       if (!decrypted) return res.sendStatus(401);
       if (!req.query.category) return res.sendStatus(500, 'No category specified');
@@ -125,7 +126,7 @@ router.post('/',
 
       const authHeader = req.headers['authorization']
       const token = authHeader && authHeader.split(' ')[1];
-      const decrypted = jwt.verify(token, 'complete');
+      const decrypted = jwt.verify(token, process.env.COMPLETE_KEY);
 
       if (!decrypted) return res.sendStatus(401);
       const article = {
@@ -166,7 +167,7 @@ router.put('/',
 
       const authHeader = req.headers['authorization']
       const token = authHeader && authHeader.split(' ')[1];
-      const decrypted = jwt.verify(token, 'complete');
+      const decrypted = jwt.verify(token, process.env.COMPLETE_KEY);
 
       if (!decrypted) return res.sendStatus(401);
 
@@ -200,7 +201,7 @@ router.post('/review',
     const token = authHeader && authHeader.split(' ')[1];
 
     try {
-      const decrypted = jwt.verify(token, 'complete');
+      const decrypted = jwt.verify(token, process.env.COMPLETE_KEY);
 
       if (!decrypted) return res.sendStatus(401);
       if (!req.body) return res.sendStatus(500, { error: err });
@@ -234,7 +235,7 @@ router.delete('/',
     const token = authHeader && authHeader.split(' ')[1];
 
     try {
-      const decrypted = jwt.verify(token, 'complete');
+      const decrypted = jwt.verify(token, process.env.COMPLETE_KEY);
 
       if (!decrypted || !req.body.articleId) return res.sendStatus(401);
 

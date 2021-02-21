@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 const AnonymousModel = require('../models/anonymous-model');
 const UserModel = require('../models/user-model');
@@ -8,7 +9,7 @@ const authenticateUser = function(res, next, user, rolePermissions) {
     UserModel.find({ email: user.email }).then(function (docs) {
       const user = docs[0];
       if (user) {
-        const decryptedUser = jwt.verify(user.token, 'complete');
+        const decryptedUser = jwt.verify(user.token, process.env.COMPLETE_KEY);
         if (decryptedUser && decryptedUser.role === user.role) {
           if (rolePermissions && rolePermissions.length > 0) {
             if (rolePermissions.includes(user.role)) {
@@ -39,7 +40,7 @@ const authenticateToken = function(req, res, next, rolePermissions) {
     
     if (!token) return res.sendStatus(401);
 
-    const decrypted = jwt.verify(token, 'complete');
+    const decrypted = jwt.verify(token, process.env.COMPLETE_KEY);
 
     if (decrypted) {
       return authenticateUser(res, next, decrypted, rolePermissions);

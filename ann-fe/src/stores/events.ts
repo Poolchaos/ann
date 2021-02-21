@@ -11,8 +11,16 @@ export class EVENTS {
   public static CLEAR_CART = 'CLEAR:CART';
 
   public static CACHE = {
-    USER: 'ann-user',
-    CART: 'ann-items',
-    LOCALE: 'ann-locale'
+    CONFIRMED: 'allow-cache',
+    USER: 'identity',
+    CART: 'cart',
+    LOCALE: 'locale'
+  };
+  
+  public static ROLES = {
+    ADMIN: 'Admin',
+    JOURNALIST: 'Journalist',
+    VOICE_OVER: 'Voice-Over',
+    USER: 'DEFAULT_USER'
   };
 }

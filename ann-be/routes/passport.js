@@ -38,7 +38,7 @@ const decrypt = function(data) {
   _decrypt.setPrivateKey(process.env.PRIVATE_KEY);
   return _decrypt.decrypt(data);
 };
-
+// todo: add this site uses cookies
 router.post(
   '/submit',
   authenticateAnonymous,
@@ -53,7 +53,7 @@ router.post(
     try {
       const decrypted = jwt.verify(token, 'anonymous');
       const id = new ObjectID();
-      const reg_token = jwt.sign({ userId: id }, 'completing registration');
+      const reg_token = jwt.sign({ userId: id }, process.env.COMPLETING_REGISTRATION_KEY);
       let user = {
         _id: id,
         firstName: req.body.firstName,
@@ -95,7 +95,7 @@ router.post(
     try {
       const authHeader = req.headers['authorization']
       const token = authHeader && authHeader.split(' ')[1];
-      const decrypted = jwt.verify(token, 'completing registration');
+      const decrypted = jwt.verify(token, process.env.COMPLETING_REGISTRATION_KEY);
 
       if (!req.body.password) return res.sendStatus(500, {error: 'No password specified'});
     
@@ -106,7 +106,7 @@ router.post(
         if (user) {
           const password = req.body ? req.body.password : null;
           user.token = null;
-          user.token = jwt.sign(user, 'complete');
+          user.token = jwt.sign(user, process.env.COMPLETE_KEY);
           user.password = password;
           user.permissions = user.role === ROLES.ADMIN;
 
@@ -177,7 +177,7 @@ router.post('/authenticate-token',
     if (!token) return res.sendStatus(401);
 
     try {
-      const decrypted = jwt.verify(token, 'complete');
+      const decrypted = jwt.verify(token, process.env.COMPLETE_KEY);
       const email = decrypted.email;
       UserModel.find({ email }, function (err, docs) {
         if (err || docs.length == 0) return res.sendStatus(500, {error: 'No email specified.'});
@@ -214,7 +214,7 @@ router.post('/reset-password',
           let date = new Date();
           date.setHours(date.getHours() + 1);
           user.validBy = date;
-          user.token = jwt.sign(user, 'password-reset-request');
+          user.token = jwt.sign(user, process.env.PASSWORD_RESET_KEY);
 
           sendValidPasswordResetRequest(user);
           log('Confirm password reset token is valid', token);
@@ -236,7 +236,7 @@ router.put('/reset-password',
 
     try {
       const password = req.body.password;
-      const decrypted = jwt.verify(token, 'complete');
+      const decrypted = jwt.verify(token, process.env.COMPLETE_KEY);
       if (!password || !decrypted) return res.sendStatus(500);
 
       // todo: pull verify, sign key into enums + 20 digit encryption
@@ -269,7 +269,7 @@ router.post('/token',
     if (!token) return res.sendStatus(500);
 
     try {
-      const decrypted = jwt.verify(token, 'password-reset-request');
+      const decrypted = jwt.verify(token, process.env.PASSWORD_RESET_KEY);
       // todo: check best server-side date implementation
 
       const dateToCheck = new Date(decrypted.validBy);

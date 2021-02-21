@@ -67,7 +67,7 @@ export class App {
 
   private init(): void {
     try {
-      let user = JSON.parse(this.cookieService.getCookie('ann-user'));
+      let user = JSON.parse(this.cookieService.getCookie(EVENTS.CACHE.USER));
       if (!user || user === 'null') {
         return;
       }

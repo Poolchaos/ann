@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const mongoose = require('mongoose');
 var jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 const UserModel = require('../models/user-model');
 const { authenticateToken } = require('./authenticate-token');
@@ -41,7 +42,7 @@ const updateRegistration = function(req, res, userId) {
     const token = authHeader && authHeader.split(' ')[1];
     if (!token) return res.sendStatus(401);
 
-    const decrypted = jwt.verify(token, 'complete');
+    const decrypted = jwt.verify(token, process.env.COMPLETE_KEY);
     log('User removed', decrypted.email, userId);
     return res.sendStatus(200);
   });

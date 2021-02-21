@@ -1,11 +1,11 @@
 import { autoinject, computedFrom } from 'aurelia-framework';
 
 import { CookieService } from 'services/cookie-service';
+import { IUser } from './data-store';
 import { EVENTS } from './events';
 
 @autoinject()
 export class CartModel {
-
   private cookieService = new CookieService();
 
   private _ITEMS: ICartItem[] = [];
@@ -35,18 +35,27 @@ export class CartModel {
     return this._ITEMS.map(item => item._id);
   }
 
+  private userId(): string {
+    const cookie = this.cookieService.getCookie(EVENTS.CACHE.USER);
+    const user: IUser = cookie ? JSON.parse(cookie) : null;
+    if (user && user._id) {
+      return user._id;
+    }
+    return null;
+  }
+
   private setCookie(): void {
-    this.cookieService.setCookie(EVENTS.CACHE.CART, JSON.stringify(this._ITEMS), 1);
+    this.cookieService.setCookie(`${EVENTS.CACHE.CART}-${this.userId()}`, JSON.stringify(this._ITEMS), 1);
   }
 
   private getCookie(): void {
     try {
-      this._ITEMS = JSON.parse(this.cookieService.getCookie(EVENTS.CACHE.CART)) || [];
+      this._ITEMS = JSON.parse(this.cookieService.getCookie(`${EVENTS.CACHE.CART}-${this.userId()}`)) || [];
     } catch(e) {}
   }
   
   private removeCookie(): void {
-    this.cookieService.eraseCookie(EVENTS.CACHE.CART);
+    this.cookieService.eraseCookie(`${EVENTS.CACHE.CART}-${this.userId()}`);
   }
 
   @computedFrom('_ITEMS')

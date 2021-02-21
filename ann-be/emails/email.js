@@ -28,7 +28,7 @@ function sendRegisterConfirmationEmail(user) {
     from: 'noreply@ann.com',
     to: user.email,
     subject: 'noreply',
-    html: CONFIRM_REGISTRATION.replace('${ann_token}', user.token)
+    html: CONFIRM_REGISTRATION.replace(/\$\{ann_token\}/gi, user.token)
   };
 
   transporter.sendMail(mailData, function (err, info) {
