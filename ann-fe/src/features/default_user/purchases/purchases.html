@@ -1,7 +1,7 @@
 <template>
   <h3>Purchase History</h3>
   <div class="white-bg container">
-    <div if.bind="!purchases.length">No items in cart</div>
+    <div if.bind="!purchases.length">No previous purchases</div>
     <div repeat.for="item of purchases" class="item">
       <div class="col">
         <img src.bind="'../../../../../icon-' + item.category + '.png'" width="50px" height="50px" />

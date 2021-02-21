@@ -144,6 +144,8 @@ function sendPurchasedEmail(user, articles) {
   });
 }
 
+// todo: make all links in emails safe via google
+
 const log = function(message, email, userId) {
   logger.info(message, {
     email,

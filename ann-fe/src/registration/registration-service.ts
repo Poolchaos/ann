@@ -4,7 +4,7 @@ import {HttpClient} from 'aurelia-http-client';
 import { UserRegistrationSettings } from './user-registration-settings';
 import { EncryptService } from '../services/encrypt-service';
 
-const logger = LogManager.getLogger('RegistrationService');
+const logger = LogManager.getLogger('RegistrationService'); // todo: add logger in all ts files
 
 @autoinject()
 export class RegistrationService {

@@ -1,5 +1,5 @@
 <template>
-  Admin dashboard
+  <h1>Users</h1>
   <table class="white-bg container full-width">
     <thead>
       <tr>
@@ -20,15 +20,17 @@
         <td>${user.number}</td>
         <td>${user.role}</td>
         <td>
+          <span if.bind="user.role === 'Admin'">- - - - - - - - - - - - -</span>
           <button
-            if.bind="user._id !== dataStore.user._id && !user.permissions"
+            if.bind="user.role !== 'Admin'"
             click.trigger="enableAccess(user)">Enable</button>
           <button
-            if.bind="user._id !== dataStore.user._id && user.permissions"
+            if.bind="user.role !== 'Admin'"
             click.trigger="disableAccess(user)">Disable</button>
         </td>
-        <td if.bind="user._id !== dataStore.user._id">
-          <button click.trigger="removeUser(user)">Remove</button>
+        <td>
+          <span if.bind="user._id === dataStore.user._id">- - - - - - -</span>
+          <button if.bind="user._id !== dataStore.user._id" click.trigger="removeUser(user)">Remove</button>
         </td>
       </tr>
     </tbody>

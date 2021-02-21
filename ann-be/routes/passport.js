@@ -117,6 +117,7 @@ router.post(
           user_instance.save(function (err) {
             if (err) return res.sendStatus(500, {error: err});
             sendRegistrationCompleteEmail(user);
+            //todo: send registration complete email to admin > authenticate user
             log('Registration Complete', user.email);
             return res.sendStatus(200);
           });

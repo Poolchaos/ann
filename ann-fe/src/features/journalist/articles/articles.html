@@ -42,6 +42,10 @@
           click.trigger="activateArticle(article._id)">
           Activate Article
         </button>
+        <button if.bind="dataStore.isVoiceOver"
+          click.trigger="addToCart(article)">
+          Add audio
+        </button>
         <button if.bind="dataStore.isUser && !article.selected"
           click.trigger="addToCart(article)">
           Add to cart
