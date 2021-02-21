@@ -2,7 +2,6 @@ import { autoinject } from 'aurelia-framework';
 import { Router } from 'aurelia-router';
 import { ValidationControllerFactory, ValidationController, ValidationRules, validateTrigger } from 'aurelia-validation';
 
-import { RegistrationService } from 'registration/registration-service';
 import { AuthenticateService } from 'login/authenticate-service';
 
 @autoinject()
@@ -10,13 +9,14 @@ export class ResetPassword {
 
   public password: string;
   public isValid: boolean;
+  public error: boolean;
+  public invalidToken: boolean;
 
   private token: string;
   private validation: ValidationController;
 
   constructor(
     private router: Router,
-    private registrationService: RegistrationService,
     private authenticateService: AuthenticateService,
     validationControllerFactory: ValidationControllerFactory
   ) {
@@ -26,10 +26,9 @@ export class ResetPassword {
   
   public activate(params: { token: string }): void {
     if (!params.token) {
-      this.triggerNoTokenPresent();
+      this.error = true;
       return;
     }
-    // todo: serverside, check if date in token
     this.token = params.token;
     this.validateToken();
   }
@@ -41,16 +40,7 @@ export class ResetPassword {
         this.token = token;
         this.setupValidations();
       })
-      .catch(() => this.triggerInvalidToken());
-  }
-
-  private triggerNoTokenPresent(): void {
-    // todo: implement something went wrong, please contact support to resolve this issue
-  }
-
-  private triggerInvalidToken(): void {
-    // todo: implement something went wrong, please contact support to resolve this issue
-    // token expired
+      .catch(() => this.invalidToken = true);
   }
 
   private setupValidations(): void {
@@ -72,7 +62,12 @@ export class ResetPassword {
       .on(this);
   }
 
+  public navToForgotPassword(): void {
+    this.router.navigate('forgot-password');
+  }
+
   public confirmPasswordReset(): void {
+    this.error = null;
 
     this.validation
       .validate()
