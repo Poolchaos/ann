@@ -56,6 +56,10 @@ export class Articles {
     this.router.navigate('create-article');
   }
 
+  public goToDashboard(): void {
+    this.router.navigate('dashboard');
+  }
+
   public playAudio(file: string, parentIndex: number, index: number): void {
     this.articleService
       .playAudio(file)
