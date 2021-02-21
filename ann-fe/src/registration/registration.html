@@ -41,6 +41,7 @@
             ${error.message}
           </li>
         </ul>
+        <ul if.bind="error">${error}</ul>
         <div>
           <button disabled.bind="submitted" click.trigger="register()" i18n="page.register.form.register-button"></button>
         </div>

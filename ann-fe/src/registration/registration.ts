@@ -12,6 +12,7 @@ export class Registration {
   public email: string;
   public number: string;
   public submitted: boolean = false;
+  public error: string;
 
   private validation: ValidationController;
 
@@ -54,6 +55,7 @@ export class Registration {
   }
 
   public register(): void {
+    this.error = null;
 
     this.validation
       .validate()
@@ -80,7 +82,7 @@ export class Registration {
       )
       .then(() => this.router.navigate('email-sent'))
       .catch(() => {
-        // todo: show some error
+        this.error = 'Registration failed. Please contact support for assistance.';
       });
   }
 }
