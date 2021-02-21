@@ -7,14 +7,19 @@
   width: 100%;
   display: flex;
   justify-content: space-evenly;
+  flex-wrap: wrap;
+  
+  overflow: hidden;
+  border-radius: 0 10px 10px 0;
 
   li {
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    height: 200px;
-    width: 25%;
+    height: 80px;
+    width: calc(50% - 20px);
+    padding: 10px;
   }
 
   li:nth-child(1) {

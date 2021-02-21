@@ -1,39 +1,58 @@
 <template>
-  <h1 i18n="page.register.title"></h1>
-  <form>
-    <div>
-      <!-- toto: add required indicators -->
-      <!-- todo: add form validation -->
 
-      *<label i18n="page.register.form.firstName"></label>
-      <input type="text" value.bind="firstName & validate" placeholder="Jane" />
+
+
+
+
+  
+  <div class="small-wrapper container box centered">
+    <h1 i18n="page.register.title"></h1>
+    <div class="flex">
+
+      <form class="left content">
+          <!-- toto: add required indicators -->
+          <!-- todo: add form validation -->
+    
+        *<label i18n="page.register.form.firstName"></label>
+        <div class="row">
+          <input type="text" value.bind="firstName & validate" placeholder="Jane" />
+        </div>
+        *<label i18n="page.register.form.lastName"></label>
+        <div class="row">
+          <input type="text" value.bind="surname & validate" placeholder="Doe" />
+        </div>
+        *<label i18n="page.register.form.email"></label>
+        <div class="row">
+          <input type="text" value.bind="email & validate" placeholder="jane@example.com" />
+        </div>
+        *<label i18n="page.register.form.contactNumber"></label>
+        <div class="row">
+          <input type="text" value.bind="number & validate" />
+        </div>
+        <div>
+        <ul class="reg-roles hoverable">
+          <li click.trigger="selectRole('Admin')" class.bind="selectedRole === 'Admin' ? 'selected' : ''">Admin<br/>(This will be removed)</li>
+          <li click.trigger="selectRole('Journalist')" class.bind="selectedRole === 'Journalist' ? 'selected' : ''">Create news articles</li>
+          <li click.trigger="selectRole('Voice-Over')" class.bind="selectedRole === 'Voice-Over' ? 'selected' : ''">Add voice over to articles</li>
+          <li click.trigger="selectRole('DEFAULT_USER')" class.bind="selectedRole === 'DEFAULT_USER' ? 'selected' : ''">Find and use articles</li>
+        </ul>
+        <ul if.bind="validation.errors">
+          <li repeat.for="error of validation.errors">
+            ${error.message}
+          </li>
+        </ul>
+        <div>
+          <button disabled.bind="submitted" click.trigger="register()" i18n="page.register.form.register-button"></button>
+        </div>
+      </form>
+
     </div>
-    <div>
-      *<label i18n="page.register.form.lastName"></label>
-      <input type="text" value.bind="surname & validate" placeholder="Doe" />
-    </div>
-    <div>
-      *<label i18n="page.register.form.email"></label>
-      <input type="text" value.bind="email & validate" placeholder="jane@example.com" />
-    </div>
-    <div>
-      *<label i18n="page.register.form.contactNumber"></label>
-      <input type="text" value.bind="number & validate" />
-    </div>
-    <div>
-    <ul class="reg-roles hoverable">
-      <li click.trigger="selectRole('Admin')" class.bind="selectedRole === 'Admin' ? 'selected' : ''">Admin<br/>(This will be removed)</li>
-      <li click.trigger="selectRole('Journalist')" class.bind="selectedRole === 'Journalist' ? 'selected' : ''">Create news articles</li>
-      <li click.trigger="selectRole('Voice-Over')" class.bind="selectedRole === 'Voice-Over' ? 'selected' : ''">Add voice over to articles</li>
-      <li click.trigger="selectRole('DEFAULT_USER')" class.bind="selectedRole === 'DEFAULT_USER' ? 'selected' : ''">Find and use articles</li>
-    </ul>
-    <ul if.bind="validation.errors">
-      <li repeat.for="error of validation.errors">
-        ${error.message}
-      </li>
-    </ul>
-    <div>
-      <button disabled.bind="submitted" click.trigger="register()" i18n="page.register.form.register-button"></button>
-    </div>
-  </form>
+  </div>
+
+
+
+
+
+
+  
 </template>
