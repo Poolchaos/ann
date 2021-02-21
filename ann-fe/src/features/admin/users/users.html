@@ -1,6 +1,6 @@
 <template>
   Admin dashboard
-  <table>
+  <table class="white-bg container full-width">
     <thead>
       <tr>
         <td i18n="page.register.form.email"></td>
@@ -23,6 +23,9 @@
           <button
             if.bind="user._id !== dataStore.user._id && !user.permissions"
             click.trigger="enableAccess(user)">Enable</button>
+          <button
+            if.bind="user._id !== dataStore.user._id && user.permissions"
+            click.trigger="disableAccess(user)">Disable</button>
         </td>
         <td if.bind="user._id !== dataStore.user._id">
           <button click.trigger="removeUser(user)">Remove</button>

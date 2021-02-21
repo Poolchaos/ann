@@ -102,6 +102,28 @@ router.put('/enable',
   }
 );
 
+router.put('/disable',
+  (req, res, next) => authenticateToken(req, res, next, [ROLES.ADMIN]),
+  function(req, res, next) {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1];
+    
+    try {
+      if (!req.body || !req.body.userId) return res.sendStatus(500, { error: err });
+
+      UserModel.findById(req.body.userId, function (err, doc) {
+        doc.permissions = false;
+        doc.save();
+        log('Disable user access', token, req.body);
+        return res.send({ userId: doc._id, permissions: doc.permissions });
+      });
+    } catch(e) {
+      error('Failed to disable user access', token, req.body, e);
+      return res.sendStatus(500);
+    }
+  }
+);
+
 const log = function(message, email, removedUser) {
   logger.info(message, {
     email,

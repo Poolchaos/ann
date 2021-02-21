@@ -36,6 +36,7 @@ export class DataStore {
     this.USER = user;
     if (user) {
       this.cookieService.setCookie(EVENTS.CACHE.USER, JSON.stringify(user), 3);
+      this.cart.initialise();
     } else {
       this.cookieService.eraseCookie(EVENTS.CACHE.USER);
     }

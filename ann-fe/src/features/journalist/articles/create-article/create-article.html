@@ -1,13 +1,13 @@
 <template>
-  <div class="container content">
-    <form submit.trigger="submitForm()">
+  <div class="content">
+    <h4>Create Article</h4>
+    <form submit.trigger="submitForm()" class="white-bg container">
+      *<label i18n="page.journalist.create-article.title"></label>
       <div>
-        *<label i18n="page.journalist.create-article.title"></label>
         <input type="text" value.bind="title" />
       </div>
+      *<label i18n="page.journalist.create-article.category.label"></label>
       <div>
-        *<label i18n="page.journalist.create-article.category.label"></label>
-
         <select class="o-zdropdown" ref="select" value.bind="category">
           <option i18n="page.journalist.create-article.category.options.news"></option>
           <option i18n="page.journalist.create-article.category.options.sport"></option>

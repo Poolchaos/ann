@@ -1,7 +1,19 @@
 <template>
-  <div>
-    <h3>Cart</h3>
-    <div  if.bind="!dataStore.cart.hasItems">No items in cart</div>
+  <h3>
+    Cart
+    <div class="pull-right">
+      <button
+        click.trigger="checkout()" disabled.bind="!dataStore.cart.hasItems">
+        Checkout
+      </button>
+      <button
+        click.trigger="clear()" disabled.bind="!dataStore.cart.hasItems">
+        Clear Cart
+      </button>
+    </div>
+  </h3>
+  <div class="white-bg">
+    <div if.bind="!dataStore.cart.hasItems">No items in cart</div>
     <div repeat.for="article of dataStore.cart.items" if.bind="dataStore.cart.hasItems" class="item">
       <div class="col">
         <img src.bind="'../../../../icon-' + article.category + '.png'" width="50px" height="50px" />
@@ -22,13 +34,5 @@
       </div>
     </div>
     <div if.bind="error">Something went wrong. Please contact support for assistance.</div>
-    <button
-      click.trigger="checkout()" disabled.bind="!dataStore.cart.hasItems">
-      Checkout
-    </button>
-    <button
-      click.trigger="clear()" disabled.bind="!dataStore.cart.hasItems">
-      Clear Cart
-    </button>
   </div>
 </template>

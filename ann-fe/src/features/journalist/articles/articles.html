@@ -1,10 +1,15 @@
 <template>
-  <h4>articles</h4>
-  <div class="articles">
-    <div>
-      <button click.trigger="goToDashboard()">Back</button>
+  <h4>
+    Articles
+    <div class="pull-right">
       <button if.bind="dataStore.isJournalist" click.trigger="goToCreateArticle()">Create New Article</button>
+      <button if.bind="!dataStore.isJournalist" click.trigger="goToDashboard()">Back</button>
     </div>
+  </h4>
+  <div>
+    
+  </div>
+  <div class="articles white-bg">
 
     <div repeat.for="article of articles" class="item" class.bind="article.selected ? 'is-selected' : ''">
       <div class="col">

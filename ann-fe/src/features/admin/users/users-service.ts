@@ -53,4 +53,11 @@ export class UserService {
       .withContent({ userId })
       .send();
   }
+  
+  public disableAccess(userId: string): Promise<any> {
+    return this.httpClient.createRequest('users/disable')
+      .asPut()
+      .withContent({ userId })
+      .send();
+  }
 }

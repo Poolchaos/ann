@@ -14,6 +14,10 @@ export class CartModel {
     this.getCookie();
   }
 
+  public initialise(): void {
+    this.getCookie();
+  }
+
   public add(item: ICartItem) {
     if (!this.hasItem(item._id)) {
       this._ITEMS.push(item);

@@ -1,10 +1,10 @@
 <template>
   <div class="wrapper">
-    <ul class="nav" style="width: 100%;margin: 0;padding: 0">
-      <li><button click.trigger="goToHome()" i18n="nav-links.home"></button></li>
-      <li class="hoverable" if.bind="!isAuthenticated"><button click.trigger="goToLogin()" i18n="nav-links.login"></button></li>
-      <li class="hoverable" if.bind="!isAuthenticated"><button click.trigger="goToRegistration()" i18n="nav-links.register"></button></li>
-      <li class="hoverable" if.bind="isAuthenticated"><button click.trigger="goToDashboard()" i18n="nav-links.dashboard"></button></li>
+    <ul class="nav">
+      <li><button class="hoverable" click.trigger="goToHome()" i18n="nav-links.home"></button></li>
+      <li if.bind="!isAuthenticated"><button class="hoverable" click.trigger="goToLogin()" i18n="nav-links.login"></button></li>
+      <li if.bind="!isAuthenticated"><button class="hoverable" click.trigger="goToRegistration()" i18n="nav-links.register"></button></li>
+      <li if.bind="isAuthenticated"><button class="hoverable" click.trigger="goToDashboard()" i18n="nav-links.dashboard"></button></li>
       <li style="float:right;" class="locales">
         <img src="../static/1280px-Font_Awesome_5_solid_language.svg.png"
           width="50px"
@@ -18,12 +18,12 @@
           </li>
         </ul>
       </li>
-      <li style="float:right;" class="hoverable" if.bind="isAuthenticated"><button click.trigger="logout()" i18n="nav-links.logout"></button></li>
-      <li style="float:right; padding: 10px 20px" class="hoverable" if.bind="isAuthenticated && dataStore.isUser" click.trigger="viewCart()">
-        Cart ${dataStore.cart.itemsCount}
+      <li style="float:right;" if.bind="isAuthenticated"><button class="hoverable" click.trigger="logout()" i18n="nav-links.logout"></button></li>
+      <li style="float:right;" if.bind="isAuthenticated && dataStore.isUser">
+        <button class="hoverable" click.trigger="viewCart()">Cart ${dataStore.cart.itemsCount}</button>
       </li>
-      <li style="float:right;" class="hoverable" if.bind="dataStore.isAdmin || dataStore.isUser">
-        <button click.trigger="goToPurchases()">Purchases</button>
+      <li style="float:right;" if.bind="dataStore.isAdmin || dataStore.isUser">
+        <button class="hoverable" click.trigger="goToPurchases()">Purchases</button>
       </li>
     </ul>
     <div class="spacer big"></div>
