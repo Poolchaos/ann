@@ -10,6 +10,7 @@ const { authenticateToken } = require('./authenticate-token');
 const PurchaseModel = require('../models/purchase-model');
 const ArticleModel = require('../models/article-model');
 const FileModel = require('../models/file-model');
+const UserModel = require('../models/user-model');
 const ROLES = require('../enums/roles');
 const logger = require('../logger');
 const { sendPurchasedEmail } = require('../emails/email');
@@ -121,7 +122,7 @@ router.post('/checkout',
               });
 
             }
-          ], function (err, result) {
+          ], function (result) {
             return res.sendStatus(200);
           });
         }
@@ -138,21 +139,132 @@ router.get('/all',
   (req, res, next) => authenticateToken(req, res, next, [ROLES.ADMIN]),
   function(req, res, next) {
     try {
-      PurchaseModel.find({}, function (err, docs) {
-        let count = 0;
-        let list = [];
 
-        docs.forEach(item => {
-          ArticleModel.findById(item.articleId, function (err, doc) {
-            if (err) return;
-            list.push(doc);
-            count++;
-            if (count >= docs.length) {
-              return res.send(list);
-            }
-          });
+      function startWaterfall() {
+        return async.waterfall([
+          (cb) => {
+            // get all purchases
+            PurchaseModel.find({}, function (err, docs) {
+              if (!err && docs) {
+                cb(null, docs);
+              }
+            });
+          },
+          (purchases, cb) => {
+            console.log(' ::>> parallel 0 >>> ');
+            async.parallel([
+              (callback) => {
+                // get all purchased articles
+                let count = 0;
+                let map = {};
+
+                purchases.forEach(purchase => {
+                  const articleId = purchase.articleId;
+                  if (map[articleId]) return;
+
+                  ArticleModel.findById(articleId, function (err, doc) {
+                    if (!err && doc) {
+                      map[articleId] = doc;
+                      count++;
+
+                      if (count >= purchases.length) {
+                        return callback(null, map);
+                      }
+                    }
+                  });
+                });
+              },
+              (callback) => {
+                // get purchasees
+                let count = 0;
+                let map = {};
+
+                purchases.forEach(purchase => {
+                  const userId = purchase.userId;
+                  if (map[userId]) return;
+
+                  UserModel.findById(userId, function (err, doc) {
+                    if (!err && doc) {
+                      map[userId] = doc;
+                      count++;
+
+                      if (count >= purchases.length) {
+                        return callback(null, map);
+                      }
+                    }
+                  });
+                });
+              }
+            ], (err, result) => {
+              const articles = result[0];
+              const users = result[1];
+              console.log(' ::>> extra data done', { err, articles, users });
+
+              let mappedPurchases = [];
+
+              function mapEntries(purchase) {
+                let entry = {
+                  _id: purchase._id,
+                  date: purchase.date,
+                  purchasee: null,
+                  article: null
+                };
+
+                const article = articles[purchase.articleId];
+                console.log(' ::>> purchase.articleId >>>>> ', !!article);
+                if (article) {
+                  entry.article = article;
+                }
+
+                const user = users[purchase.userId];
+                console.log(' ::>> purchase.userId >>>>> ', !!user);
+                if (user) {
+                  entry.user = user;
+                }
+                
+                mappedPurchases.push(entry);
+              }
+              
+              let promises = [];
+              purchases.forEach(purchase => promises.push(mapEntries(purchase)));
+              
+              Promise.all(promises).then((values) => {
+                cb(mappedPurchases);
+              });
+
+            })
+          }
+        ], function(result) {
+          console.log(' ::>> waterfall done ', result);
+          return res.send(result);
         });
-      });
+      }
+      
+      startWaterfall();
+
+
+
+
+
+      // PurchaseModel.find({}, function (err, docs) {
+      //   let count = 0;
+      //   let list = [];
+
+      //   // todo: get each article
+      //   // todo: get each user
+      //   // todo: add paging
+
+      //   docs.forEach(item => {
+      //     ArticleModel.findById(item.articleId, function (err, doc) {
+      //       if (err) return;
+      //       list.push(doc);
+      //       count++;
+      //       if (count >= docs.length) {
+      //         return res.send(list);
+      //       }
+      //     });
+      //   });
+      // });
     } catch(e) {
       console.log(' ::>> error ', e);
     }

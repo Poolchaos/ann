@@ -2,7 +2,26 @@
   <h3>Purchase History</h3>
   <div class="white-bg container">
     <div if.bind="!purchases.length">No previous purchases</div>
-    <div repeat.for="item of purchases" class="item">
+
+    <div repeat.for="item of purchases" class="item" if.bind="dataStore.isAdmin">
+      <div class="col">
+        <img src.bind="'../../../../../icon-' + item.article.category + '.png'" width="50px" height="50px" />
+      </div>
+      <div class="col">
+        <div>Name: ${item.article.name}</div>
+        <div>Content: ${item.article.content}</div>
+        <div>
+          Files: ${item.article.files.length === 0 ? '0 files' : ''}
+        </div>
+      </div>
+      <div class="col actions right">
+        <div>First Name: ${item.user.firstName}</div>
+        <div>Surname: ${item.user.surname}</div>
+        <div>Email: ${item.user.email}</div>
+      </div>
+    </div>
+
+    <div repeat.for="item of purchases" class="item" if.bind="!dataStore.isAdmin">
       <div class="col">
         <img src.bind="'../../../../../icon-' + item.category + '.png'" width="50px" height="50px" />
       </div>

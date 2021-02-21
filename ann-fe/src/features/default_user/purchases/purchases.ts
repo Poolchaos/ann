@@ -1,15 +1,12 @@
 import { autoinject } from 'aurelia-framework';
-import { EventAggregator } from 'aurelia-event-aggregator';
-import { Router } from 'aurelia-router';
 
 import { DataStore } from 'stores/data-store';
 import { PurchaseService } from 'features/default_user/purchases/purchase-service';
-import { EVENTS } from 'stores/events';
 
 @autoinject()
 export class Cart {
 
-  private purchases: [] = [];
+  public purchases: [] = [];
 
   constructor(
     public dataStore: DataStore,
