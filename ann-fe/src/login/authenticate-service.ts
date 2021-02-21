@@ -8,6 +8,8 @@ import { IUser } from 'stores/data-store';
 @autoinject()
 export class AuthenticateService {
 
+  private route = 'passport';
+
   constructor(private httpClient: HttpClient) {}
 
   public authenticate(email: string, password: string): Promise<any> {
@@ -15,7 +17,7 @@ export class AuthenticateService {
     const encryptedPassword = EncryptService.encrypt(password);
 
     return new Promise(resolve => {
-      this.httpClient.createRequest('passport/authenticate')
+      this.httpClient.createRequest(this.route + '/authenticate')
         .asPost()
         .withContent({
           email,
@@ -41,7 +43,7 @@ export class AuthenticateService {
   public authenticateWithToken(): Promise<any> {
 
     return new Promise((resolve, reject) => {
-      this.httpClient.createRequest('passport/authenticate-token')
+      this.httpClient.createRequest(this.route + '/authenticate-token')
         .asPost()
         .withContent({})
         .send()
@@ -53,7 +55,7 @@ export class AuthenticateService {
   public requestPasswordReset(email: string): Promise<void> {
     
     return new Promise((resolve, reject) => {
-      this.httpClient.createRequest('passport/reset-password')
+      this.httpClient.createRequest(this.route + '/reset-password')
         .withHeader('Authorization', UserRegistrationSettings.ANONYMOUS_TOKEN)
         .asPost()
         .withContent({ email })
@@ -70,7 +72,7 @@ export class AuthenticateService {
 
   public validateToken(token: string): Promise<any> {
     
-    return this.httpClient.createRequest('passport/token')
+    return this.httpClient.createRequest(this.route + '/token')
       .withHeader('Authorization', UserRegistrationSettings.ANONYMOUS_TOKEN)
       .asPost()
       .withContent({ token })
@@ -82,7 +84,7 @@ export class AuthenticateService {
     const encryptedPassword = EncryptService.encrypt(password);
 
     return this.httpClient
-      .createRequest('passport/reset-password')
+      .createRequest(this.route + '/reset-password')
       .asPut()
       .withContent({
         password: encryptedPassword

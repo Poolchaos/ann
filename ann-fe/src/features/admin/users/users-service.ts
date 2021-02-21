@@ -6,56 +6,45 @@ import { DataStore, IUser } from 'stores/data-store';
 @autoinject()
 export class UserService {
 
+  private route = 'users';
+
   constructor(
     private httpClient: HttpClient,
     private dataStore: DataStore
   ) {}
   
-  public retrieveUsers(): Promise<IUser[]> {
-    return new Promise(resolve => {
-      this.httpClient.createRequest('users')
-        .asGet()
-        .send()
-        .then(
-          (response) => {
-            // @ts-ignore
-            resolve(response);
-          },
-          (error) => {
-            console.warn(' ::>> error ', error);
-          }
-        );
-    });
+  public retrieveUsers(): Promise<any> {
+    return this.httpClient.createRequest(this.route)
+      .asGet()
+      .send()
+      .catch((error) => {
+          console.warn(' ::>> error ', error);
+        }
+      );
   }
   
   public removeUser(userId: string): Promise<void> {
     return new Promise(resolve => {
-      this.httpClient.createRequest('users')
+      this.httpClient.createRequest(this.route)
         .asDelete()
         .withContent({ userId })
         .send()
-        .then(
-          () => {
-            console.log(' ::>> successfully removed member ');
-            resolve();
-          },
-          (error) => {
-            console.warn(' ::>> error ', error);
-          }
-        );
+        .then(() => resolve())
+        .catch((error) => {
+          console.warn(' ::>> error ', error);
+        });
     });
   }
   
   public enableAccess(userId: string): Promise<any> {
-    // todo: abstract all routes
-    return this.httpClient.createRequest('users/enable')
+    return this.httpClient.createRequest(this.route + '/enable')
       .asPut()
       .withContent({ userId })
       .send();
   }
   
   public disableAccess(userId: string): Promise<any> {
-    return this.httpClient.createRequest('users/disable')
+    return this.httpClient.createRequest(this.route + '/disable')
       .asPut()
       .withContent({ userId })
       .send();

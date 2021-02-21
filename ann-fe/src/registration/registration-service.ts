@@ -9,6 +9,8 @@ const logger = LogManager.getLogger('RegistrationService');
 @autoinject()
 export class RegistrationService {
 
+  private route = 'passport';
+
   constructor(private httpClient: HttpClient) {}
 
   public registerUser(
@@ -19,7 +21,7 @@ export class RegistrationService {
     role: string
   ): Promise<void> {
     return new Promise(resolve => {
-      this.httpClient.createRequest('passport/submit')
+      this.httpClient.createRequest(this.route + '/submit')
         .asPost()
         .withContent({ firstName, surname, email, number, role })
         .withHeader('Content-Type', 'application/json')
@@ -38,13 +40,9 @@ export class RegistrationService {
   public completeRegistration(token: string, password: string): Promise<void> {
 
     const encryptedPassword = EncryptService.encrypt(password);
-    console.log(' ::>> user >>>> ', {
-      password,
-      encryptedPassword
-    });
 
     return new Promise(resolve => {
-      this.httpClient.createRequest('passport/complete-registration')
+      this.httpClient.createRequest(this.route + '/complete-registration')
         .asPost()
         .withContent({
           password: encryptedPassword
