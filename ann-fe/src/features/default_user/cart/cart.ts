@@ -8,6 +8,9 @@ import { EVENTS } from 'stores/events';
 
 @autoinject()
 export class Cart {
+
+  public error: boolean;
+
   constructor(
     public dataStore: DataStore,
     private purchaseService: PurchaseService,
@@ -17,29 +20,22 @@ export class Cart {
 
   public checkout(): void {
 
+    this.error = false;
     if (!this.dataStore.cart.hasItems) return;
-    // todo: add validation
-
     const articleIds = this.dataStore.cart.checkout();
 
     this.purchaseService
       .checkout(articleIds)
       .then(() => {
-        console.log(' ::>> successfully activated article ');
-        // this.clear();
-        // this.router.navigate('purchases');
+        this.router.navigate('checkout-complete');
       })
       .catch(() => {
         console.log(' ::>> failed to activate article ');
+        this.error = true;
       });
   }
 
   public remove(itemId: string): void {
     this.eventAggregator.publish(EVENTS.REMOVE_ITEM_FROM_CART, itemId);
-  }
-
-  public clear(): void {
-    if (!this.dataStore.cart.hasItems) return;
-    this.eventAggregator.publish(EVENTS.CLEAR_CART);
   }
 }

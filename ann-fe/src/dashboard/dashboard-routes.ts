@@ -120,6 +120,16 @@ export class DashboardRoutes {
       settings: {
         access: ['Admin', 'DEFAULT_USER']
       }
+    }, {
+      route: 'checkout-complete',
+      name: 'checkout-complete',
+      moduleId: PLATFORM.moduleName('features/default_user/cart/checkout-complete/checkout-complete'),
+      nav: true,
+      title: 'Checkout complete',
+      auth: true,
+      settings: {
+        access: ['DEFAULT_USER']
+      }
     }];
   }
 }

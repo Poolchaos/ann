@@ -32,12 +32,23 @@ export class Articles {
     try {
       this.articleService
         .getArticles(this.params)
-        .then((articles) => {
-          this.articles = articles;
-        });
+        .then((articles) => this.handleArticlesRetrieved(articles));
     } catch(e) {
       console.warn('Unauthorised access. Routing to dashboard.');
       // this.router.navigate('dashboard');
+    }
+  }
+
+  private handleArticlesRetrieved(articles: any[]): void {
+    this.articles = articles;
+    if (this.dataStore.isUser) {
+      const cart = this.dataStore.cart.getItems();
+      cart.forEach(item => {
+        let article = this.articles.find(article => article._id === item._id);
+        if (article) {
+          article.selected = true;
+        }
+      })
     }
   }
 
@@ -104,13 +115,22 @@ export class Articles {
   }
 
   public addToCart(article: any) {
+    article.selected = true;
     const item = {
       _id: article._id,
       name: article.name,
       category: article.category
     };
-    console.log(' ::>> adding article ', item);
-    // this.cart.push(item);
     this.eventAggregator.publish(EVENTS.ADD_ITEM_TO_CART, item);
+  }
+
+  public removeFromCart(article: any) {
+    article.selected = false;
+    const item = {
+      _id: article._id,
+      name: article.name,
+      category: article.category
+    };
+    this.eventAggregator.publish(EVENTS.REMOVE_ITEM_FROM_CART, item);
   }
 }

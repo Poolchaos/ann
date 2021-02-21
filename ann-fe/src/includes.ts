@@ -6,6 +6,7 @@ import './styles/theme.scss';
 import './registration/registration.scss';
 import './login/login.scss';
 
+import './features/journalist/articles/articles.scss';
 import './features/default_user/default_user.scss';
 
 import '../node_modules/trix/dist/trix.css';

@@ -21,6 +21,10 @@ export class CartModel {
     this.setCookie();
   }
 
+  public getItems(): ICartItem[] {
+    return this._ITEMS;
+  }
+
   public remove(itemId: string): void {
     this._ITEMS = this._ITEMS.filter(item => item._id !== itemId);
     this.setCookie();

@@ -1,40 +1,45 @@
 <template>
   <h4>articles</h4>
-  
-  <div if.bind="dataStore.isJournalist">
-    <button click.trigger="goToCreateArticle()">Create New Article</button>
-  </div>
-
-  <div repeat.for="article of articles">
-    <div>Name: ${article.name}</div>
-    <div>Category: ${article.category}</div>
-    <div>Content: ${article.content}</div>
-    <div>
-      Files: ${article.files.length === 0 ? '0 files' : ''}
-      <div repeat.for="file of article.files">
-        <button
-          click.trigger="playAudio(file, $parent.$index, $index)">
-          Attachment ${$index}
-        </button>
-        <audio id="js-audio-${$parent.$index}-${$index}"></audio>
-      </div>
+  <div class="articles">
+    <div if.bind="dataStore.isJournalist">
+      <button click.trigger="goToCreateArticle()">Create New Article</button>
     </div>
-    <button if.bind="dataStore.isJournalist"
-      click.trigger="editArticle(article._id)">
-      Edit Article
-    </button>
-    <button if.bind="dataStore.isJournalist"
-      click.trigger="removeArticle(article)">
-      Remove Article
-    </button>
-    <button if.bind="dataStore.isAdmin"
-      click.trigger="activateArticle(article._id)">
-      Activate Article
-    </button>
-    <button if.bind="dataStore.isUser"
-      click.trigger="addToCart(article)">
-      Add to cart
-    </button>
-    <hr/>
+
+    <div repeat.for="article of articles" class.bind="article.selected ? 'is-selected' : ''">
+      <div>Name: ${article.name}</div>
+      <div>Category: ${article.category}</div>
+      <div>Content: ${article.content}</div>
+      <div>
+        Files: ${article.files.length === 0 ? '0 files' : ''}
+        <div repeat.for="file of article.files">
+          <button
+            click.trigger="playAudio(file, $parent.$index, $index)">
+            Attachment ${$index}
+          </button>
+          <audio id="js-audio-${$parent.$index}-${$index}"></audio>
+        </div>
+      </div>
+      <button if.bind="dataStore.isJournalist"
+        click.trigger="editArticle(article._id)">
+        Edit Article
+      </button>
+      <button if.bind="dataStore.isJournalist"
+        click.trigger="removeArticle(article)">
+        Remove Article
+      </button>
+      <button if.bind="dataStore.isAdmin"
+        click.trigger="activateArticle(article._id)">
+        Activate Article
+      </button>
+      <button if.bind="dataStore.isUser && !article.selected"
+        click.trigger="addToCart(article)">
+        Add to cart
+      </button>
+      <button if.bind="dataStore.isUser && article.selected"
+        click.trigger="removeFromCart(article)">
+        Remove from cart
+      </button>
+      <hr/>
+    </div>
   </div>
 </template>

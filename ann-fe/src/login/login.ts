@@ -52,7 +52,7 @@ export class Login {
   }
 
   public goToRegister(): void {
-    this.router.navigate('register');
+    this.router.navigate('registration');
   }
 
   public login(): void {

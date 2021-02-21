@@ -8,6 +8,7 @@
       <button click.trigger="remove(item._id)">Remove Item</button>
       <hr/>
     </div>
+    <div if.bind="error">Something went wrong. Please contact support for assistance.</div>
     <button
       click.trigger="checkout()" disabled.bind="!dataStore.cart.hasItems">
       Checkout
