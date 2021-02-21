@@ -9,10 +9,14 @@
       </div>
       <div class="col">
         <div>Name: ${item.article.name}</div>
+        <!-- todo: add ability to expand/collapse content -->
         <div>Content: ${item.article.content}</div>
         <div>
           Files: ${item.article.files.length === 0 ? '0 files' : ''}
         </div>
+      </div>
+      <div class="col actions right">
+        Date: ${item.date}
       </div>
       <div class="col actions right">
         <div>First Name: ${item.user.firstName}</div>

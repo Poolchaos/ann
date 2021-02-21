@@ -162,7 +162,9 @@ router.get('/all',
                   const articleId = purchase.articleId;
                   if (map[articleId]) return;
 
-                  ArticleModel.findById(articleId, function (err, doc) {
+                  // todo: Date type > ).sort({ date: 1 }).exec(
+                    // todo: service listens for app dying
+                  ArticleModel.findById(articleId, (err, doc) => {
                     if (!err && doc) {
                       map[articleId] = doc;
                       count++;
@@ -198,7 +200,6 @@ router.get('/all',
             ], (err, result) => {
               const articles = result[0];
               const users = result[1];
-              console.log(' ::>> extra data done', { err, articles, users });
 
               let mappedPurchases = [];
 
@@ -211,17 +212,14 @@ router.get('/all',
                 };
 
                 const article = articles[purchase.articleId];
-                console.log(' ::>> purchase.articleId >>>>> ', !!article);
                 if (article) {
                   entry.article = article;
                 }
 
                 const user = users[purchase.userId];
-                console.log(' ::>> purchase.userId >>>>> ', !!user);
                 if (user) {
                   entry.user = user;
                 }
-                
                 mappedPurchases.push(entry);
               }
               
@@ -235,7 +233,6 @@ router.get('/all',
             })
           }
         ], function(result) {
-          console.log(' ::>> waterfall done ', result);
           return res.send(result);
         });
       }
