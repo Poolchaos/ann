@@ -3,11 +3,11 @@
   justify-content: space-evenly;
   flex-wrap: wrap;
   width: 100%;
+  background: #fff;;
 
   .category__item {
     padding: 100px 0;
-    width: calc(25% - 3px);
-    border: 1px solid green;
+    width: 25%;
     text-align: center;
   }
 }
