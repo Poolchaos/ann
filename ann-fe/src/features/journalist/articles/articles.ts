@@ -1,10 +1,12 @@
 import { autoinject } from 'aurelia-framework';
 import { Router } from 'aurelia-router';
 import { EventAggregator } from 'aurelia-event-aggregator';
+import { DialogService } from 'aurelia-dialog';
 
 import { ArticleService } from './articles-service';
 import { DataStore } from 'stores/data-store';
 import { EVENTS } from 'stores/events';
+import { RemoveArticleDialog } from './remove-article-dialog/remove-article-dialog';
 
 @autoinject()
 export class Articles {
@@ -17,7 +19,8 @@ export class Articles {
     private router: Router,
     private articleService: ArticleService,
     private eventAggregator: EventAggregator,
-    public dataStore: DataStore
+    public dataStore: DataStore,
+    private dialogService: DialogService
   ) {}
 
   public activate(params?: any): void {
@@ -63,9 +66,20 @@ export class Articles {
     this.router.navigate(`edit-article?articleId=${articleId}`);
   }
 
-  public removeArticle(articleId: string): void {
-    // todo: add confirm remove
-    
+  public removeArticle(article: any): void {
+    this.dialogService
+      .open({ viewModel: RemoveArticleDialog, model: article })
+      .whenClosed(response => {
+        if (!response.wasCancelled) {
+          this.confirmRemoveArticle(article._id);
+        } else {
+          console.log('dialog cancelled');
+        }
+        console.log(response.output);
+      });
+  }
+
+  public confirmRemoveArticle(articleId: string): void {
     this.articleService
       .removeArticle(articleId)
       .then(() => {
