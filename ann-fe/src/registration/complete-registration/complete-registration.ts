@@ -7,10 +7,9 @@ import { RegistrationService } from 'registration/registration-service';
 @autoinject()
 export class CompleteRegistration {
 
-  private user: any;
-
   public password: string;
   public confirmPassword: string;
+  public complete: boolean;
 
   private token: string;
 
@@ -18,16 +17,16 @@ export class CompleteRegistration {
     private cookieService: CookieService,
     private router: Router,
     private registrationService: RegistrationService
-  ) {
-    console.log(' ::>> CompleteRegistration ');
-  }
+  ) {}
 
   public activate(params: {[key: string]: string}): void {
     if (params.token) {
       this.token = params.token;
     } else {
-      // todo: new toastee warning
+      this.complete = true;
+      setTimeout(() => {
         this.router.navigate('home');
+      }, 3000);
     }
   }
 

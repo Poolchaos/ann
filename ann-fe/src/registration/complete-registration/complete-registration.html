@@ -1,7 +1,12 @@
 <template>
   <h1>complete registration</h1>
 
-  <form>
+  <div>
+    <h4>Registration Complete</h4>
+    You will now be redirected to the login page.
+  </div>
+
+  <form if.bind="!complete">
     <div>
       <label>*Password</label>
       <input type="password" value.bind="password" />
