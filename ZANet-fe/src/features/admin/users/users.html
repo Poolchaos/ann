@@ -1,0 +1,38 @@
+<template>
+  <h1>Users</h1>
+  <table class="white-bg container full-width">
+    <thead>
+      <tr>
+        <td i18n="page.register.form.email"></td>
+        <td i18n="page.register.form.firstName"></td>
+        <td i18n="page.register.form.lastName"></td>
+        <td i18n="page.register.form.contactNumber"></td>
+        <td i18n="page.register.form.role"></td>
+        <td>Permissions</td>
+        <td></td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr repeat.for="user of users">
+        <td>${user.email}</td>
+        <td>${user.firstName}</td>
+        <td>${user.surname}</td>
+        <td>${user.number}</td>
+        <td>${user.role}</td>
+        <td>
+          <span if.bind="user.role === 'Admin'">- - - - - - - - - - - - -</span>
+          <button
+            if.bind="user.role !== 'Admin' && !user.permissions"
+            click.trigger="enableAccess(user)">Enable</button>
+          <button
+            if.bind="user.role !== 'Admin' && user.permissions"
+            click.trigger="disableAccess(user)">Disable</button>
+        </td>
+        <td>
+          <span if.bind="user._id === dataStore.user._id">- - - - - - -</span>
+          <button if.bind="user._id !== dataStore.user._id" click.trigger="removeUser(user)">Remove</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</template>

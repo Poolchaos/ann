@@ -3,8 +3,8 @@
 node_modules
 
 tmp
-ann-be/combined.log
-ann-be/error.log
+ZANet-be/combined.log
+ZANet-be/error.log
 
 id_rsa_complete
 id_rsa_password_reset
