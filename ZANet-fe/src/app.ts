@@ -43,6 +43,7 @@ export class App {
     }
     this.configureHTTP();
     this.init();
+    // todo: add cookie permission
   }
 
   public configureRouter(config, router): void {
