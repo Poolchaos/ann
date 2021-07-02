@@ -24,3 +24,23 @@ cd ZANet-fe & npm install
 ```
 npm run start
 ```
+
+
+## Todo:
+- Add unit tests
+- - Login
+- - Register
+- - Forgot password
+
+
+// todo: hide all sensitive data in logs
+// todo: update logs https://www.loggly.com/ultimate-guide/node-logging-basics/
+
+
+
+
+
+
+
+
+
