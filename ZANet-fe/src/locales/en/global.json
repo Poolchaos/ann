@@ -1,16 +1,12 @@
 {
   "title": "Hello",
   "nav-links": {
-    "home": "Home",
     "login": "Login",
     "register": "Register",
     "dashboard": "Dashboard",
     "logout": "Logout"
   },
   "page": {
-    "home": {
-      "title": "Home"
-    },
     "login": {
       "title": "Login",
       "form": {

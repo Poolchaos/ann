@@ -109,10 +109,6 @@ export class App {
     }
   }
 
-  public goToHome(): void {
-    this.router.navigate('home');
-  }
-
   public goToLogin(): void {
     this.router.navigate('login');
   }

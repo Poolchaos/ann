@@ -7,12 +7,12 @@ export class AppRoutes {
   }
 
   public static get routes(): RouteConfig[] {
-    return this.errorRoutes().concat(this.loginRoutes(), this.registrationRoutes(), this.appRoutes(), this.authRoutes());
+    return this.errorRoutes().concat(this.loginRoutes(), this.registrationRoutes(), this.authRoutes());
   }
 
   private static loginRoutes(): RouteConfig[] {
     return [{
-      route: 'login',
+      route: ['', 'login'],
       name: 'login',
       moduleId: PLATFORM.moduleName('login/login'),
       nav: true,
@@ -70,17 +70,6 @@ export class AppRoutes {
       moduleId: PLATFORM.moduleName('registration/complete-registration/complete-registration'),
       nav: true,
       title: 'Complete Registration',
-      auth: false
-    }];
-  }
-
-  private static appRoutes(): RouteConfig[] {
-    return [{
-      route: ['', 'home'],
-      name: 'home',
-      moduleId: PLATFORM.moduleName('home/home'),
-      nav: true,
-      title: 'Home',
       auth: false
     }];
   }
