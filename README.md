@@ -1,6 +1,6 @@
 # ANN
 
-## This is a secure CMS
+## This is a secure CMS and still a WORK IN PROGRESS
 
 This project contains aurelia fe app and webpack/mongoose/mongodb be app
 
