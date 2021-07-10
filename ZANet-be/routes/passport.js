@@ -76,7 +76,7 @@ router.post(
             return res.send(user);
           });
         } else if (docs[0].status === 'removed') {
-          return res.sendStatus(500, { error: 'A user with this email has been removed from the system' });
+          return res.sendStatus(401, { error: 'A user with this email has been removed from the system' });
         } else {
           return res.sendStatus(401);
         }

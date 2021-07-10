@@ -1,6 +1,6 @@
 <template>
 
-  <div class="small-wrapper container box centered">
+  <!-- <div class="small-wrapper container box centered">
     <h1 class="black-text">Complete Registration</h1>
 
     <div class=" white-bg">
@@ -28,6 +28,55 @@
         </form>
       </div>
     </div>
-  </div>
+  </div> -->
 
+  
+  <div class="small-wrapper bordered--5 white container centered">
+    <h1 class="black-text flex flex--justify-center">
+      <img src="../../assets/images/zanet-logo.png" />
+      <div class="spacer-v--10"></div>
+      <span>Complete Registration</span>
+    </h1>
+
+    <!-- todo: rename login-form to padding -->
+    <span class="medium-font">Please enter your password to complete the registration.</span>
+    <div if.bind="!error">
+      <div class="login-form left" if.bind="!resetComplete">
+        <form>
+          <div class="row">
+            <i class="fas fa-lock"></i>
+            <input
+              type="password"
+              value.bind="password"
+              placeholder="Password"
+              class="icon small-font"
+            />
+          </div>
+          <div class="row">
+            <i class="fas fa-lock"></i>
+            <input
+              type="password"
+              value.bind="confirmPassword"
+              placeholder="Confirm Password"
+              class="icon small-font"
+            />
+          </div>
+          <div class="row">
+            <input type="checkbox" /> Accept terms and conditions 
+          </div>
+          <div class="spacer--20"></div>
+          <div class="flex flex--justify-between">
+            <button
+              class="blue hoverable medium-font pad--t-10 pad--b-10 pad--r-40 pad--l-40"
+              disabled.bind="submitted"
+              click.trigger="completeRegistration()">Complete Registration</button>
+          </div>
+        </form>
+      </div>
+      <div if.bind="resetComplete">
+        <h4>Registration Complete</h4>
+        You will now be redirected to the login page.
+      </div>
+    </div>
+  </div>
 </template>

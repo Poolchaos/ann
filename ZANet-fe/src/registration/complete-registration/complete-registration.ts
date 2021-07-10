@@ -9,7 +9,7 @@ export class CompleteRegistration {
 
   public password: string;
   public confirmPassword: string;
-  public complete: boolean;
+  public resetComplete: boolean;
 
   private token: string;
 
@@ -23,7 +23,7 @@ export class CompleteRegistration {
     if (params.token) {
       this.token = params.token;
     } else {
-      this.complete = true;
+      this.resetComplete = true;
       setTimeout(() => {
         this.router.navigate('home');
       }, 3000);
@@ -37,7 +37,7 @@ export class CompleteRegistration {
         this.password
       )
       .then(() => {
-        console.log(' ::>> registration Complete >>> navigating to login');
+        console.log(' ::>> registration resetComplete >>> navigating to login');
         this.cookieService.eraseCookie('ZANet-registration');
         this.router.navigate('login');
       })

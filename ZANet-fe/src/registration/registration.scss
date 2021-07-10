@@ -9,60 +9,25 @@
   justify-content: space-evenly;
   flex-wrap: wrap;
   
-  overflow: hidden;
-  border-radius: 0 10px 10px 0;
-
   li {
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
+    flex-direction: column;
     height: 80px;
     width: calc(50% - 20px);
     padding: 10px;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.02);
+    }
+
+    &.selected {
+      width: calc(50% - 23px);
+      height: 77px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
   }
 
-  li:nth-child(1) {
-    background-color: rgb(28, 211, 162);
-  }
-  li:nth-child(1):active {
-    background-color: shade(rgb(28, 211, 162), 5);
-  }
-  li:nth-child(1).selected {
-    background-color: shade(rgb(28, 211, 162), 20);
-    color: #fff;
-  }
-
-  li:nth-child(2) {
-    background-color: rgb(162, 173, 208);
-  }
-  li:nth-child(2):active {
-    background-color: shade(rgb(162, 173, 208), 5);
-  }
-  li:nth-child(2).selected {
-    background-color: shade(rgb(162, 173, 208), 20);
-    color: #fff;
-  }
-
-  li:nth-child(3) {
-    background-color: rgb(255, 155, 170);
-  }
-  li:nth-child(3):active {
-    background-color: shade(rgb(255, 155, 170), 5);
-  }
-  li:nth-child(3).selected {
-    background-color: shade(rgb(255, 155, 170), 20);
-    color: #fff;
-  }
-
-  li:nth-child(4) {
-    background-color: rgb(205, 167, 108);
-  }
-  li:nth-child(4):active {
-    background-color: shade(rgb(205, 167, 108), 5);
-  }
-  li:nth-child(4).selected {
-    background-color: shade(rgb(205, 167, 108), 20);
-    color: #fff;
-  }
 }
