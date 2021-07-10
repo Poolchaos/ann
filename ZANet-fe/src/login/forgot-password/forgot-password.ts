@@ -1,5 +1,6 @@
 import { autoinject } from 'aurelia-framework';
 import { ValidationControllerFactory, ValidationController, ValidationRules, validateTrigger } from 'aurelia-validation';
+import { Router } from 'aurelia-router';
 
 import { AuthenticateService } from "../authenticate-service";
 
@@ -14,6 +15,7 @@ export class ForgotPassword {
 
   constructor(
     private authenticateService: AuthenticateService,
+    private router: Router,
     validationControllerFactory: ValidationControllerFactory
   ) {
     this.validation = validationControllerFactory.createForCurrentScope();
@@ -53,11 +55,17 @@ export class ForgotPassword {
   }
 
   private triggerRequestPasswordReset(): void {
+    this.submitted = true;
     this.authenticateService
       .requestPasswordReset(this.identity)
       .then(() => this.requestSubmitted = true)
       .catch(error => {
         console.warn('Failed to request password reset', error);
+        this.submitted = false;
       });
+  }
+
+  private goToLogin(): void {
+    this.router.navigate('');
   }
 }

@@ -9,6 +9,7 @@ require('dotenv').config();
 const RegistrationModel = require('../models/registration-model');
 const UserModel = require('../models/user-model');
 const {
+  sendPasswordReset,
   sendRegisterConfirmationEmail,
   sendRegistrationCompleteEmail,
   sendValidPasswordResetRequest,
@@ -250,7 +251,7 @@ router.put('/reset-password',
           doc.password = password;
           doc.save();
 
-          sendPasswordReset(user);
+          sendPasswordReset(doc);
           log('Confirm password reset', token);
           return res.sendStatus(200);
         }

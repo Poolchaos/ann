@@ -11,6 +11,7 @@ export class ResetPassword {
   public isValid: boolean;
   public error: boolean;
   public invalidToken: boolean;
+  public resetComplete: boolean;
 
   private token: string;
   private validation: ValidationController;
@@ -73,12 +74,17 @@ export class ResetPassword {
       .validate()
       .then(validation => {
         if (!validation.valid) return;
+
+        console.log(' ::>> is valid. Triggering resetPassword... ');
         
         this.authenticateService
           .resetPassword(this.token, this.password)
           .then(() => {
             console.log(' ::>> registration Complete >>> navigating to login');
-            this.router.navigate('login');
+            this.resetComplete = true;
+            setTimeout(() => {
+              this.router.navigate('login');
+            }, 2000);
           })
           .catch(() => {
             // this.router.navigate('login');
