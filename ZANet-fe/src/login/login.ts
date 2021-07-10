@@ -47,6 +47,10 @@ export class Login {
       .on(this);
   }
 
+  public clearErrors(): void {
+    this.error = null;
+  }
+
   public forgotPassword(): void {
     this.router.navigate('forgot-password');
   }
@@ -62,6 +66,7 @@ export class Login {
 
   public login(): void {
     if (this.submitted) return;
+    this.error = null;
 
     this.validation
       .validate()
@@ -84,7 +89,7 @@ export class Login {
       .authenticate(this.identity, this.password)
       .then(user => this.handleUserAuthenticated(user))
       .catch(error => {
-        console.warn('Failed to login due to cause', error);
+        this.error = error;
       });
   }
 

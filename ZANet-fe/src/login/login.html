@@ -18,6 +18,7 @@
             value.bind="identity & validate"
             placeholder="${'page.login.form.emailPlaceholder' | t}"
             class="icon small-font"
+            keyup.trigger="clearErrors()"
           />
         </div>
         <label class="small-font" i18n="page.login.form.password"></label>
@@ -28,12 +29,14 @@
             value.bind="password & validate"
             placeholder="${'page.login.form.passwordPlaceholder' | t}"
             class="icon small-font"
+            keyup.trigger="clearErrors()"
           />
           <ul if.bind="validation.errors">
             <li repeat.for="error of validation.errors">
               ${error.message}
             </li>
           </ul>
+          <div if.bind="error">${error}</div>
 
           <div class="spacer--20"></div>
           <div class="flex flex--justify-between">

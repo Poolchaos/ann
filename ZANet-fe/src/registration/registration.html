@@ -76,7 +76,7 @@
           </li>
         </ul>
         <div class="row">
-          <ul if.bind="validation.errors">
+          <ul if.bind="validation.errors" class="red-text">
             <li repeat.for="error of validation.errors">
               ${error.message}
             </li>

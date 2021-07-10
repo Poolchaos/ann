@@ -16,7 +16,7 @@ export class AuthenticateService {
 
     const encryptedPassword = EncryptService.encrypt(password);
 
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       this.httpClient.createRequest(this.route + '/authenticate')
         .asPost()
         .withContent({
@@ -26,17 +26,16 @@ export class AuthenticateService {
         .withHeader('Content-Type', 'application/json')
         .withHeader('Authorization', UserRegistrationSettings.ANONYMOUS_TOKEN)
         .send()
-        .then(
-          (response) => {
-            // @ts-ignore
-            const user: IUser = response;
-            this.setHeader(user.token);
-            resolve(user);
-          },
-          (error) => {
-            console.warn(' ::>> error ', error);
-          }
-        );
+        .then(response => {
+          // @ts-ignore
+          const user: IUser = response;
+          this.setHeader(user.token);
+          resolve(user);
+        })
+        .catch(error => {
+          console.warn(' ::>> >>>>>>>> ', error);
+          reject(error.response);
+        });
     });
   }
   

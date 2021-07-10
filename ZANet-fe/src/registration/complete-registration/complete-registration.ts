@@ -38,8 +38,11 @@ export class CompleteRegistration {
       )
       .then(() => {
         console.log(' ::>> registration resetComplete >>> navigating to login');
+        this.resetComplete = true;
         this.cookieService.eraseCookie('ZANet-registration');
-        this.router.navigate('login');
+        setTimeout(() => {
+          this.router.navigate('login');
+        }, 3000);
       })
       .catch(() => {
         this.router.navigate('login');

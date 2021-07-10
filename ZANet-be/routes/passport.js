@@ -149,7 +149,7 @@ router.post(
         .find({ email })
         .select({ token: 1, role: 1, password: 1, permissions: 1 }) // todo: check for other data mappings
         .then(function (docs, err) {
-          if (err || !docs || docs.length == 0) return res.sendStatus(401, {error: err});
+          if (err || !docs || docs.length == 0) return res.send(401, 'Email or password is incorrect. Please try again.');
 
           let user = docs[0].toJSON();
           if (user && decrypt(password) === decrypt(user.password)) {
@@ -157,7 +157,7 @@ router.post(
             log('User authenticated', email);
             return res.send(user);
           }
-          return res.sendStatus(401)
+          return res.send(401, 'Email or password is incorrect. Please try again.')
         })
         .catch(e => {
           return res.sendStatus(500, {error: e})

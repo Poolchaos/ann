@@ -109,7 +109,7 @@ export class App {
 
   public logout(): void {
     this.eventAggregator.publish(EVENTS.USER_LOGGED_OUT);
-    this.router.navigate('home');
+    this.router.navigate('');
     this.authenticateService.logout();
   }
 
