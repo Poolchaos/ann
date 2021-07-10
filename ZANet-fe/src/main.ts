@@ -44,7 +44,8 @@ export function configure(aurelia: Aurelia): void {
       })
     })
     .plugin(PLATFORM.moduleName('aurelia-dialog'))
-    .feature(PLATFORM.moduleName('features/index'));
+    .feature(PLATFORM.moduleName('features/index'))
+    .feature(PLATFORM.moduleName('components/index'));
 
     
   let configure = aurelia.container.get(AureliaConfiguration);

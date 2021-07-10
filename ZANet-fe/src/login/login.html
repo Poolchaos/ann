@@ -1,29 +1,61 @@
 <template>
-  <div class="small-wrapper container box centered">
-    <h1 i18n="page.login.title" class="black-text"></h1>
-    <div class="flex">
-      <img src="../../static/ios-application-placeholder-2-601407.png" width="220px" height="220px" />
+  <div id="login" class="small-wrapper bordered--5 white container centered">
+    <h1 class="black-text flex flex--justify-center">
+      <img src="../assets/images/zanet-logo.png" />
+      <div class="spacer-v--10"></div>
+      <span i18n="page.login.title"></span>
+    </h1>
 
-      <div class="login-form left">
-        <form>
-          <label i18n="page.login.form.email"></label>
-          <div class="row">
-            <input type="text" value.bind="identity & validate" />
-          </div>
-          <label i18n="page.login.form.password"></label>
-          <div class="row">
-            <input type="password" value.bind="password & validate" />
-            <a click.trigger="forgotPassword()">I Forgot</a>
-          </div class="row">
+    <div class="login-form left">
+      <form>
+        <label
+          class="small-font"
+          i18n="page.login.form.email"></label>
+        <div class="row">
+          <i class="fas fa-user"></i>
+          <input
+            type="text"
+            value.bind="identity & validate"
+            placeholder="${'page.login.form.emailPlaceholder' | t}"
+            class="icon small-font"
+          />
+        </div>
+        <label class="small-font" i18n="page.login.form.password"></label>
+        <div class="row">
+          <i class="fas fa-lock"></i>
+          <input
+            type="password"
+            value.bind="password & validate"
+            placeholder="${'page.login.form.passwordPlaceholder' | t}"
+            class="icon small-font"
+          />
           <ul if.bind="validation.errors">
             <li repeat.for="error of validation.errors">
               ${error.message}
             </li>
           </ul>
-          <button disabled.bind="submitted" click.trigger="login()" i18n="page.login.form.login-button"></button>
-          New to Ann, <a click.trigger="goToRegister()">register</a> now.
-        </form>
-      </div>
+
+          <div class="spacer--20"></div>
+          <div class="flex flex--justify-between">
+            <button
+              class="blue medium-font pad--t-10 pad--b-10 pad--r-40 pad--l-40"
+              disabled.bind="submitted"
+              click.trigger="login()" i18n="page.login.form.login-button"></button>
+            <a click.trigger="forgotPassword()">Forgot password?</a>
+          </div>
+        </div class="row">
+        <div class="spacer--20"></div>
+        <!-- <div>or register using</div>
+        <div class="spacer--20"></div>
+        <div class="social">
+          <span click.trigger="signInViaFacebook()">Facebook</span>
+          <span click.trigger="signInViaTwitter()">Twitter</span>
+          <span click.trigger="signInViaGoogle()">Gmail</span>
+        </div> -->
+        <div class="centered">
+          New to ZANet, <a click.trigger="goToRegister()">register</a> now.
+        </div>
+      </form>
     </div>
   </div>
 </template>

@@ -35,7 +35,7 @@ npm run start
 
 // todo: hide all sensitive data in logs
 // todo: update logs https://www.loggly.com/ultimate-guide/node-logging-basics/
-
+- translate all texts
 
 
 

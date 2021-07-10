@@ -55,6 +55,11 @@ export class Login {
     this.router.navigate('registration');
   }
 
+  // social media integration
+  // todo: login via fb
+  // todo: login via twitter
+  // todo: login via google
+
   public login(): void {
     if (this.submitted) return;
 
@@ -98,5 +103,16 @@ export class Login {
           }
         }
       );
+  }
+
+  public signInViaFacebook(): void {
+    
+  }
+
+  public signInViaTwitter(): void {
+    
+  }
+
+  public signInViaGoogle(): void {
   }
 }

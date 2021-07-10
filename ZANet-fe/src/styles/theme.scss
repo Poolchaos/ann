@@ -5,7 +5,6 @@
 :root {
   /*  ---- colors ----  */
   --gray: #3f3f40;
-  --light-gray: #848487;
   --blue: #13a89e;
   --red: #a81322;
 
@@ -20,10 +19,6 @@
   #THEME COLOUR CLASSES
 \*------------------------------------*/
 
-.black-text {
-  color: black!important;
-}
-
 .gray-text {
   color: var(--gray)!important;
 }
@@ -36,20 +31,34 @@
   color: var(--red);
 }
 
+.gray {
+  background: var(--gray)!important;
+  color: white;
+}
+
+.blue {
+  background: var(--blue)!important;
+  color: white;
+}
+
+.red {
+  background: var(--red)!important;
+  color: white;
+}
+
 /*------------------------------------*\
   #THEME FONTS
 \*------------------------------------*/
 
-// @font-face {
-//   font-family: 'Calibri Light';
-//   font-style: normal;
-//   font-weight: normal;
-//   src: local('Calibri Light'), url('../fonts/calibril.woff') format('woff');
-// }
+@font-face {
+  font-family: 'Calibri Light';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Calibri Light'), url('../assets/fonts/calibril.woff') format('woff');
+}
 
 html, body, div, a, button, li {
-  font-family: 'Arial', 'Roboto'!important;
-  // font-family: 'Calibri light', 'Roboto'!important;
+  font-family: 'Calibri light', 'Roboto'!important;
 }
 
 /*------------------------------------*\

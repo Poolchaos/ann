@@ -11,7 +11,9 @@
       "title": "Login",
       "form": {
         "email": "Email",
+        "emailPlaceholder": "Type your email",
         "password": "Password",
+        "passwordPlaceholder": "Type your password",
         "login-button": "Login"
       }
     },

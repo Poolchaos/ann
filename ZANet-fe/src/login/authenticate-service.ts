@@ -101,6 +101,19 @@ export class AuthenticateService {
     });
   }
 
+  // public authWithGoogle(): Promise<any> {
+
+    
+  //   // clientId > 554987705805-tup7fufobe4aqn5uscelvmk5sad6oa2h.apps.googleusercontent.com
+  //   // secret > 8ZiW27BBoMZI-7sI3B69a87N
+    
+  //   return this.httpClient.createRequest(this.route + '/token')
+  //     .withHeader('Authorization', UserRegistrationSettings.ANONYMOUS_TOKEN)
+  //     .asPost()
+  //     .withContent({ token })
+  //     .send();
+  // }
+
   public logout(): void {
     this.httpClient.configure(req => {
       req.withHeader('Authorization', UserRegistrationSettings.ANONYMOUS_TOKEN);
