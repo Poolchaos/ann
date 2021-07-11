@@ -7,16 +7,21 @@
   .col {
     flex-direction: column;
 
-    &.actions {
-      align-self: center;
-      flex-grow: 1;
-    }
-
     img {
       margin-right: 20px;
     }
   }
 }
+  
+.actions {
+  button {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    &:last-child {
+      border-bottom: 0px;
+    }
+  }
+}
+
 .articles {
   .is-selected {
     background: #b8b8b8;

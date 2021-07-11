@@ -3,6 +3,8 @@ html, body {
   background: rgb(19,168,158);
   background: radial-gradient(circle, rgba(19,168,158,1) 0%, rgba(63,63,64,1) 100%);
   color: var(--gray);
+  padding: 0;
+  margin: 0;
 }
 
 button {
@@ -18,11 +20,6 @@ button {
   > li {
     display: inline-block;
   }
-}
-
-body {
-  padding: 0;
-  margin: 0;
 }
 
 ul {

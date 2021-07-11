@@ -5,56 +5,60 @@
       <div class="spacer-v--10"></div>
       <span>Articles</span>
     </h1>
-    <div class="pull-right">
+    <div class="centered">
       <button class="blue" if.bind="dataStore.isJournalist" click.trigger="goToCreateArticle()">Create New Article</button>
       <button class="gray" if.bind="!dataStore.isJournalist" click.trigger="goToDashboard()">Back</button>
     </div>
-
+    
     <div class="articles white-bg">
 
       <div repeat.for="article of articles" class="item" class.bind="article.selected ? 'is-selected' : ''">
-        <div class="col">
-          <img src.bind="'../../../assets/images/icon-' + article.category + '.png'" width="50px" height="50px" />
+        <div class="flex flex--direction-cols" style="height: 300px;margin-right: 20px;">
+          <!-- <img src.bind="'../../../assets/images/icon-' + article.category + '.png'" width="50px" height="50px" /> -->
+          <img src="https://via.placeholder.com/150" width="100px" height="100px" />
+          <div class="spacer--20"></div>
+          
+          <div class="flex flex--direction-cols actions" style="width: 100px;">
+            <button class="opac-0 text-left hoverable" if.bind="dataStore.isJournalist"
+              click.trigger="editArticle(article._id)">
+              Edit
+            </button>
+            <button class="opac-0 text-left hoverable" if.bind="dataStore.isJournalist"
+              click.trigger="removeArticle(article)">
+              Remove
+            </button>
+            <button class="opac-0 text-left hoverable" if.bind="dataStore.isAdmin"
+              click.trigger="activateArticle(article._id)">
+              Activate
+            </button>
+            <button class="opac-0 text-left hoverable" if.bind="dataStore.isVoiceOver"
+              click.trigger="addToCart(article)">
+              Add audio
+            </button>
+            <button class="opac-0 text-left hoverable" if.bind="dataStore.isUser && !article.selected"
+              click.trigger="addToCart(article)">
+              Add to cart
+            </button>
+            <button class="opac-0 text-left hoverable" if.bind="dataStore.isUser && article.selected"
+              click.trigger="removeFromCart(article)">
+              Remove from cart
+            </button>
+          </div>
         </div>
         <div class="col">
-          <div><h5 class="black-text">Name: ${article.name}</h5></div>
+          <div class="black-text medium-font thick-font">${article.name}</div>
+          <div class="spacer--10"></div>
           <div innerhtml.bind="article.content"></div>
-          <div>
+          <div class="actions">
             Files: ${article.files.length === 0 ? '0 files' : ''}
-            <div repeat.for="file of article.files">
-              <button
+            <div class="flex" repeat.for="file of article.files">
+              <button class="opac-0 text-left hoverable"
                 click.trigger="playAudio(file, $parent.$index, $index)">
                 Attachment ${$index}
               </button>
               <audio id="js-audio-${$parent.$index}-${$index}"></audio>
             </div>
           </div>
-        </div>
-        <div class="col actions right">
-          <button if.bind="dataStore.isJournalist"
-            click.trigger="editArticle(article._id)">
-            Edit Article
-          </button>
-          <button if.bind="dataStore.isJournalist"
-            click.trigger="removeArticle(article)">
-            Remove Article
-          </button>
-          <button if.bind="dataStore.isAdmin"
-            click.trigger="activateArticle(article._id)">
-            Activate Article
-          </button>
-          <button if.bind="dataStore.isVoiceOver"
-            click.trigger="addToCart(article)">
-            Add audio
-          </button>
-          <button if.bind="dataStore.isUser && !article.selected"
-            click.trigger="addToCart(article)">
-            Add to cart
-          </button>
-          <button if.bind="dataStore.isUser && article.selected"
-            click.trigger="removeFromCart(article)">
-            Remove from cart
-          </button>
         </div>
       </div>
     </div>
