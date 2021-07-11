@@ -40,6 +40,7 @@ export class Articles {
   }
 
   private handleArticlesRetrieved(articles: any[]): void {
+    console.log(' ::>> articles >>>>> ', articles);
     this.articles = articles;
     if (this.dataStore.isUser) {
       const cart = this.dataStore.cart.getItems();

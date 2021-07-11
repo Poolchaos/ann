@@ -181,6 +181,26 @@ export class ArticleService {
     });
   }
 
+  public removeAudio(articleId: string, fileId: string, audioId: string): Promise<{ articleId: string }> {
+    return new Promise((resolve, reject) => {
+      this.httpClient.createRequest('audio')
+        .asDelete()
+        .withContent({
+          articleId,
+          fileId,
+          audioId
+        })
+        .send()
+        .then(
+          (response) => {
+            // @ts-ignore
+            resolve(response);
+          },
+          (error) => reject(error)
+        );
+    });
+  }
+
   public playAudio(file: string): Promise<any> {
     return new Promise((resolve, reject) => {
       

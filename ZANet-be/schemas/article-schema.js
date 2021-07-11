@@ -32,7 +32,10 @@ var ArticleSchema = new Schema({
     type: Boolean,
     required: [true, 'Please validate whether content has been confirmed']
   },
-  files: [Schema.Types.ObjectId]
+  files: [{
+    audioId: String,
+    name: String
+  }]
 }, { collection : 'articles' });
 
 module.exports = ArticleSchema;

@@ -6,8 +6,8 @@
       <span>Articles</span>
     </h1>
     <div class="centered">
-      <button class="blue" if.bind="dataStore.isJournalist" click.trigger="goToCreateArticle()">Create New Article</button>
-      <button class="gray" if.bind="!dataStore.isJournalist" click.trigger="goToDashboard()">Back</button>
+      <button class="blue hoverable" if.bind="dataStore.isJournalist" click.trigger="goToCreateArticle()">Create New Article</button>
+      <button class="gray hoverable" if.bind="!dataStore.isJournalist" click.trigger="goToDashboard()">Back</button>
     </div>
     
     <div class="articles white-bg">
@@ -53,8 +53,8 @@
             Files: ${article.files.length === 0 ? '0 files' : ''}
             <div class="flex" repeat.for="file of article.files">
               <button class="opac-0 text-left hoverable"
-                click.trigger="playAudio(file, $parent.$index, $index)">
-                Attachment ${$index}
+                click.trigger="playAudio(file.audioId, $parent.$index, $index)">
+                ${file.name}
               </button>
               <audio id="js-audio-${$parent.$index}-${$index}"></audio>
             </div>

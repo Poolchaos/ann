@@ -46,13 +46,22 @@
         type="file" multiple
         change.delegate="selectionChanged($event)"
         accept="audio/mp3,audio/wav" />
+      <ul style="width: 275px;">
+        <li
+          class="flex flex--justify-between"
+          repeat.for="file of fileContents"
+          if.bind="!file.toBeRemoved">
+          ${file.name} <button class="red hoverable" click.trigger="removeAudio(file._id)">X</button>
+        </li>
+      </ul>
     </div>
+    <div class="spacer--20"></div>
     
     <button
       class="blue medium-font hoverable pad--t-10 pad--b-10 pad--r-40 pad--l-40"
       disabled.bind="submitted"
       click.trigger="submitForm()"
-      disabled.bind="disable">Create</button>
+      disabled.bind="disable">${articleId ? 'Update' : 'Create'}</button>
     <button
       class="gray medium-font hoverable pad--t-10 pad--b-10 pad--r-40 pad--l-40"
       disabled.bind="submitted"

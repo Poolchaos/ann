@@ -17,10 +17,13 @@ export class CreateArticle {
   public category: string;
   public submitted: boolean = false;
   private fileContents: {
+    _id?: string;
+    audioId?: string;
     name: string;
     data: string | ArrayBuffer;
     type: string;
     size: string;
+    toBeRemoved?: boolean;
   }[] = [];
   private originalFileContents: {
     name: string;
@@ -64,15 +67,23 @@ export class CreateArticle {
         
         this.title = article.name;
         this.category = article.category;
-        this.originalFileContents = [].concat(article.files);
+        this.originalFileContents = JSON.parse(JSON.stringify(article.files));
         this.fileContents = article.files;
 
         let element: any = document.querySelector('#x');
-        console.log(' ::>> element >>>> ', element);
         element.value = article.content;
 
         this.ready = true;
       });
+  }
+
+  public removeAudio(id: string): void {
+    console.log(' ::>> removeAudio >>>>> ', id, this.fileContents);
+    this.fileContents.forEach(file => {
+      if (file._id === id) {
+        file.toBeRemoved = true;
+      }
+    });
   }
 
   public toggleCategories(): void {
@@ -174,6 +185,9 @@ export class CreateArticle {
         )
         .then((article: { articleId: string }) => {
           console.log(' ::>> article created >>>> ');
+          // todo: resolve race condition to update state
+          // maybe stay on view and clear state
+          // notify of updated/completed
           this.uploadAudio(article.articleId);
         })
         .catch(error => {
@@ -185,6 +199,10 @@ export class CreateArticle {
   private uploadAudio(articleId: string): void {
     if (this.fileContents.length > 0) {
       let uploadCount = 0;
+      console.log(' ::>> this.fileContents >>>>> ', {
+        fileContents: this.fileContents,
+        originalFileContents: this.originalFileContents
+      }, (JSON.stringify(this.originalFileContents) === JSON.stringify(this.fileContents)));
 
       if (JSON.stringify(this.originalFileContents) === JSON.stringify(this.fileContents)) {
         return this.handleArticleCreated();
@@ -194,6 +212,24 @@ export class CreateArticle {
 
       this.fileContents.forEach(file => {
         if (!this.originalFileContents.includes(file)) {
+
+          if (file.toBeRemoved) {
+            this.articleService
+              .removeAudio(this.articleId, file._id, file.audioId)
+              .then(() => {
+                uploadCount++;
+  
+                if (uploadCount >= this.fileContents.length) {
+                  this.handleArticleCreated();
+                }
+  
+              })
+              .catch(() => {
+                console.log(' ::>> failed to uplaod ');
+              });
+
+            return;
+          }
 
           this.articleService
             .uploadAudio(

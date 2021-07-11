@@ -56,7 +56,10 @@ router.post('/',
         ArticleModel.findById(audio.articleId, function (err, doc) {
           if (err) return res.sendStatus(500, {error: err});
           if (!doc) return res.sendStatus(404, {error: 'Article not found'});
-          doc.files.addToSet(audio._id);
+          doc.files.addToSet({
+            audioId: audio._id,
+            name: audio.name
+          });
           doc.save();
 
           log('Article reviewed', req.body.articleId, decrypted._id);
@@ -99,6 +102,40 @@ router.put('/',
       });
     } catch(e) {
       error('Failed to stream audio', token, req.body, e);
+      return res.sendStatus(500, { error: err });
+    }
+  }
+);
+
+router.delete('/', 
+  (req, res, next) => authenticateToken(req, res, next, [ROLES.ADMIN, ROLES.JOURNALIST]),
+  function(req, res, next) {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1];
+
+    try {
+      if (!req.body) return res.sendStatus(500, { error: err });
+      const decrypted = jwt.verify(token, process.env.COMPLETE_KEY);
+      if (!decrypted) return res.sendStatus(401);
+
+      FileModel.deleteOne({
+        _id: req.body.audioId
+      }, function (err) {
+        if (err) return res.sendStatus(500, { error: err });
+        log('Audio file removed', req.body.audioId, decrypted._id);
+
+        ArticleModel.findById(req.body.articleId, function (err, doc) {
+          if (err) return res.sendStatus(500, {error: err});
+          if (!doc) return res.sendStatus(404, {error: 'Article not found'});
+          doc.files = doc.files.filter(file => file.audioId !== req.body.audioId);
+          doc.save();
+
+          log('Article reviewed', req.body.articleId, decrypted._id);
+          return res.send(200, { articleId: req.body.articleId });
+        });
+      });
+    } catch(e) {
+      error('Failed to remove audio', token, req.body, e);
       return res.sendStatus(500, { error: err });
     }
   }
