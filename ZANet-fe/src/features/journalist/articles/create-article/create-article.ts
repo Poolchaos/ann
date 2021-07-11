@@ -31,6 +31,8 @@ export class CreateArticle {
   private validation: ValidationController;
   private ready: boolean = false;
 
+  public categoriesVisible: boolean = false;
+
   constructor(
     private articleService: ArticleService,
     private router: Router,
@@ -71,6 +73,20 @@ export class CreateArticle {
 
         this.ready = true;
       });
+  }
+
+  public toggleCategories(): void {
+    this.categoriesVisible = !this.categoriesVisible;
+  }
+
+  private hideCategories(): void {
+    this.categoriesVisible = false;
+  }
+
+  public selectCategory(category: string, event): void {
+    event.stopPropagation();
+    this.hideCategories();
+    this.category = category;
   }
 
   public selectionChanged(event: Event): void {
