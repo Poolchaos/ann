@@ -2,6 +2,7 @@ import './app.scss';
 
 import './styles/globals.scss';
 import './styles/theme.scss';
+import './styles/trix-editor-overrides.scss';
 
 import './registration/registration.scss';
 import './login/login.scss';
