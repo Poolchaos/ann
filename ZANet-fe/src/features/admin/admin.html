@@ -1,7 +1,13 @@
 <template>
   <div class="bordered--5 white container centered">
-  <div class="flex">
-    <button click.trigger="goToMembers()">Members</button>
-    <button click.trigger="goToReviewArticles()">Review Articles</button>
+  <div class="flex flex--justify-evenly height--400 medium-font">
+    <div
+      class="flex flex--justify-center flex--align-center-v hoverable bg-gray width--half height--full"
+      click.trigger="goToMembers()"
+    >Members</div>
+    <div
+      class="flex flex--justify-center flex--align-center-v hoverable bg-gray width--half height--full"
+      click.trigger="goToReviewArticles()"
+    >Articles</div>
   </div>
 </template>

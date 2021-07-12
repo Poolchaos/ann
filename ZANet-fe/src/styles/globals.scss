@@ -61,6 +61,16 @@ li {
 
 .hoverable {
   cursor: pointer;
+
+  &:hover {
+    &.bg {
+      &-gray {
+        box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.1);
+        -webkit-box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.1);
+        -moz-box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.1);
+      }
+    }
+  }
 }
 
 .centered {
@@ -117,8 +127,31 @@ li {
   letter-spacing: 2px;
 }
 
-.full-width {
-  width: 100%;
+.width {
+  &--half {
+    width: 50%;
+  }
+  &--full {
+    width: 100%;
+  }
+}
+
+.height {
+  &--half {
+    height: 50%;
+  }
+  &--full {
+    height: 100%;
+  }
+  &--300 {
+    height: 300px;
+  }
+  &--400 {
+    height: 400px;
+  }
+  &--600 {
+    height: 600px;
+  }
 }
 
 .content {
@@ -234,6 +267,9 @@ label {
     &-between {
       justify-content: space-between;
     }
+    &-evenly {
+      justify-content: space-evenly;
+    }
   }
 
   &--position {
@@ -248,6 +284,12 @@ label {
     }
     &-end-h {
       justify-content: flex-end;
+    }
+  }
+
+  &--align {
+    &-center-v {
+      align-items: center;
     }
   }
 
@@ -279,6 +321,12 @@ label {
 }
 
 .pad {
+  &-20 {
+    padding: 20px;
+  }
+  &-40 {
+    padding: 40px;
+  }
   &--t {
     &-10 {
       padding-top: 10px;
@@ -347,4 +395,18 @@ label {
 
 audio {
   height: 25px;
+}
+
+table {
+  tbody {
+    tr {
+      td {
+        padding-top: 10px;
+
+        &:first-child {
+          padding-top: 20px;
+        }
+      }
+    }
+  }
 }

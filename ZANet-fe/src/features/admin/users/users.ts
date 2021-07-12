@@ -1,5 +1,6 @@
 import { autoinject } from 'aurelia-framework';
 import { DialogService } from 'aurelia-dialog';
+import { Router } from 'aurelia-router';
 
 import { DataStore, IUser } from 'stores/data-store';
 import { UserService } from './users-service';
@@ -13,6 +14,7 @@ export class Admin {
   constructor(
     private userService: UserService,
     private dialogService: DialogService,
+    private router: Router,
     public dataStore: DataStore
   ) {}
 
@@ -55,6 +57,10 @@ export class Admin {
       .catch(() => {
         console.log(' Failed to give access to user ');
       });
+  }
+
+  public goToDashboard(): void {
+    this.router.navigate('dashboard');
   }
 
   public removeUser(user: IUser): void {
