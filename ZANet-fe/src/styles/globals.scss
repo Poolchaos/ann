@@ -410,3 +410,14 @@ table {
     }
   }
 }
+
+.error {
+  color: var(--crayon-red);
+
+  &.attached {
+    position: absolute;
+    top: calc(100% - 10px);
+    left: 20px;
+    z-index: 5;
+  }
+}

@@ -2,7 +2,8 @@ import { autoinject } from 'aurelia-framework';
 import {
   ValidationControllerFactory,
   ValidationController,
-  validateTrigger
+  validateTrigger,
+  ValidationRules
 } from 'aurelia-validation';
 import { Router } from 'aurelia-router';
 
@@ -35,6 +36,11 @@ export class CreateArticle {
   private ready: boolean = false;
 
   public categoriesVisible: boolean = false;
+  public errors = {
+    title: null,
+    category: null,
+    content: null
+  };
 
   constructor(
     private articleService: ArticleService,
@@ -47,12 +53,26 @@ export class CreateArticle {
   }
 
   public activate(params?: { articleId: string }): any {
+    this.initValidation();
     if (location.href.includes('/edit-article?') && this.dataStore.isJournalist) {
       this.articleId = params.articleId;
       this.retrieveArticle();
     } else {
       this.ready = true;
     }
+  }
+
+  private initValidation(): void {
+    ValidationRules.customRule('isRequired', (value: any) => {
+      const isValid = !!value;
+      this.errors.title = isValid ? null : 'Please enter a title.';
+      return isValid;
+    }, 'Please enter a past date.');
+
+    ValidationRules
+      .ensure("title")
+      .satisfiesRule('isRequired')
+      .on(this);
   }
 
   private retrieveArticle() {
@@ -98,6 +118,7 @@ export class CreateArticle {
     event.stopPropagation();
     this.hideCategories();
     this.category = category;
+    this.errors.category = null;
   }
 
   public selectionChanged(event: Event): void {
@@ -135,11 +156,45 @@ export class CreateArticle {
   }
 
   public submitForm(): void {
-    if (this.dataStore.isJournalist && location.href.includes('/edit-article?') && this.articleId) {
-      this.updateArticle();
-    } else {
-      this.createArticle();
-    }
+    this.validation
+      .validate()
+      .then((validation) => {
+        console.log(' ::>> validation >>>> ', validation);
+
+        let invalid = false;
+
+        if (!this.category) {
+          this.errors.category = 'Please select a category';
+          invalid = true;
+        }
+        let element: any = document.querySelector('#x');
+        let content = element.value;
+    
+        if (content) {
+          const messageContent = content.replace(/<div>|<\/div>/gi, '').trim();
+          console.log(' ::>> messageContent >>>>> ', messageContent);
+          if (messageContent) {
+            this.errors.content = null;
+          } else {
+            this.errors.content = 'Please enter article content.';
+            invalid = true;
+          }
+        } else {
+          this.errors.content = 'Please enter article content.';
+          invalid = true;
+        }
+
+        if (!validation.valid || invalid) {
+          return;
+        }
+        this.errors.content = null;
+
+        if (this.dataStore.isJournalist && location.href.includes('/edit-article?') && this.articleId) {
+          this.updateArticle();
+        } else {
+          this.createArticle();
+        }
+      });
   }
   
   private createArticle(): void {
@@ -149,7 +204,7 @@ export class CreateArticle {
     // todo: validate
 
     if (content) {
-      const messageContent = content.replace(/<div>|<\/div>/gi, '');
+      const messageContent = content.replace(/<div>|<\/div>/gi, '').trim();
 
       this.articleService
         .createArticle(
@@ -171,10 +226,8 @@ export class CreateArticle {
     let element: any = document.querySelector('#x');
     let content = element.value;
     
-    // todo: validate
-
     if (content) {
-      const messageContent = content.replace(/<div>|<\/div>/gi, '');
+      const messageContent = content.replace(/<div>|<\/div>/gi, '').trim();
      
       this.articleService
         .updateArticle(
