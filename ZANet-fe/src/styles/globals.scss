@@ -16,10 +16,12 @@ button {
   outline: none;
   border: 0;
   background: rgba(0, 0, 0, 0);
+  cursor: pointer;
 }
 
 button:disabled {
-  color: var(--light-gray);
+  color: var(--light-gray)!important;
+  cursor: default;
 }
 
 ul {
@@ -273,6 +275,9 @@ label {
   }
 
   &--position {
+    &-stretch {
+      align-content: stretch;
+    }
     &-center-h {
       align-content: center;
     }
@@ -419,5 +424,23 @@ table {
     top: calc(100% - 10px);
     left: 20px;
     z-index: 5;
+  }
+}
+
+table td, table td * {
+  vertical-align: top;
+  padding-top: 0!important;
+}
+
+// DIALOGS
+ux-dialog-container {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.dialog {
+  border-radius: 5px;
+
+  .header {
+    background: var(--blue);
   }
 }

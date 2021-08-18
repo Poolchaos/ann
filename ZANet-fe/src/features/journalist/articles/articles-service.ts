@@ -78,7 +78,18 @@ export class ArticleService {
 
   public activateArticle(articleId: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.httpClient.createRequest(this.route + '/review')
+      this.httpClient.createRequest(this.route + '/activate')
+        .asPost()
+        .withContent({ articleId })
+        .send()
+        .then(() => resolve())
+        .catch((error) => reject(error));
+    });
+  }
+
+  public deactivateArticle(articleId: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.httpClient.createRequest(this.route + '/deactivate')
         .asPost()
         .withContent({ articleId })
         .send()

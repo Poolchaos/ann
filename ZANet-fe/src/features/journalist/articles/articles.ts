@@ -107,12 +107,36 @@ export class Articles {
       });
   }
 
+  public requestDeactivate(): void {
+    // todo: implement request 
+  }
+
   public activateArticle(articleId: string): void {
     this.articleService
       .activateArticle(articleId)
       .then(() => {
         console.log(' ::>> successfully activated article ');
-        this.articles = this.articles.filter(article => article._id !== articleId);
+        this.articles.forEach(article => {
+          if (article._id === articleId) {
+            article.contentConfirmed = true;
+          }
+        });
+      })
+      .catch(() => {
+        console.log(' ::>> failed to activate article ');
+      });
+  }
+
+  public deactivateArticle(articleId: string): void {
+    this.articleService
+      .deactivateArticle(articleId)
+      .then(() => {
+        console.log(' ::>> successfully activated article ');
+        this.articles.forEach(article => {
+          if (article._id === articleId) {
+            article.contentConfirmed = false;
+          }
+        });
       })
       .catch(() => {
         console.log(' ::>> failed to activate article ');

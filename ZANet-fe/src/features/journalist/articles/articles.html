@@ -20,16 +20,24 @@
           
           <div class="flex flex--direction-cols actions" style="width: 100px;">
             <button class="opac-0 text-left hoverable" if.bind="dataStore.isJournalist"
-              click.trigger="editArticle(article._id)">
+              click.trigger="editArticle(article._id)" disabled.bind="article.contentConfirmed ? 'disabled' : ''">
               Edit
+            </button>
+            <button class="opac-0 text-left hoverable" if.bind="dataStore.isJournalist && article.contentConfirmed"
+              click.trigger="requestDeactivate(article._id)">
+              Request Deactivation
             </button>
             <button class="opac-0 text-left hoverable" if.bind="dataStore.isJournalist"
               click.trigger="removeArticle(article)">
               Remove
             </button>
-            <button class="opac-0 text-left hoverable" if.bind="dataStore.isAdmin"
+            <button class="opac-0 text-left hoverable" if.bind="dataStore.isAdmin && !article.contentConfirmed"
               click.trigger="activateArticle(article._id)">
               Activate
+            </button>
+            <button class="opac-0 text-left hoverable" if.bind="dataStore.isAdmin && article.contentConfirmed"
+              click.trigger="deactivateArticle(article._id)">
+              Deactivate
             </button>
             <button class="opac-0 text-left hoverable" if.bind="dataStore.isVoiceOver"
               click.trigger="addToCart(article)">
@@ -63,4 +71,5 @@
       </div>
     </div>
   </div>
+  <!-- todo: admin view articles by categories or by users -->
 </template>

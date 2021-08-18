@@ -5,6 +5,7 @@
 :root {
   /*  ---- colors ----  */
   --gray: #3f3f40;
+  --light-gray: #919191;
   --blue: #13a89e;
   --red: #a81322;
   --crayon-red: #ee204d;
@@ -20,6 +21,9 @@
   #THEME COLOUR CLASSES
 \*------------------------------------*/
 
+.white-text {
+  color: #ffffff!important;
+}
 .gray-text {
   color: var(--gray)!important;
 }

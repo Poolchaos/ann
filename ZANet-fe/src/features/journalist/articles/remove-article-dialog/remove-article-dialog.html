@@ -1,15 +1,28 @@
 <template>
   <!-- todo: move styles to scss in all dialogs -->
-  <div style="width: 400px;height: 300px;background-color: gray;">
-    <h4>Remove Article</h4>
-    <div>Are you sure you want to remove this article?</div>
-    <div >
-      Name: ${article.name} <br/>
-      Category: ${article.category}
+  <div
+    class="dialog flex flex--direction-cols flex--justify-between"
+    style="width: 400px;background-color: white;"
+  >
+    <div class="header centered white-text medium-font pad--t-20 pad--b-20">
+      Remove Article
     </div>
-    <div>
-      <button click.trigger="confirm()">Confirm</button>
-      <button click.trigger="cancel()">Cancel</button>
+    <div class="centered">
+      <h5>Are you sure you want to remove this article?</h5>
+      <table class="v-centered left">
+        <tr>
+          <td class="pad--r-10">Name:</td>
+          <td style="max-width:300px;">${article.name}</td>
+        </tr>
+        <tr>
+          <td class="pad--r-10">Category:</td>
+          <td class="capitalise">${article.category}</td>
+        </tr>
+      </table>
+    </div>
+    <div class="flex pad--t-20" style="height:61px;">
+      <button class="blue width--half small-font" click.trigger="confirm()">Confirm</button>
+      <button class="width--half small-font" click.trigger="cancel()">Cancel</button>
     </div>
   </div>
 </template>

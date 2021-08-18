@@ -83,7 +83,7 @@ router.get('/review',
 
       if (!decrypted) return res.sendStatus(401);
 
-      ArticleModel.find({ contentConfirmed: false }, function (err, docs) {
+      ArticleModel.find({}, function (err, docs) {
         return res.send(docs);
       });
     } catch(e) {
@@ -195,7 +195,7 @@ router.put('/',
   }
 );
 
-router.post('/review', 
+router.post('/activate', 
   (req, res, next) => authenticateToken(req, res, next, [ROLES.ADMIN]),
   function(req, res, next) {
     const authHeader = req.headers['authorization']
@@ -220,7 +220,41 @@ router.post('/review',
         log('Article reviewed', req.body.articleId, decrypted._id);
         return res.send({ articleId: req.body.articleId });
       });
+      // todo: add stacktrace logging to all requests
 
+    } catch(e) {
+      error('Failed to review article', token, req.body, e);
+      return res.sendStatus(500, { error: err });
+    }
+  }
+);
+
+router.post('/deactivate', 
+  (req, res, next) => authenticateToken(req, res, next, [ROLES.ADMIN]),
+  function(req, res, next) {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1];
+
+    try {
+      const decrypted = jwt.verify(token, process.env.COMPLETE_KEY);
+
+      if (!decrypted) return res.sendStatus(401);
+      if (!req.body) return res.sendStatus(500, { error: err });
+      
+      ArticleModel.findById(req.body.articleId, function (err, doc) {
+        if (err) return res.sendStatus(500, {error: err});
+
+        doc.contentConfirmed = false;
+        doc.reviewer = {
+          userId: decrypted._id,
+          timestamp: Date.now()
+        };
+        doc.save();
+
+        log('Article reviewed', req.body.articleId, decrypted._id);
+        return res.send({ articleId: req.body.articleId });
+      });
+      // todo: add stacktrace logging to all requests
 
     } catch(e) {
       error('Failed to review article', token, req.body, e);
