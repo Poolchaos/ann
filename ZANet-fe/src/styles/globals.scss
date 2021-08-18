@@ -416,6 +416,12 @@ table {
   }
 }
 
+.has-divider {
+  padding-bottom: 20px!important;
+  margin-bottom: 20px!important;
+  border-bottom: 2px solid var(--blue);
+}
+
 .error {
   color: var(--crayon-red);
 
