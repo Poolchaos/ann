@@ -1,9 +1,15 @@
 <template>
   <div class="bordered--5 white container">
-    <h1 class="black-text flex flex--justify-center">
-      <img src="../../../../assets/images/zanet-logo.png" />
-      <div class="spacer-v--10"></div>
-      <span>Create Article</span>
+    <h1 class="black-text flex flex--justify-between">
+      <div style="width: 200px;"></div>
+      <div class="black-text flex flex--justify-center">
+        <img src="../../../../assets/images/zanet-logo.png" />
+        <div class="spacer-v--10"></div>
+        <span>Create Article</span>
+      </div>
+      <div class="flex flex--position-end-h" style="width: 200px;">
+        <button class="gray hoverable small-font" click.trigger="cancel()">Back</button>
+      </div>
     </h1>
     <div class="is-relative">
       <i class="fas fa-heading"></i>

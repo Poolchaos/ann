@@ -1,21 +1,31 @@
 <template>
   <div class="bordered--5 white container">
-    <h1 class="black-text flex flex--justify-center">
-      <img src="../../../assets/images/zanet-logo.png" />
-      <div class="spacer-v--10"></div>
-      <span>Articles</span>
+    <h1 class="black-text flex flex--justify-between">
+      <div style="width: 200px;"></div>
+      <div class="black-text flex flex--justify-center">
+        <img src="../../../assets/images/zanet-logo.png" />
+        <div class="spacer-v--10"></div>
+        <span>Articles</span>
+      </div>
+      <div class="flex flex--position-end-h" style="width: 200px;">
+        <button class="blue hoverable small-font" if.bind="dataStore.isJournalist" click.trigger="goToCreateArticle()">Create New Article</button>
+        <button class="gray hoverable small-font" if.bind="!dataStore.isJournalist" click.trigger="goToDashboard()">Back</button>
+      </div>
     </h1>
-    <div class="centered">
-      <button class="blue hoverable" if.bind="dataStore.isJournalist" click.trigger="goToCreateArticle()">Create New Article</button>
-      <button class="gray hoverable" if.bind="!dataStore.isJournalist" click.trigger="goToDashboard()">Back</button>
-    </div>
     
     <div class="articles white-bg">
 
       <div repeat.for="article of articles" class="item ${$index === articles.length - 1 ? '' : 'has-divider'}" class.bind="article.selected ? 'is-selected' : ''">
         <div class="flex flex--direction-cols" style="height: 300px;margin-right: 20px;">
-          <!-- <img src.bind="'../../../assets/images/icon-' + article.category + '.png'" width="50px" height="50px" /> -->
-          <img src="https://via.placeholder.com/150" width="100px" height="100px" />
+          <img src="../../../assets/images/icon-business.png" width="100px" height="100px" if.bind="article.category === 'business'" />
+          <img src="../../../assets/images/icon-crime.png" width="100px" height="100px" if.bind="article.category === 'crime'" />
+          <img src="../../../assets/images/icon-news.png" width="100px" height="100px" if.bind="article.category === 'news'" />
+          <img src="../../../assets/images/icon-politics.png" width="100px" height="100px" if.bind="article.category === 'politics'" />
+          <img src="../../../assets/images/icon-sport.png" width="100px" height="100px" if.bind="article.category === 'sport'" />
+          <img src="../../../assets/images/icon-technical.png" width="100px" height="100px" if.bind="article.category === 'technical'" />
+          <img src="../../../assets/images/icon-travel.png" width="100px" height="100px" if.bind="article.category === 'travel'" />
+          
+
           <div class="spacer--20"></div>
           
           <div class="flex flex--direction-cols actions" style="width: 100px;">

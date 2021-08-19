@@ -212,6 +212,10 @@ li {
   }
 }
 
+textarea:focus, input:focus{
+  outline: none;
+}
+
 .dropdown {
   @extend %input-styles;
 

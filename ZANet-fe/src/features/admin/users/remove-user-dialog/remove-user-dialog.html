@@ -1,10 +1,17 @@
 <template>
-  <div style="width: 400px;height: 300px;background-color: gray;">
-    <h4>Remove member</h4>
-    <div>Are you sure you want to remove ${user.firstName} ${surname}?</div>
-    <div>
-      <button click.trigger="confirm()">Confirm</button>
-      <button click.trigger="cancel()">Cancel</button>
+  <div
+    class="dialog flex flex--direction-cols flex--justify-between"
+    style="width: 400px;background-color: white;"
+  >
+    <div class="header centered white-text medium-font pad--t-20 pad--b-20">
+      Remove Member
+    </div>
+    <div class="centered">
+      <h5>Are you sure you want to remove ${user.firstName} ${surname}?</h5>
+    </div>
+    <div class="flex pad--t-20" style="height:61px;">
+      <button class="blue width--half small-font" click.trigger="confirm()">Confirm</button>
+      <button class="width--half small-font" click.trigger="cancel()">Cancel</button>
     </div>
   </div>
 </template>
