@@ -1,17 +1,20 @@
 <template>
   
   <div class="bordered--5 white container">
-    <h1 class="black-text flex flex--justify-center">
-      <img src="../../../assets/images/zanet-logo.png" />
-      <div class="spacer-v--10"></div>
-      <span>Users</span>
+    <h1 class="black-text flex flex--justify-between">
+      <div style="width: 200px;"></div>
+      <div class="black-text flex flex--justify-center">
+        <img src="../../../assets/images/zanet-logo.png" />
+        <div class="spacer-v--10"></div>
+        <span>Users</span>
+      </div>
+      <div class="flex flex--position-end-h" style="width: 200px;">
+        <button class="gray hoverable" click.trigger="goToDashboard()">Back</button>
+      </div>
     </h1>
-    <div class="centered">
-      <button class="gray hoverable" click.trigger="goToDashboard()">Back</button>
-    </div>
 
     <table class="white-bg container width--full" cellpadding="0" cellspacing="0">
-      <thead class="medium-font">
+      <thead class="thick-font">
         <tr>
           <td class="border--bottom-gray" i18n="page.register.form.email"></td>
           <td class="border--bottom-gray" i18n="page.register.form.firstName"></td>
@@ -23,14 +26,14 @@
         </tr>
       </thead>
       <tbody>
-        <tr repeat.for="user of users">
+        <tr repeat.for="user of users" style="line-height: 30px;">
           <td>${user.email}</td>
           <td>${user.firstName}</td>
           <td>${user.surname}</td>
           <td>${user.number}</td>
           <td>${user.role}</td>
           <td>
-            <span if.bind="user.role === 'Admin'">NA</span>
+            <div class="centered mini-font gray-text thick-font" if.bind="user.role === 'Admin'">NA</div>
             <button
               class="blue hoverable"
               if.bind="user.role !== 'Admin' && !user.permissions"
@@ -38,14 +41,16 @@
             <button
               class="blue hoverable"
               if.bind="user.role !== 'Admin' && user.permissions"
-              click.trigger="disableAccess(user)">Disable</button>
+              click.trigger="disableAccess(user)"
+              style="height: 30px;width: 100%;">Disable</button>
           </td>
           <td>
-            <span if.bind="user._id === dataStore.user._id">- - - - - - -</span>
+            <div class="centered mini-font gray-text thick-font" if.bind="user._id === dataStore.user._id">NA</div>
             <button
-              class="blue hoverable"
+              class="crayon-red hoverable"
               if.bind="user._id !== dataStore.user._id"
-              click.trigger="removeUser(user)">Remove</button>
+              click.trigger="removeUser(user)"
+              style="height: 30px;width: 100%;">Remove</button>
           </td>
         </tr>
       </tbody>

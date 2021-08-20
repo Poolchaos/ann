@@ -11,6 +11,7 @@
   --crayon-red: #ee204d;
 
   /* ---- font sizes ---- */
+  --mini: 10px;
   --tiny: 14px;
   --small: 16px;
   --medium: 20px;
@@ -46,6 +47,16 @@
   color: white;
 }
 
+.red {
+  background: var(--red)!important;
+  color: white;
+}
+
+.crayon-red {
+  background: var(--crayon-red)!important;
+  color: white;
+}
+
 .opac-0 {
   background: rgba(0, 0, 0, 0)!important;
 }
@@ -74,6 +85,10 @@ html, body, div, a, button, li, input {
   #THEME FONT CLASSES
 \*------------------------------------*/
 
+
+.mini-font {
+  font-size: var(--mini);
+}
 
 .tiny-font {
   font-size: var(--tiny);
