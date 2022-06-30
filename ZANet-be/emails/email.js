@@ -16,11 +16,11 @@ const PASSWORD_RESET = fs.readFileSync(path.resolve(__dirname, './email-password
 // todo: format all dates like this >>> info: Confirm registration email sent {"date":1613982736471,"email":"flaap4@zailab.com","userId":"60336c8c16144c0684353523","domain":"email"}
 
 var transporter = nodemailer.createTransport({
-  host: "smtp.mailtrap.io",
-  port: 2525,
+  host: process.env.EMAIL_HOST,
+  port: process.env.EMAIL_PORT,
   auth: {
-    user: "37195f8d35d947", // todo: move to dontenv
-    pass: "56a6b4f73e969c"
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
   }
 });
 
