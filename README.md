@@ -7,7 +7,7 @@ This project contains aurelia fe app and webpack/mongoose/mongodb be app
 This app uses:
 - node: `v10.16.3`
 - npm: `7.5.4`
-- mongo server: `4.4`
+- mongo server: `4.4` || `5.0.9`
 - aurelia
 - expressjs
 - mongoose
@@ -18,6 +18,8 @@ This app uses:
 npm install
 cd ZANet-be & npm install
 cd ZANet-fe & npm install
+
+start up mongo: Run `mongod` in `C:\Program Files\MongoDB\Server\{version}}0\bin`
 ```
 
 ### Compiles and hot-reloads for development
