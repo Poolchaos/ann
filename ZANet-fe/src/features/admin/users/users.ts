@@ -1,3 +1,4 @@
+import { Sort } from './../../../tools/sort';
 import { autoinject } from 'aurelia-framework';
 import { DialogService } from 'aurelia-dialog';
 import { Router } from 'aurelia-router';
@@ -26,7 +27,7 @@ export class Admin {
     this.userService
       .retrieveUsers()
       .then((users: IUser[]) => {
-        this.users = users;
+        this.users = Sort.alphabetically(users);
       })
       .catch(() => {
 
