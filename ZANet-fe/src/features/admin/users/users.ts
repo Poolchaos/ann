@@ -1,4 +1,3 @@
-import { Sort } from './../../../tools/sort';
 import { autoinject } from 'aurelia-framework';
 import { DialogService } from 'aurelia-dialog';
 import { Router } from 'aurelia-router';
@@ -6,6 +5,9 @@ import { Router } from 'aurelia-router';
 import { DataStore, IUser } from 'stores/data-store';
 import { UserService } from './users-service';
 import { RemoveUserDialog } from './remove-user-dialog/remove-user-dialog';
+import { CookieService } from 'services/cookie-service';
+import { EVENTS } from 'stores/events';
+import { Sort } from 'tools/sort';
 
 @autoinject()
 export class Admin {
@@ -16,7 +18,8 @@ export class Admin {
     private userService: UserService,
     private dialogService: DialogService,
     private router: Router,
-    public dataStore: DataStore
+    public dataStore: DataStore,
+    private cookieService: CookieService
   ) {}
 
   public bind(): void {
@@ -27,7 +30,18 @@ export class Admin {
     this.userService
       .retrieveUsers()
       .then((users: IUser[]) => {
-        this.users = Sort.alphabetically(users, 'email');
+
+        let cachedUser = JSON.parse(this.cookieService.getCookie(EVENTS.CACHE.USER));
+        let user;
+        if (cachedUser && cachedUser !== 'null') {
+          console.log(' ::>> user >>>>> ', cachedUser, users);
+          user = users.find(_user => _user._id === cachedUser._id);
+          if (user) {
+            users = users.filter(_user => _user._id !== cachedUser._id);
+          }
+        }
+
+        this.users = [user, ...Sort.alphabetically(users, 'email')];
       })
       .catch(() => {
 
