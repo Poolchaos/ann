@@ -27,7 +27,7 @@ export class Admin {
     this.userService
       .retrieveUsers()
       .then((users: IUser[]) => {
-        this.users = Sort.alphabetically(users);
+        this.users = Sort.alphabetically(users, 'email');
       })
       .catch(() => {
 
