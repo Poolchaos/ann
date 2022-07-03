@@ -34,7 +34,7 @@
               Edit
             </button>
             <button class="opac-0 text-left hoverable" if.bind="dataStore.isJournalist && article.contentConfirmed"
-              click.trigger="requestDeactivate(article._id)">
+              click.trigger="requestDeactivation(article._id)">
               Request Deactivation
             </button>
             <button class="opac-0 text-left hoverable" if.bind="dataStore.isJournalist"
@@ -78,6 +78,11 @@
             </div>
           </div>
         </div>
+      </div>
+      <div if.bind="!articles || articles.length === 0" class="text-center">
+        <div class="spacer--100"></div>
+        No have no articles. Please select `Create New Article` to continue.
+        <div class="spacer--100"></div>
       </div>
     </div>
   </div>

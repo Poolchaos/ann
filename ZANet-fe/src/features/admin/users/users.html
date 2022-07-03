@@ -37,7 +37,8 @@
             <button
               class="blue hoverable"
               if.bind="user.role !== 'Admin' && !user.permissions"
-              click.trigger="enableAccess(user)">Enable</button>
+              click.trigger="enableAccess(user)"
+              style="height: 30px;width: 100%;">Enable</button>
             <button
               class="blue hoverable"
               if.bind="user.role !== 'Admin' && user.permissions"

@@ -27,7 +27,7 @@ var transporter = nodemailer.createTransport({
 function sendRegisterConfirmationEmail(user) {
   
   let mailData = {
-    from: 'noreply@ZANet.com',
+    from: process.env.EMAIL_FROM,
     to: user.email,
     subject: 'noreply',
     html: CONFIRM_REGISTRATION.replace(/\$\{ZANet_token\}/gi, user.token)
@@ -45,7 +45,7 @@ function sendRegisterConfirmationEmail(user) {
 function sendRegistrationCompleteEmail(user) {
   
   let mailData = {
-    from: 'noreply@ZANet.com',
+    from: process.env.EMAIL_FROM,
     to: user.email,
     subject: 'noreply',
     html: REGISTRATION_COMPLETED
@@ -63,7 +63,7 @@ function sendRegistrationCompleteEmail(user) {
 function sendValidPasswordResetRequest(user) {
   
   let mailData = {
-    from: 'noreply@ZANet.com',
+    from: process.env.EMAIL_FROM,
     to: user.email,
     subject: 'noreply',
     html: REQUEST_PASSWORD_RESET_VALID.replace('${ZANet_token}', user.token)
@@ -81,7 +81,7 @@ function sendValidPasswordResetRequest(user) {
 function sendInValidPasswordResetRequest(user) {
   
   let mailData = {
-    from: 'noreply@ZANet.com',
+    from: process.env.EMAIL_FROM,
     to: user.email,
     subject: 'noreply',
     html: REQUEST_PASSWORD_RESET_INVALID
@@ -99,7 +99,7 @@ function sendInValidPasswordResetRequest(user) {
 function sendPasswordReset(user) {
   
   let mailData = {
-    from: 'noreply@ZANet.com',
+    from: process.env.EMAIL_FROM,
     to: user.email,
     subject: 'noreply',
     html: PASSWORD_RESET
@@ -131,7 +131,7 @@ function sendPurchasedEmail(user, articles) {
   let template = PURCHASE_CONFIRMED.replace('${purchases}', _articles);
   
   let mailData = {
-    from: 'noreply@ZANet.com',
+    from: process.env.EMAIL_FROM,
     to: user.email,
     subject: 'noreply',
     html: template,

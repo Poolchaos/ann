@@ -107,7 +107,7 @@ export class Articles {
       });
   }
 
-  public requestDeactivate(): void {
+  public requestDeactivation(): void {
     // todo: implement request 
   }
 
