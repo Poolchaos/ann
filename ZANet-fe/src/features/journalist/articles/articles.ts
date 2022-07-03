@@ -107,6 +107,10 @@ export class Articles {
       });
   }
 
+  public requestActivation(): void {
+    // todo: move implementation from create to new request 
+  }
+
   public requestDeactivation(): void {
     // todo: implement request 
   }
