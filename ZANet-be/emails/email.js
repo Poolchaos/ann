@@ -47,12 +47,8 @@ var transporter = nodemailer.createTransport({
 
 function sendRegisterConfirmationEmail(user) {
   let template = CONFIRM_REGISTRATION;
-  console.info(
-    ' ::>> has fullname text ',
-    template.indexOf('${fullName}') >= 0
-  );
   template = template.replace(
-    '${fullName}',
+    /\$\{fullName\}/gi,
     user.firstName + ' ' + user.surname
   );
   template = template.replace(/\$\{ZANet_token\}/gi, user.token);
