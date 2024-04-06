@@ -52,7 +52,10 @@ function sendRegisterConfirmationEmail(user) {
     user.firstName + ' ' + user.surname
   );
   template = template.replace(/\$\{ZANet_token\}/gi, user.token);
-  // todo: inject the correct environment as well
+  template = template.replace(
+    /\$\{environmentURL\}/gi,
+    process.env.ENVIRONMENT
+  );
 
   let mailData = {
     from: process.env.EMAIL_FROM,

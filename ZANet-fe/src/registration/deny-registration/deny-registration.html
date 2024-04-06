@@ -1,0 +1,20 @@
+<template>
+  <div class="small-wrapper bordered--5 white container centered">
+    <h1 class="black-text flex flex--justify-center">
+      <img src="../../assets/images/zanet-logo.png" />
+      <div class="spacer-v--10"></div>
+      <span>Problem with Registration</span>
+    </h1>
+
+    <span class="medium-font">Didn't register with us?</span>
+    <span class="small-font">
+      If you did not intend to create an account on ZANet, click the button
+      below to remove this registration and keep your information secure.
+    </span>
+    <button
+      class="blue hoverable medium-font pad--t-10 pad--b-10 pad--r-40 pad--l-40"
+      disabled.bind="submitted"
+      click.trigger="removeRegistration()">Remove Registration</button>
+  </div>
+  </div>
+</template>
