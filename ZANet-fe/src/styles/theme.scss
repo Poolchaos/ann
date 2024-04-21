@@ -8,10 +8,11 @@
   --light-gray: #919191;
   --blue: #13a89e;
   --red: #a81322;
+  --green: #13a82c;
   --crayon-red: #ee204d;
 
   /* ---- font sizes ---- */
-  --mini: 10px;
+  --mini: 12px;
   --tiny: 14px;
   --small: 16px;
   --medium: 20px;
@@ -23,10 +24,10 @@
 \*------------------------------------*/
 
 .white-text {
-  color: #ffffff!important;
+  color: #ffffff !important;
 }
 .gray-text {
-  color: var(--gray)!important;
+  color: var(--gray) !important;
 }
 
 .blue-text {
@@ -38,32 +39,65 @@
 }
 
 .gray {
-  background: var(--gray)!important;
+  background: var(--gray) !important;
   color: white;
 }
 
 .blue {
-  background: var(--blue)!important;
+  background: var(--blue) !important;
   color: white;
 }
 
+.white-svg,
+.white-svg svg {
+  fill: white;
+}
+
+.blue-svg,
+.blue-svg svg {
+  fill: var(--blue);
+}
+
+.b {
+  &b {
+    &-blue {
+      border-bottom: 1px solid var(--blue) !important;
+    }
+  }
+}
+
+.hover {
+  &--bb-blue:hover {
+    border-bottom: 1px solid var(--blue) !important;
+  }
+}
+
 .red {
-  background: var(--red)!important;
+  background: var(--red) !important;
+  color: white;
+}
+
+.green {
+  background: var(--green) !important;
   color: white;
 }
 
 .crayon-red {
-  background: var(--crayon-red)!important;
+  background: var(--crayon-red) !important;
   color: white;
 }
 
 .opac-0 {
-  background: rgba(0, 0, 0, 0)!important;
+  background: rgba(0, 0, 0, 0) !important;
 }
 
 .red {
-  background: var(--red)!important;
+  background: var(--red) !important;
   color: white;
+}
+
+.bb-grey {
+  border-bottom: 1px solid #bfbfbf;
 }
 
 /*------------------------------------*\
@@ -71,20 +105,26 @@
 \*------------------------------------*/
 
 @font-face {
-  font-family: 'Calibri Light';
+  font-family: "Calibri Light";
   font-style: normal;
   font-weight: normal;
-  src: local('Calibri Light'), url('../assets/fonts/calibril.woff') format('woff');
+  src: local("Calibri Light"),
+    url("../assets/fonts/calibril.woff") format("woff");
 }
 
-html, body, div, a, button, li, input {
-  font-family: 'Calibri light', 'Roboto'!important;
+html,
+body,
+div,
+a,
+button,
+li,
+input {
+  font-family: "Calibri light", "Roboto" !important;
 }
 
 /*------------------------------------*\
   #THEME FONT CLASSES
 \*------------------------------------*/
-
 
 .mini-font {
   font-size: var(--mini);
@@ -96,6 +136,7 @@ html, body, div, a, button, li, input {
 
 .small-font {
   font-size: var(--small);
+  line-height: var(--small);
 }
 
 .medium-font {

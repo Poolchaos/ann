@@ -6,6 +6,16 @@ This project is bootstrapped by [aurelia-cli](https://github.com/aurelia/cli).
 
 For more information, go to https://aurelia.io/docs/cli/webpack
 
+This app uses:
+
+- node: `v10.16.3`
+- npm: `7.5.4`
+- mongo server: `4.4` || `5.0.9`
+- aurelia
+- expressjs
+- mongoose
+- jwt
+
 ## Run dev app
 
 Run `npm start`, then open `http://localhost:8080`

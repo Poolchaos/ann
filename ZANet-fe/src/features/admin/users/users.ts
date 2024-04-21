@@ -1,17 +1,18 @@
-import { autoinject } from 'aurelia-framework';
-import { DialogService } from 'aurelia-dialog';
-import { Router } from 'aurelia-router';
+import { autoinject } from "aurelia-framework";
+import { DialogService } from "aurelia-dialog";
+import { Router } from "aurelia-router";
 
-import { DataStore, IUser } from 'stores/data-store';
-import { UserService } from './users-service';
-import { RemoveUserDialog } from './remove-user-dialog/remove-user-dialog';
-import { CookieService } from 'services/cookie-service';
-import { EVENTS } from 'stores/events';
-import { Sort } from 'tools/sort';
+import { DataStore, IUser } from "stores/data-store";
+import { UserService } from "./users-service";
+import { RemoveUserDialog } from "./remove-user-dialog/remove-user-dialog";
+import { CookieService } from "services/cookie-service";
+import { EVENTS } from "stores/events";
+import { Sort } from "tools/sort";
+import { SVGManager } from "../../../services/svg-manager-service";
 
 @autoinject()
 export class Admin {
-  
+  public SVGManager = SVGManager;
   public users: IUser[] = [];
 
   constructor(
@@ -30,22 +31,21 @@ export class Admin {
     this.userService
       .retrieveUsers()
       .then((users: IUser[]) => {
-
-        let cachedUser = JSON.parse(this.cookieService.getCookie(EVENTS.CACHE.USER));
+        let cachedUser = JSON.parse(
+          this.cookieService.getCookie(EVENTS.CACHE.USER)
+        );
         let user;
-        if (cachedUser && cachedUser !== 'null') {
-          console.log(' ::>> user >>>>> ', cachedUser, users);
-          user = users.find(_user => _user._id === cachedUser._id);
+        if (cachedUser && cachedUser !== "null") {
+          console.log(" ::>> user >>>>> ", cachedUser, users);
+          user = users.find((_user) => _user._id === cachedUser._id);
           if (user) {
-            users = users.filter(_user => _user._id !== cachedUser._id);
+            users = users.filter((_user) => _user._id !== cachedUser._id);
           }
         }
 
-        this.users = [user, ...Sort.alphabetically(users, 'email')];
+        this.users = [user, ...Sort.alphabetically(users, "email")];
       })
-      .catch(() => {
-
-      })
+      .catch(() => {});
   }
 
   public enableAccess(user: IUser): void {
@@ -57,7 +57,7 @@ export class Admin {
         user.permissions = _user.permissions;
       })
       .catch(() => {
-        console.log(' Failed to give access to user ');
+        console.log(" Failed to give access to user ");
       });
   }
 
@@ -70,22 +70,22 @@ export class Admin {
         user.permissions = _user.permissions;
       })
       .catch(() => {
-        console.log(' Failed to give access to user ');
+        console.log(" Failed to give access to user ");
       });
   }
 
   public goToDashboard(): void {
-    this.router.navigate('dashboard');
+    this.router.navigate("dashboard");
   }
 
   public removeUser(user: IUser): void {
     this.dialogService
       .open({ viewModel: RemoveUserDialog, model: user })
-      .whenClosed(response => {
+      .whenClosed((response) => {
         if (!response.wasCancelled) {
           this.removeConfirmed(user._id);
         } else {
-          console.log('dialog cancelled');
+          console.log("dialog cancelled");
         }
         console.log(response.output);
       });
@@ -95,11 +95,9 @@ export class Admin {
     this.userService
       .removeUser(userId)
       .then(() => {
-        this.users = this.users.filter(user => user._id !== userId);
+        this.users = this.users.filter((user) => user._id !== userId);
       })
-      .catch(() => {
-
-      })
+      .catch(() => {});
   }
 
   // public saveUser(): void {

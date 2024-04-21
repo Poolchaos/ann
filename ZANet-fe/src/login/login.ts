@@ -1,18 +1,22 @@
-import { autoinject } from 'aurelia-framework';
-import { Router } from 'aurelia-router';
-import { ValidationControllerFactory, ValidationController, ValidationRules, validateTrigger } from 'aurelia-validation';
+import { autoinject } from "aurelia-framework";
+import { Router } from "aurelia-router";
+import {
+  ValidationControllerFactory,
+  ValidationController,
+  ValidationRules,
+  validateTrigger,
+} from "aurelia-validation";
 
 import { AuthenticateService } from "./authenticate-service";
-import { ILogin } from 'stores/data-store';
-import { EventsStore } from 'stores/events-store';
-import { EVENTS } from 'stores/events';
+import { ILogin } from "stores/data-store";
+import { EventsStore } from "stores/events-store";
+import { EVENTS } from "stores/events";
 
 @autoinject()
 export class Login {
-
   public identity: string;
   public password: string;
-  public submitted: boolean = false;
+  public submitted = false;
   public error: string;
 
   private validation: ValidationController;
@@ -35,15 +39,15 @@ export class Login {
   }
 
   private setupValidations(): void {
-    ValidationRules.ensure('identity')
+    ValidationRules.ensure("identity")
       .required()
-      .withMessage('Please enter your email.')
+      .withMessage("Please enter your email.")
       .then()
       .email()
-      .withMessage('Please enter a valid email.')
-      .ensure('password')
+      .withMessage("Please enter a valid email.")
+      .ensure("password")
       .required()
-      .withMessage('Please enter your password.')
+      .withMessage("Please enter your password.")
       .on(this);
   }
 
@@ -52,11 +56,11 @@ export class Login {
   }
 
   public forgotPassword(): void {
-    this.router.navigate('forgot-password');
+    this.router.navigate("forgot-password");
   }
 
   public goToRegister(): void {
-    this.router.navigate('registration');
+    this.router.navigate("registration");
   }
 
   // social media integration
@@ -70,9 +74,9 @@ export class Login {
 
     this.validation
       .validate()
-      .then(validation => {
+      .then((validation) => {
         if (!validation.valid) {
-          console.log(' ::>> is invalid ', validation);
+          console.log(" ::>> is invalid ", validation);
           this.submitted = false;
           return;
         }
@@ -80,44 +84,69 @@ export class Login {
       })
       .catch(() => {
         this.submitted = false;
-        this.error = 'Email or password is incorrect. Please try again.';
+        this.error = "Email or password is incorrect. Please try again.";
       });
   }
 
   private triggerLogin(): void {
     this.authenticateService
       .authenticate(this.identity, this.password)
-      .then(user => this.handleUserAuthenticated(user))
-      .catch(error => {
+      .then((user) => this.handleUserAuthenticated(user))
+      .catch((error) => {
+        console.log(" ::>> error >>>> ", error);
         this.error = error;
       });
   }
 
   private handleUserAuthenticated(user: ILogin): void {
-
-    this.eventsStore
-      .subscribeAndPublish(
-        EVENTS.USER_LOGGED_IN,
-        EVENTS.USER_UPDATED,
-        user,
-        () => {
-          if (this.fromRoute) {
-            this.router.navigate(this.fromRoute);
-          } else {
-            this.router.navigate('dashboard');
-          }
+    this.eventsStore.subscribeAndPublish(
+      EVENTS.USER_LOGGED_IN,
+      EVENTS.USER_UPDATED,
+      user,
+      () => {
+        if (this.fromRoute) {
+          this.router.navigate(this.fromRoute);
+        } else {
+          this.router.navigate("dashboard");
         }
-      );
+      }
+    );
   }
 
   public signInViaFacebook(): void {
-    
+    //
   }
 
   public signInViaTwitter(): void {
-    
+    //
   }
 
   public signInViaGoogle(): void {
+    //
+  }
+
+  // Only for test data
+  public testLogin(role: string): void {
+    const loginData = {
+      Admin: {
+        identity: "phillipjuanvanderberg@gmail.com",
+        password: "Test1234",
+      },
+      Journalist: {
+        identity: "bt1phillip@gmail.com",
+        password: "tEST1234",
+      },
+      "Voice-Over": {
+        identity: "phillipjuanv@gmail.com",
+        password: "Test1234",
+      },
+      User: {
+        identity: "phillip-juan@zailab.com",
+        password: "Test1234",
+      },
+    };
+
+    this.identity = loginData[role].identity;
+    this.password = loginData[role].password;
   }
 }

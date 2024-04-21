@@ -1,5 +1,4 @@
 <template>
-  
   <div class="small-wrapper bordered--5 white container centered">
     <h1 class="black-text flex flex--justify-center">
       <img src="../../assets/images/zanet-logo.png" />
@@ -8,7 +7,9 @@
     </h1>
 
     <!-- todo: rename login-form to padding -->
-    <span class="medium-font">Please enter your password to complete the registration.</span>
+    <span class="medium-font"
+      >Please enter your password to complete the registration.</span
+    >
     <div if.bind="!error">
       <div class="login-form left" if.bind="!resetComplete">
         <form>
@@ -30,15 +31,21 @@
               class="icon small-font"
             />
           </div>
-          <div class="row">
-            <input type="checkbox" /> Accept terms and conditions 
+          <div class="row flex">
+            <input type="checkbox" id="termsCheckbox" class="hoverable" />
+            <label for="termsCheckbox" class="hoverable">
+              Accept terms and conditions
+            </label>
           </div>
           <div class="spacer--20"></div>
           <div class="flex flex--justify-between">
             <button
-              class="blue hoverable medium-font pad--t-10 pad--b-10 pad--r-40 pad--l-40"
+              class="blue hoverable small-font rounded pad--t-10 pad--b-10"
               disabled.bind="submitted"
-              click.trigger="completeRegistration()">Complete Registration</button>
+              click.trigger="completeRegistration()"
+            >
+              Complete Registration
+            </button>
           </div>
         </form>
       </div>

@@ -1,22 +1,21 @@
-import { autoinject } from 'aurelia-framework';
+import { autoinject } from "aurelia-framework";
 import {
   ValidationControllerFactory,
   ValidationController,
   validateTrigger,
-  ValidationRules
-} from 'aurelia-validation';
-import { Router } from 'aurelia-router';
+  ValidationRules,
+} from "aurelia-validation";
+import { Router } from "aurelia-router";
 
-import { ArticleService } from '../articles-service';
-import { DataStore } from 'stores/data-store';
+import { ArticleService } from "../articles-service";
+import { DataStore } from "stores/data-store";
 
 @autoinject()
 export class CreateArticle {
-
   private articleId: string;
   public title: string;
   public category: string;
-  public submitted: boolean = false;
+  public submitted = false;
   private fileContents: {
     _id?: string;
     audioId?: string;
@@ -33,13 +32,13 @@ export class CreateArticle {
     size: string;
   }[] = [];
   private validation: ValidationController;
-  private ready: boolean = false;
+  private ready = false;
 
-  public categoriesVisible: boolean = false;
+  public categoriesVisible = false;
   public errors = {
     title: null,
     category: null,
-    content: null
+    content: null,
   };
 
   constructor(
@@ -54,7 +53,10 @@ export class CreateArticle {
 
   public activate(params?: { articleId: string }): any {
     this.initValidation();
-    if (location.href.includes('/edit-article?') && this.dataStore.isJournalist) {
+    if (
+      location.href.includes("/edit-article?") &&
+      this.dataStore.isJournalist
+    ) {
       this.articleId = params.articleId;
       this.retrieveArticle();
     } else {
@@ -63,43 +65,42 @@ export class CreateArticle {
   }
 
   private initValidation(): void {
-    ValidationRules.customRule('isRequired', (value: any) => {
-      const isValid = !!value;
-      this.errors.title = isValid ? null : 'Please enter a title.';
-      return isValid;
-    }, 'Please enter a past date.');
+    ValidationRules.customRule(
+      "isRequired",
+      (value: any) => {
+        const isValid = !!value;
+        this.errors.title = isValid ? null : "Please enter a title.";
+        return isValid;
+      },
+      "Please enter a past date."
+    );
 
-    ValidationRules
-      .ensure("title")
-      .satisfiesRule('isRequired')
-      .on(this);
+    ValidationRules.ensure("title").satisfiesRule("isRequired").on(this);
   }
 
   private retrieveArticle() {
     if (!this.articleId) {
-      return this.router.navigate('dashboard')
+      return this.router.navigate("dashboard");
     }
-    
-    this.articleService
-      .retrieveArticle(this.articleId)
-      .then((article) => {
-        console.log(' ::>> article retrieved >>>> ', article);
-        
-        this.title = article.name;
-        this.category = article.category;
-        this.originalFileContents = JSON.parse(JSON.stringify(article.files));
-        this.fileContents = article.files;
 
-        let element: any = document.querySelector('#x');
-        element.value = article.content;
+    this.articleService.retrieveArticle(this.articleId).then((article) => {
+      console.log(" ::>> article retrieved >>>> ", article);
 
-        this.ready = true;
-      });
+      this.title = article.name;
+      this.category = article.category;
+      this.originalFileContents = JSON.parse(JSON.stringify(article.files));
+      this.fileContents = article.files;
+
+      const element: any = document.querySelector("#x");
+      element.value = article.content;
+
+      this.ready = true;
+    });
   }
 
   public removeAudio(id: string): void {
-    console.log(' ::>> removeAudio >>>>> ', id, this.fileContents);
-    this.fileContents.forEach(file => {
+    console.log(" ::>> removeAudio >>>>> ", id, this.fileContents);
+    this.fileContents.forEach((file) => {
       if (file._id === id) {
         file.toBeRemoved = true;
       }
@@ -121,20 +122,19 @@ export class CreateArticle {
     this.errors.category = null;
   }
 
-  public selectionChanged(event: Event): void {
+  public selectionChanged(event: any): void {
     this.fileContents = [];
-    // @ts-ignore
     const files = event.target.files;
-    console.log(' ::>> files >>> ', files);
+    console.log(" ::>> files >>> ", files);
     if (files.length > 0) {
-      console.log(' ::>> has files >>> ', typeof files);
-      let list = Object.keys(files);
+      console.log(" ::>> has files >>> ", typeof files);
+      const list = Object.keys(files);
 
-      list.forEach(key => {
-        let file = files[key];
-        console.log(' ::>> file >>> ', file);
-        
-        let reader = new FileReader();
+      list.forEach((key) => {
+        const file = files[key];
+        console.log(" ::>> file >>> ", file);
+
+        const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = (evt: any) => {
           try {
@@ -142,93 +142,91 @@ export class CreateArticle {
               name: file.name,
               data: reader.result,
               type: file.type,
-              size: file.size
+              size: file.size,
             });
-          } catch(e) {
-            console.warn('::>> Failed to parse uploaded file ', evt);
+          } catch (e) {
+            console.warn("::>> Failed to parse uploaded file ", evt);
           }
-        }
-        reader.onerror = (evt: any) =>  {
-          console.warn('::>> Failed to upload file ', evt);
-        }
+        };
+        reader.onerror = (evt: any) => {
+          console.warn("::>> Failed to upload file ", evt);
+        };
       });
     }
   }
 
   public submitForm(): void {
-    this.validation
-      .validate()
-      .then((validation) => {
-        console.log(' ::>> validation >>>> ', validation);
+    this.validation.validate().then((validation) => {
+      console.log(" ::>> validation >>>> ", validation);
 
-        let invalid = false;
+      let invalid = false;
 
-        if (!this.category) {
-          this.errors.category = 'Please select a category';
+      if (!this.category) {
+        this.errors.category = "Please select a category";
+        invalid = true;
+      }
+      const element: any = document.querySelector("#x");
+      const content = element.value;
+
+      if (content) {
+        const messageContent = content.replace(/<div>|<\/div>/gi, "").trim();
+        console.log(" ::>> messageContent >>>>> ", messageContent);
+        if (messageContent) {
+          this.errors.content = null;
+        } else {
+          this.errors.content = "Please enter article content.";
           invalid = true;
         }
-        let element: any = document.querySelector('#x');
-        let content = element.value;
-    
-        if (content) {
-          const messageContent = content.replace(/<div>|<\/div>/gi, '').trim();
-          console.log(' ::>> messageContent >>>>> ', messageContent);
-          if (messageContent) {
-            this.errors.content = null;
-          } else {
-            this.errors.content = 'Please enter article content.';
-            invalid = true;
-          }
-        } else {
-          this.errors.content = 'Please enter article content.';
-          invalid = true;
-        }
+      } else {
+        this.errors.content = "Please enter article content.";
+        invalid = true;
+      }
 
-        if (!validation.valid || invalid) {
-          return;
-        }
-        this.errors.content = null;
+      if (!validation.valid || invalid) {
+        return;
+      }
+      this.errors.content = null;
 
-        if (this.dataStore.isJournalist && location.href.includes('/edit-article?') && this.articleId) {
-          this.updateArticle();
-        } else {
-          this.createArticle();
-        }
-      });
+      if (
+        this.dataStore.isJournalist &&
+        location.href.includes("/edit-article?") &&
+        this.articleId
+      ) {
+        this.updateArticle();
+      } else {
+        this.createArticle();
+      }
+    });
   }
-  
+
   private createArticle(): void {
-    let element: any = document.querySelector('#x');
-    let content = element.value;
+    const element: any = document.querySelector("#x");
+    const content = element.value;
 
     // todo: validate
 
     if (content) {
-      const messageContent = content.replace(/<div>|<\/div>/gi, '').trim();
+      const messageContent = content.replace(/<div>|<\/div>/gi, "").trim();
 
       this.articleService
-        .createArticle(
-          this.title,
-          this.category,
-          messageContent
-        )
+        .createArticle(this.title, this.category, messageContent)
         .then((article: { articleId: string }) => {
-          console.log(' ::>> article created >>>> ');
-            this.uploadAudio(article.articleId);
+          console.log(" ::>> article created >>>> ");
+          this.uploadAudio(article.articleId);
         })
-        .catch(error => {
-          console.log(' ::>> failed to create article >>>> ');
+        .catch((error) => {
+          console.log(" ::>> failed to create article >>>> ");
         });
     }
   }
 
   private updateArticle(): void {
-    let element: any = document.querySelector('#x');
-    let content = element.value;
-    
+    const element: any = document.querySelector("#x");
+    const content = element.value;
+
     if (content) {
-      const messageContent = content.replace(/<div>|<\/div>/gi, '').trim();
-     
+      const messageContent = content.replace(/<div>|<\/div>/gi, "").trim();
+
       this.articleService
         .updateArticle(
           this.articleId,
@@ -237,14 +235,14 @@ export class CreateArticle {
           messageContent
         )
         .then((article: { articleId: string }) => {
-          console.log(' ::>> article created >>>> ');
+          console.log(" ::>> article created >>>> ");
           // todo: resolve race condition to update state
           // maybe stay on view and clear state
           // notify of updated/completed
           this.uploadAudio(article.articleId);
         })
-        .catch(error => {
-          console.log(' ::>> failed to create article >>>> ');
+        .catch((error) => {
+          console.log(" ::>> failed to create article >>>> ");
         });
     }
   }
@@ -252,33 +250,39 @@ export class CreateArticle {
   private uploadAudio(articleId: string): void {
     if (this.fileContents.length > 0) {
       let uploadCount = 0;
-      console.log(' ::>> this.fileContents >>>>> ', {
-        fileContents: this.fileContents,
-        originalFileContents: this.originalFileContents
-      }, (JSON.stringify(this.originalFileContents) === JSON.stringify(this.fileContents)));
+      console.log(
+        " ::>> this.fileContents >>>>> ",
+        {
+          fileContents: this.fileContents,
+          originalFileContents: this.originalFileContents,
+        },
+        JSON.stringify(this.originalFileContents) ===
+          JSON.stringify(this.fileContents)
+      );
 
-      if (JSON.stringify(this.originalFileContents) === JSON.stringify(this.fileContents)) {
+      if (
+        JSON.stringify(this.originalFileContents) ===
+        JSON.stringify(this.fileContents)
+      ) {
         return this.handleArticleCreated();
       }
 
       // todo: cater for removing an audio file
 
-      this.fileContents.forEach(file => {
+      this.fileContents.forEach((file) => {
         if (!this.originalFileContents.includes(file)) {
-
           if (file.toBeRemoved) {
             this.articleService
               .removeAudio(this.articleId, file._id, file.audioId)
               .then(() => {
                 uploadCount++;
-  
+
                 if (uploadCount >= this.fileContents.length) {
                   this.handleArticleCreated();
                 }
-  
               })
               .catch(() => {
-                console.log(' ::>> failed to uplaod ');
+                console.log(" ::>> failed to uplaod ");
               });
 
             return;
@@ -286,8 +290,14 @@ export class CreateArticle {
 
           this.articleService
             .uploadAudio(
-              {name: file.name, data: file.data, type: file.type, size: file.size, articleId},
-              data => this.fileUploadProgressCallback(data)
+              {
+                name: file.name,
+                data: file.data,
+                type: file.type,
+                size: file.size,
+                articleId,
+              },
+              (data) => this.fileUploadProgressCallback(data)
             )
             .then(() => {
               uploadCount++;
@@ -295,10 +305,9 @@ export class CreateArticle {
               if (uploadCount >= this.fileContents.length) {
                 this.handleArticleCreated();
               }
-
             })
             .catch(() => {
-              console.log(' ::>> failed to uplaod ');
+              console.log(" ::>> failed to uplaod ");
             });
         }
       });
@@ -308,15 +317,15 @@ export class CreateArticle {
   }
 
   private handleArticleCreated(): void {
-    this.router.navigate('articles');
+    this.router.navigate("articles");
   }
 
   private fileUploadProgressCallback(data: any): void {
-    console.log(' ::>> fileUploadProgressCallback >>>> ', data);
+    console.log(" ::>> fileUploadProgressCallback >>>> ", data);
     // todo: implement file upload progress
   }
 
   public cancel(): void {
-    this.router.navigate('articles');
+    this.router.navigate("articles");
   }
 }

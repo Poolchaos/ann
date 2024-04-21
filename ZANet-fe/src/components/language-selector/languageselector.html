@@ -1,13 +1,17 @@
 <template>
-  <div class="locales">
-    <img src="../../../static/1280px-Font_Awesome_5_solid_language.svg.png"
-      width="50px"
-      height="40px"
-      click.trigger="showLocale = !showLocale" />
-    <ul if.bind="showLocale">
-      <li class="hoverable" repeat.for="locale of locales"
-      css="text-decoration: ${locale.code === currentLocale ? 'underline' : 'none'}"
-      click.trigger="setLocale(locale)">
+  <div class="locales flex">
+    <span
+      innerhtml.bind="SVGManager.language"
+      click.trigger="showLocale = !showLocale"
+      class="flex hoverable"
+    ></span>
+    <ul if.bind="showLocale" class="shadow">
+      <li
+        class="hoverable"
+        repeat.for="locale of locales"
+        css="text-decoration: ${locale.code === currentLocale ? 'underline' : 'none'}"
+        click.trigger="setLocale(locale)"
+      >
         ${locale.title}
       </li>
     </ul>

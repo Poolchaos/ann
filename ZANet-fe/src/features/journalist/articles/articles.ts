@@ -1,16 +1,28 @@
-import { autoinject } from 'aurelia-framework';
-import { Router } from 'aurelia-router';
-import { EventAggregator } from 'aurelia-event-aggregator';
-import { DialogService } from 'aurelia-dialog';
+import { autoinject } from "aurelia-framework";
+import { Router } from "aurelia-router";
+import { EventAggregator } from "aurelia-event-aggregator";
+import { DialogService } from "aurelia-dialog";
 
-import { ArticleService } from './articles-service';
-import { DataStore } from 'stores/data-store';
-import { EVENTS } from 'stores/events';
-import { RemoveArticleDialog } from './remove-article-dialog/remove-article-dialog';
+import { ArticleService } from "./articles-service";
+import { DataStore } from "stores/data-store";
+import { EVENTS } from "stores/events";
+import { RemoveArticleDialog } from "./remove-article-dialog/remove-article-dialog";
+import { SVGManager } from "../../../services/svg-manager-service";
 
 @autoinject()
 export class Articles {
-
+  public SVGManager = SVGManager;
+  public categories = [
+    "All",
+    "News",
+    "Sport",
+    "Politics",
+    "Crime",
+    "Technical",
+    "Business",
+    "Travel",
+  ];
+  public selectedCategory = "All";
   public articles = [];
 
   private params: { [key: string]: string };
@@ -33,45 +45,57 @@ export class Articles {
       this.articleService
         .getArticles(this.params)
         .then((articles) => this.handleArticlesRetrieved(articles));
-    } catch(e) {
-      console.warn('Unauthorised access. Routing to dashboard.');
+    } catch (e) {
+      console.warn("Unauthorised access. Routing to dashboard.");
       // this.router.navigate('dashboard');
     }
   }
 
   private handleArticlesRetrieved(articles: any[]): void {
-    console.log(' ::>> articles >>>>> ', articles);
+    console.log(" ::>> articles >>>>> ", articles);
     this.articles = articles;
     if (this.dataStore.isUser) {
       const cart = this.dataStore.cart.getItems();
-      cart.forEach(item => {
-        let article = this.articles.find(article => article._id === item._id);
+      cart.forEach((item) => {
+        const article = this.articles.find(
+          (article) => article._id === item._id
+        );
         if (article) {
           article.selected = true;
         }
-      })
+      });
     }
   }
 
+  public selectCategory(category: string): void {
+    this.selectedCategory = category;
+  }
+
   public goToCreateArticle(): void {
-    this.router.navigate('create-article');
+    this.router.navigate("create-article");
   }
 
   public goToDashboard(): void {
-    this.router.navigate('dashboard');
+    this.router.navigate("dashboard");
   }
 
   public playAudio(file: string, parentIndex: number, index: number): void {
     this.articleService
       .playAudio(file)
-      .then((response: { type: string, content: any }) => {
+      .then((response: { type: string; content: any }) => {
         this.play(response, parentIndex, index);
       });
   }
 
-  private play(response: { type: string, content: string }, parentIndex: number, index: number):void {
+  private play(
+    response: { type: string; content: string },
+    parentIndex: number,
+    index: number
+  ): void {
     const base64 = `data:${response.type};base64,${response.content}`;
-    const audio: HTMLAudioElement = document.querySelector(`#js-audio-${parentIndex}-${index}`);
+    const audio: HTMLAudioElement = document.querySelector(
+      `#js-audio-${parentIndex}-${index}`
+    );
 
     audio.src = base64;
     audio.autoplay = true;
@@ -85,11 +109,11 @@ export class Articles {
   public removeArticle(article: any): void {
     this.dialogService
       .open({ viewModel: RemoveArticleDialog, model: article })
-      .whenClosed(response => {
+      .whenClosed((response) => {
         if (!response.wasCancelled) {
           this.confirmRemoveArticle(article._id);
         } else {
-          console.log('dialog cancelled');
+          console.log("dialog cancelled");
         }
         console.log(response.output);
       });
@@ -99,35 +123,37 @@ export class Articles {
     this.articleService
       .removeArticle(articleId)
       .then(() => {
-        console.log(' ::>> successfully activated article ');
-        this.articles = this.articles.filter(article => article._id !== articleId);
+        console.log(" ::>> successfully activated article ");
+        this.articles = this.articles.filter(
+          (article) => article._id !== articleId
+        );
       })
       .catch(() => {
-        console.log(' ::>> failed to activate article ');
+        console.log(" ::>> failed to activate article ");
       });
   }
 
   public requestActivation(): void {
-    // todo: move implementation from create to new request 
+    // todo: move implementation from create to new request
   }
 
   public requestDeactivation(): void {
-    // todo: implement request 
+    // todo: implement request
   }
 
   public activateArticle(articleId: string): void {
     this.articleService
       .activateArticle(articleId)
       .then(() => {
-        console.log(' ::>> successfully activated article ');
-        this.articles.forEach(article => {
+        console.log(" ::>> successfully activated article ");
+        this.articles.forEach((article) => {
           if (article._id === articleId) {
             article.contentConfirmed = true;
           }
         });
       })
       .catch(() => {
-        console.log(' ::>> failed to activate article ');
+        console.log(" ::>> failed to activate article ");
       });
   }
 
@@ -135,25 +161,25 @@ export class Articles {
     this.articleService
       .deactivateArticle(articleId)
       .then(() => {
-        console.log(' ::>> successfully activated article ');
-        this.articles.forEach(article => {
+        console.log(" ::>> successfully activated article ");
+        this.articles.forEach((article) => {
           if (article._id === articleId) {
             article.contentConfirmed = false;
           }
         });
       })
       .catch(() => {
-        console.log(' ::>> failed to activate article ');
+        console.log(" ::>> failed to activate article ");
       });
   }
 
   public addToCart(article: any) {
-    console.log(' ::>> article >>>>> ', article);
+    console.log(" ::>> article >>>>> ", article);
     article.selected = true;
     const item = {
       _id: article._id,
       name: article.name,
-      category: article.category
+      category: article.category,
     };
     this.eventAggregator.publish(EVENTS.ADD_ITEM_TO_CART, item);
   }
@@ -163,7 +189,7 @@ export class Articles {
     const item = {
       _id: article._id,
       name: article.name,
-      category: article.category
+      category: article.category,
     };
     this.eventAggregator.publish(EVENTS.REMOVE_ITEM_FROM_CART, item);
   }

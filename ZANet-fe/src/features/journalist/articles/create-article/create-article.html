@@ -1,14 +1,19 @@
 <template>
   <div class="bordered--5 white container">
     <h1 class="black-text flex flex--justify-between">
-      <div style="width: 200px;"></div>
+      <div style="width: 200px"></div>
       <div class="black-text flex flex--justify-center">
         <img src="../../../../assets/images/zanet-logo.png" />
         <div class="spacer-v--10"></div>
         <span>Create Article</span>
       </div>
-      <div class="flex flex--position-end-h" style="width: 200px;">
-        <button class="gray hoverable small-font" click.trigger="cancel()">Back</button>
+      <div class="flex flex--position-end-h" style="width: 200px">
+        <button
+          class="gray hoverable small-font rounded width-120"
+          click.trigger="cancel()"
+        >
+          Back
+        </button>
       </div>
     </h1>
     <div class="is-relative">
@@ -19,64 +24,134 @@
         placeholder="Type your title"
         class="icon small-font"
       />
-      <span class="rounded error attached pad--l-10 pad--r-10">${errors.title}</span>
+      <span class="rounded error attached pad--l-10 pad--r-10"
+        >${errors.title}</span
+      >
     </div>
     <div class="flex is-relative">
-      <i class="fas fa-layer-group" style="padding-top: 15px;margin-right: 5px;"></i>
-      <div class="is-relative dropdown icon hoverable small-font" click.trigger="toggleCategories()">
-        <div class="capitalise placeholder" if.bind="!category">Select your category</div>
+      <i
+        class="fas fa-layer-group"
+        style="padding-top: 15px; margin-right: 5px"
+      ></i>
+      <div
+        class="is-relative dropdown icon hoverable small-font"
+        click.trigger="toggleCategories()"
+      >
+        <div class="capitalise placeholder" if.bind="!category">
+          Select your category
+        </div>
         <div class="capitalise" if.bind="category">${category}</div>
         <ul show.bind="categoriesVisible">
-          <li click.trigger="selectCategory('news', $event)" class.bind="category === 'news' ? 'selected':''">News</li>
-          <li click.trigger="selectCategory('sport', $event)" class.bind="category === 'sport' ? 'selected':''">Sport</li>
-          <li click.trigger="selectCategory('politics', $event)" class.bind="category === 'politics' ? 'selected':''">Politics</li>
-          <li click.trigger="selectCategory('crime', $event)" class.bind="category === 'crime' ? 'selected':''">Crime</li>
-          <li click.trigger="selectCategory('technical', $event)" class.bind="category === 'technical' ? 'selected':''">Technical</li>
-          <li click.trigger="selectCategory('buniness', $event)" class.bind="category === 'buniness' ? 'selected':''">Buniness</li>
-          <li click.trigger="selectCategory('travel', $event)" class.bind="category === 'travel' ? 'selected':''">Travel</li>
+          <li
+            click.trigger="selectCategory('news', $event)"
+            class.bind="category === 'news' ? 'selected':''"
+          >
+            News
+          </li>
+          <li
+            click.trigger="selectCategory('sport', $event)"
+            class.bind="category === 'sport' ? 'selected':''"
+          >
+            Sport
+          </li>
+          <li
+            click.trigger="selectCategory('politics', $event)"
+            class.bind="category === 'politics' ? 'selected':''"
+          >
+            Politics
+          </li>
+          <li
+            click.trigger="selectCategory('crime', $event)"
+            class.bind="category === 'crime' ? 'selected':''"
+          >
+            Crime
+          </li>
+          <li
+            click.trigger="selectCategory('technical', $event)"
+            class.bind="category === 'technical' ? 'selected':''"
+          >
+            Technical
+          </li>
+          <li
+            click.trigger="selectCategory('buniness', $event)"
+            class.bind="category === 'buniness' ? 'selected':''"
+          >
+            Buniness
+          </li>
+          <li
+            click.trigger="selectCategory('travel', $event)"
+            class.bind="category === 'travel' ? 'selected':''"
+          >
+            Travel
+          </li>
         </ul>
       </div>
-      <span class="rounded error attached pad--l-10 pad--r-10">${errors.category}</span>
+      <span class="rounded error attached pad--l-10 pad--r-10"
+        >${errors.category}</span
+      >
     </div>
     <div class="is-relative">
       <div class="spacer--10"></div>
       <i class="fas fa-newspaper"></i>
-      <label class="placeholder" i18n="page.journalist.create-article.content"></label>
+      <label
+        class="placeholder"
+        i18n="page.journalist.create-article.content"
+      ></label>
       <div class="spacer--10"></div>
-      <input id="x" type="hidden" name="content">
+      <input id="x" type="hidden" name="content" />
       <trix-editor input="x" if.bind="ready"></trix-editor>
-      <span class="rounded error attached pad--t-10 pad--l-10 pad--r-10">${errors.content}</span>
+      <span class="rounded error attached pad--t-10 pad--l-10 pad--r-10"
+        >${errors.content}</span
+      >
     </div>
     <div>
       <div class="spacer--20"></div>
       <i class="far fa-newspaper"></i>
       <label class="placeholder">Upload Articles</label>
-      <input 
-        type="file" multiple
+      <input
+        type="file"
+        multiple
         change.delegate="selectionChanged($event)"
-        accept="audio/mp3,audio/wav" />
-      <ul style="width: 275px;">
+        accept="audio/mp3,audio/wav"
+      />
+      <ul style="width: 275px">
         <li
           class="flex flex--justify-between"
           repeat.for="file of fileContents"
-          if.bind="!file.toBeRemoved">
-          ${file.name} <button class="red hoverable" click.trigger="removeAudio(file._id)">X</button>
+          if.bind="!file.toBeRemoved"
+        >
+          ${file.name}
+          <button class="red hoverable" click.trigger="removeAudio(file._id)">
+            X
+          </button>
         </li>
       </ul>
     </div>
     <div class="spacer--20"></div>
-    
+
     <button
-      class="blue medium-font hoverable pad--t-10 pad--b-10 pad--r-40 pad--l-40"
+      class="blue hoverable small-font rounded width-120 height-40 pad--t-10 pad--b-10"
       disabled.bind="submitted"
       click.trigger="submitForm()"
-      disabled.bind="disable">${articleId ? 'Update' : 'Create'}</button>
+      disabled.bind="disable"
+    >
+      ${articleId ? 'Update' : 'Create'}
+    </button>
     <button
-      class="gray medium-font hoverable pad--t-10 pad--b-10 pad--r-40 pad--l-40"
+      class="gray hoverable small-font rounded width-120 height-40 pad--t-10 pad--b-10"
       disabled.bind="submitted"
       click.trigger="cancel()"
-      disabled.bind="disable">Cancel</button>
+      disabled.bind="disable"
+    >
+      Cancel
+    </button>
 
-    <progress id="progressBar" value="0" max="100" style="width:300px;" if.bind="submitted"></progress>
+    <progress
+      id="progressBar"
+      value="0"
+      max="100"
+      style="width: 300px"
+      if.bind="submitted"
+    ></progress>
   </div>
 </template>

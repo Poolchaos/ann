@@ -1,29 +1,33 @@
-html, body {
+html,
+body {
   // background: #073f63;
-  background: rgb(19,168,158);
-  background: radial-gradient(circle, rgba(19,168,158,1) 0%, rgba(63,63,64,1) 100%);
+  background: rgb(19, 168, 158);
+  background: radial-gradient(
+    circle,
+    rgba(19, 168, 158, 1) 0%,
+    rgba(63, 63, 64, 1) 100%
+  );
   color: var(--gray);
   padding: 0;
   margin: 0;
 }
 
 button {
-  background-color: rgb(172, 172, 172)!important;
+  background-color: rgb(172, 172, 172) !important;
   padding: 5px 10px;
 }
 .nav {
-  width: 100%;
   margin: 0;
   padding: 0;
   height: 40px;
-  
+
   > li {
     display: inline-block;
   }
 }
 
 ul {
-  margin:0;
+  margin: 0;
   padding: 0;
 }
 
@@ -46,6 +50,33 @@ li {
 
     li:hover {
       color: #545454;
+    }
+  }
+}
+
+.text {
+  &-bold {
+    font-weight: bold;
+  }
+
+  &-center {
+    text-align: center;
+  }
+}
+
+.button {
+  &-icon {
+    svg {
+      height: 12px;
+      width: 12px;
+    }
+  }
+}
+
+.icon {
+  &-white {
+    svg {
+      fill: white;
     }
   }
 }

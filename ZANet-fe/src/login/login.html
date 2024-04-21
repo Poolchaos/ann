@@ -7,10 +7,38 @@
     </h1>
 
     <div class="login-form left">
+      <ul
+        class="flex flex--justify-between width--full m-auto rounded mb-20"
+        style="background: rgb(253, 192, 192, 1)"
+      >
+        <li
+          click.trigger="testLogin('Admin')"
+          class="nav-list-item hoverable text-bold"
+        >
+          Admin
+        </li>
+        <li
+          click.trigger="testLogin('Journalist')"
+          class="nav-list-item hoverable text-bold"
+        >
+          Journalist
+        </li>
+        <li
+          click.trigger="testLogin('Voice-Over')"
+          class="nav-list-item hoverable text-bold"
+        >
+          Voice-Over
+        </li>
+        <li
+          click.trigger="testLogin('User')"
+          class="nav-list-item hoverable text-bold"
+        >
+          User
+        </li>
+      </ul>
+
       <form>
-        <label
-          class="small-font"
-          i18n="page.login.form.email"></label>
+        <label class="small-font" i18n="page.login.form.email"></label>
         <div class="row">
           <i class="fas fa-user"></i>
           <input
@@ -28,22 +56,22 @@
             type="password"
             value.bind="password & validate"
             placeholder="${'page.login.form.passwordPlaceholder' | t}"
-            class="icon small-font"
+            class="icon mini-font"
             keyup.trigger="clearErrors()"
           />
-          <ul if.bind="validation.errors">
-            <li repeat.for="error of validation.errors">
-              ${error.message}
-            </li>
+          <ul if.bind="validation.errors" class="error">
+            <li repeat.for="error of validation.errors">${error.message}</li>
           </ul>
-          <div if.bind="error">${error}</div>
+          <div if.bind="error" class="error mini-font text-bold">${error}</div>
 
           <div class="spacer--20"></div>
-          <div class="flex flex--justify-between">
+          <div class="flex flex--justify-between flex--align-center-v">
             <button
-              class="blue medium-font hoverable pad--t-10 pad--b-10 pad--r-40 pad--l-40"
+              class="blue hoverable small-font rounded pad--t-10 pad--b-10 width-120"
               disabled.bind="submitted"
-              click.trigger="login()" i18n="page.login.form.login-button"></button>
+              click.trigger="login()"
+              i18n="page.login.form.login-button"
+            ></button>
             <a click.trigger="forgotPassword()">Forgot password?</a>
           </div>
         </div>

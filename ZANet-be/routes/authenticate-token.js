@@ -69,6 +69,7 @@ const authenticateAnonymous = function (req, res, next) {
         return next();
       }
     }
+    console.log(' ::>> invalid token >>>>> ');
     return res.sendStatus(401);
   });
 };

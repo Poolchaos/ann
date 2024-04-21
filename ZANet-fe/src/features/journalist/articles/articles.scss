@@ -11,7 +11,7 @@
     }
   }
 }
-  
+
 .actions {
   button {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -24,5 +24,14 @@
 .articles {
   .is-selected {
     background: #b8b8b8;
+  }
+}
+
+.article {
+  .icon {
+    svg {
+      width: 80px;
+      height: 80px;
+    }
   }
 }
