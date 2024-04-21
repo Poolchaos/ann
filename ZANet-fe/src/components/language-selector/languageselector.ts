@@ -24,7 +24,7 @@ export class LanguageSelector {
   }
 
   public setLocale(locale: { code: string }): void {
-    let code = locale.code;
+    const code = locale.code;
     if (this.currentLocale !== code) {
       this.i18n.setLocale(code);
       this.currentLocale = code;
