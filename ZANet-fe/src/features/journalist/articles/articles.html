@@ -45,7 +45,12 @@
         class="article item ${$index === articles.length - 1 ? '' : 'has-divider'}"
         class.bind="article.selected ? 'is-selected' : ''"
       >
-
+        <div class="flex flex--direction-cols" style="margin-right: 20px">
+          <div
+            innerhtml.bind="SVGManager.news"
+            class="icon text-center blue-svg"
+            if.bind="article.category === 'news'"
+          ></div>
           <div
             innerhtml.bind="SVGManager.sport"
             class="icon text-center blue-svg"
