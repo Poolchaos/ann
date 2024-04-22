@@ -17,6 +17,14 @@
 - Accounts will have left panel and content
 - Needs some thinking and modelling
 
+1. Update email template: email-registration-complete.html
+2. Update email template: email-confirm-registration.html
+3. Update email template: email-password-reset-request-invalid.html
+4. Update email template: email-password-reset-request-valid.html
+5. Update email template: email-password-reset.html
+6. Update email template: email-purchase-template.html
+7. Update email template: email-purchase.html
+
 ## Phillip TODO
 
 1. Integrate stripe for checkout
