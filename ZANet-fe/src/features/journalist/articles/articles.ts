@@ -13,14 +13,14 @@ import { SVGManager } from "../../../services/svg-manager-service";
 export class Articles {
   public SVGManager = SVGManager;
   public categories = [
-    "All",
-    "News",
-    "Sport",
-    "Politics",
-    "Crime",
-    "Technical",
-    "Business",
-    "Travel",
+    { title: "All", icon: SVGManager.infinite },
+    { title: "News", icon: SVGManager.news },
+    { title: "Sport", icon: SVGManager.sport },
+    { title: "Politics", icon: SVGManager.politics },
+    { title: "Crime", icon: SVGManager.crime },
+    { title: "Technical", icon: SVGManager.technical },
+    { title: "Business", icon: SVGManager.business },
+    { title: "Travel", icon: SVGManager.travel },
   ];
   public selectedCategory = "All";
   public articles = [];

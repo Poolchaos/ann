@@ -13,7 +13,7 @@ const logger = require('../logger');
 
 //Set up default mongoose connection
 const mongoDB = 'mongodb://localhost:27017/ZANet-projector';
-mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.set('useFindAndModify', false);
 
 //Get the default connection
@@ -22,32 +22,37 @@ var db = mongoose.connection;
 //Bind connection to error event (to get notification of connection errors)
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-router.get('/',
+router.get(
+  '/',
   (req, res, next) => authenticateToken(req, res, next, [ROLES.JOURNALIST]),
-  function(req, res, next) {
+  function (req, res, next) {
     try {
-      const authHeader = req.headers['authorization']
+      const authHeader = req.headers['authorization'];
       const token = authHeader && authHeader.split(' ')[1];
       const decrypted = jwt.verify(token, process.env.COMPLETE_KEY);
 
       if (!decrypted) return res.sendStatus(401);
       // todo: map response > only show created, reviewer for admins
       // todo: add podCast to articles
-      ArticleModel.find({ 'created.userId': decrypted._id }, function (err, docs) {
-        return res.send(docs);
-      });
-    } catch(e) {
+      ArticleModel.find(
+        { 'created.userId': decrypted._id },
+        function (err, docs) {
+          return res.send(docs);
+        }
+      );
+    } catch (e) {
       console.log(' ::>> error ', e);
       return res.sendStatus(500);
     }
   }
 );
 
-router.get('/edit',
+router.get(
+  '/edit',
   (req, res, next) => authenticateToken(req, res, next, [ROLES.JOURNALIST]),
-  function(req, res, next) {
+  function (req, res, next) {
     try {
-      const authHeader = req.headers['authorization']
+      const authHeader = req.headers['authorization'];
       const token = authHeader && authHeader.split(' ')[1];
       const decrypted = jwt.verify(token, process.env.COMPLETE_KEY);
 
@@ -56,7 +61,7 @@ router.get('/edit',
 
       const params = {
         _id: req.query.articleId,
-        'created.userId': decrypted._id
+        'created.userId': decrypted._id,
       };
 
       ArticleModel.find(params, function (err, docs) {
@@ -66,18 +71,19 @@ router.get('/edit',
 
         return res.send(docs[0]);
       });
-    } catch(e) {
+    } catch (e) {
       console.log(' ::>> error ', e);
       return res.sendStatus(500);
     }
   }
 );
 
-router.get('/review',
+router.get(
+  '/review',
   (req, res, next) => authenticateToken(req, res, next, [ROLES.ADMIN]),
-  function(req, res, next) {
+  function (req, res, next) {
     try {
-      const authHeader = req.headers['authorization']
+      const authHeader = req.headers['authorization'];
       const token = authHeader && authHeader.split(' ')[1];
       const decrypted = jwt.verify(token, process.env.COMPLETE_KEY);
 
@@ -86,46 +92,58 @@ router.get('/review',
       ArticleModel.find({}, function (err, docs) {
         return res.send(docs);
       });
-    } catch(e) {
+    } catch (e) {
       console.log(' ::>> error ', e);
       return res.sendStatus(500);
     }
   }
 );
 
-router.get('/category',
-  (req, res, next) => authenticateToken(req, res, next, [ROLES.ADMIN, ROLES.JOURNALIST, ROLES.DEFAULT_USER]),
-  function(req, res, next) {
+router.get(
+  '/category',
+  (req, res, next) =>
+    authenticateToken(req, res, next, [
+      ROLES.ADMIN,
+      ROLES.JOURNALIST,
+      ROLES.DEFAULT_USER,
+    ]),
+  function (req, res, next) {
     try {
-      const authHeader = req.headers['authorization']
+      const authHeader = req.headers['authorization'];
       const token = authHeader && authHeader.split(' ')[1];
       const decrypted = jwt.verify(token, process.env.COMPLETE_KEY);
 
       if (!decrypted) return res.sendStatus(401);
-      if (!req.query.category) return res.sendStatus(500, 'No category specified');
-      if (!CATEGORIES.includes(req.query.category)) return res.sendStatus(500);
+      if (req.query.category && !CATEGORIES.includes(req.query.category))
+        return res.sendStatus(500);
 
+      const category = req.query.category || '';
       const params = {
-        category: req.query.category,
-        contentConfirmed: true
+        contentConfirmed: true,
       };
+
+      if (category) {
+        params.category = category;
+      }
+
       ArticleModel.find(params, function (err, docs) {
         return res.send(docs);
       });
-    } catch(e) {
-      console.log(' ::>> error ', e);
+    } catch (e) {
+      console.info(' ::>> error ', e);
       return res.sendStatus(500);
     }
   }
 );
 
-router.post('/', 
+router.post(
+  '/',
   (req, res, next) => authenticateToken(req, res, next, [ROLES.JOURNALIST]),
-  function(req, res, next) {
+  function (req, res, next) {
     try {
       if (!req.body) return res.sendStatus(500, { error: err });
 
-      const authHeader = req.headers['authorization']
+      const authHeader = req.headers['authorization'];
       const token = authHeader && authHeader.split(' ')[1];
       const decrypted = jwt.verify(token, process.env.COMPLETE_KEY);
 
@@ -137,9 +155,9 @@ router.post('/',
         content: req.body.content,
         created: {
           userId: decrypted._id,
-          timestamp: Date.now()
+          timestamp: Date.now(),
         },
-        contentConfirmed: false
+        contentConfirmed: false,
       };
 
       var instance = new ArticleModel(article);
@@ -147,58 +165,58 @@ router.post('/',
         // todo: handle errors passed through to FE
         if (err) {
           console.log(' ::>> error ', err);
-          return res.sendStatus(500, {error: err});
+          return res.sendStatus(500, { error: err });
         }
         log('Article created', article._id, article.userId);
         return res.send({ articleId: article._id });
       });
-
-    } catch(e) {
+    } catch (e) {
       error('Failed to create article', token, req.body, e);
       return res.sendStatus(500, { error: err });
     }
   }
 );
 
-router.put('/', 
+router.put(
+  '/',
   (req, res, next) => authenticateToken(req, res, next, [ROLES.JOURNALIST]),
-  function(req, res, next) {
+  function (req, res, next) {
     try {
       if (!req.body) return res.sendStatus(500, { error: err });
 
-      const authHeader = req.headers['authorization']
+      const authHeader = req.headers['authorization'];
       const token = authHeader && authHeader.split(' ')[1];
       const decrypted = jwt.verify(token, process.env.COMPLETE_KEY);
 
       if (!decrypted) return res.sendStatus(401);
 
       ArticleModel.findById(req.body.articleId, function (err, doc) {
-        if (err) return res.sendStatus(500, {error: err});
+        if (err) return res.sendStatus(500, { error: err });
 
         doc.name = req.body.name;
         doc.category = req.body.category;
         doc.content = req.body.content;
         doc.updated.addToSet({
           userId: decrypted._id,
-          timestamp: Date.now()
+          timestamp: Date.now(),
         });
         doc.save();
 
         log('Article created', req.body.articleId, decrypted._id);
         return res.send({ articleId: req.body.articleId });
       });
-
-    } catch(e) {
+    } catch (e) {
       error('Failed to create article', token, req.body, e);
       return res.sendStatus(500, { error: err });
     }
   }
 );
 
-router.post('/activate', 
+router.post(
+  '/activate',
   (req, res, next) => authenticateToken(req, res, next, [ROLES.ADMIN]),
-  function(req, res, next) {
-    const authHeader = req.headers['authorization']
+  function (req, res, next) {
+    const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
     try {
@@ -206,14 +224,14 @@ router.post('/activate',
 
       if (!decrypted) return res.sendStatus(401);
       if (!req.body) return res.sendStatus(500, { error: err });
-      
+
       ArticleModel.findById(req.body.articleId, function (err, doc) {
-        if (err) return res.sendStatus(500, {error: err});
+        if (err) return res.sendStatus(500, { error: err });
 
         doc.contentConfirmed = true;
         doc.reviewer = {
           userId: decrypted._id,
-          timestamp: Date.now()
+          timestamp: Date.now(),
         };
         doc.save();
 
@@ -221,18 +239,18 @@ router.post('/activate',
         return res.send({ articleId: req.body.articleId });
       });
       // todo: add stacktrace logging to all requests
-
-    } catch(e) {
+    } catch (e) {
       error('Failed to review article', token, req.body, e);
       return res.sendStatus(500, { error: err });
     }
   }
 );
 
-router.post('/deactivate', 
+router.post(
+  '/deactivate',
   (req, res, next) => authenticateToken(req, res, next, [ROLES.ADMIN]),
-  function(req, res, next) {
-    const authHeader = req.headers['authorization']
+  function (req, res, next) {
+    const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
     try {
@@ -240,14 +258,14 @@ router.post('/deactivate',
 
       if (!decrypted) return res.sendStatus(401);
       if (!req.body) return res.sendStatus(500, { error: err });
-      
+
       ArticleModel.findById(req.body.articleId, function (err, doc) {
-        if (err) return res.sendStatus(500, {error: err});
+        if (err) return res.sendStatus(500, { error: err });
 
         doc.contentConfirmed = false;
         doc.reviewer = {
           userId: decrypted._id,
-          timestamp: Date.now()
+          timestamp: Date.now(),
         };
         doc.save();
 
@@ -255,18 +273,18 @@ router.post('/deactivate',
         return res.send({ articleId: req.body.articleId });
       });
       // todo: add stacktrace logging to all requests
-
-    } catch(e) {
+    } catch (e) {
       error('Failed to review article', token, req.body, e);
       return res.sendStatus(500, { error: err });
     }
   }
 );
 
-router.delete('/',
+router.delete(
+  '/',
   (req, res, next) => authenticateToken(req, res, next, [ROLES.JOURNALIST]),
-  function(req, res, next) {
-    const authHeader = req.headers['authorization']
+  function (req, res, next) {
+    const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
     try {
@@ -274,36 +292,33 @@ router.delete('/',
 
       if (!decrypted || !req.body.articleId) return res.sendStatus(401);
 
-      ArticleModel.deleteOne(
-        { _id: req.body.articleId },
-        function (err) {
-          if (err) return res.sendStatus(500, { error: err });
-          log('Article removed', req.body.articleId, decrypted._id);
-          return res.sendStatus(200);
-        }
-      );
-    } catch(e) {
+      ArticleModel.deleteOne({ _id: req.body.articleId }, function (err) {
+        if (err) return res.sendStatus(500, { error: err });
+        log('Article removed', req.body.articleId, decrypted._id);
+        return res.sendStatus(200);
+      });
+    } catch (e) {
       error('Failed to delete article', token, req.body, e);
       return res.sendStatus(500);
     }
   }
 );
 
-const log = function(message, articleId, userId) {
+const log = function (message, articleId, userId) {
   logger.info(message, {
     articleId,
     userId,
-    domain: 'articles'
+    domain: 'articles',
   });
-}
+};
 
-const error = function(message, token, body, error) {
+const error = function (message, token, body, error) {
   logger.error(message, {
     token,
     body,
     error: Object.getOwnPropertyDescriptors(new Error(error)).message,
-    domain: 'articles'
+    domain: 'articles',
   });
-}
+};
 
 module.exports = router;

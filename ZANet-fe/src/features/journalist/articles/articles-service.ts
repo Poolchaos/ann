@@ -1,38 +1,35 @@
-import { autoinject } from 'aurelia-framework';
-import { HttpClient } from 'aurelia-http-client';
+import { autoinject } from "aurelia-framework";
+import { HttpClient } from "aurelia-http-client";
 
-import { DataStore } from 'stores/data-store';
+import { DataStore } from "stores/data-store";
 
 @autoinject()
 export class ArticleService {
+  private route: string = "articles";
 
-  private route: string = 'articles';
-
-  constructor(
-    private httpClient: HttpClient,
-    private dataStore: DataStore
-  ) {}
+  constructor(private httpClient: HttpClient, private dataStore: DataStore) {}
 
   public createArticle(
     name: string,
     category: string,
     content: string
   ): Promise<any> {
-    console.log(' ::>> createArticle >>> ');
+    console.log(" ::>> createArticle >>> ");
 
-    return new Promise(resolve => {
-      this.httpClient.createRequest(this.route)
+    return new Promise((resolve) => {
+      this.httpClient
+        .createRequest(this.route)
         .asPost()
-        .withContent({ 
+        .withContent({
           name,
           category,
-          content
+          content,
         })
         .send()
         .then(
           (response) => resolve(response),
           (error) => {
-            console.warn(' ::>> error ', error);
+            console.warn(" ::>> error ", error);
           }
         );
     });
@@ -44,22 +41,23 @@ export class ArticleService {
     category: string,
     content: string
   ): Promise<any> {
-    console.log(' ::>> updateArticle >>> ');
+    console.log(" ::>> updateArticle >>> ");
 
-    return new Promise(resolve => {
-      this.httpClient.createRequest(this.route)
+    return new Promise((resolve) => {
+      this.httpClient
+        .createRequest(this.route)
         .asPut()
-        .withContent({ 
+        .withContent({
           articleId,
           name,
           category,
-          content
+          content,
         })
         .send()
         .then(
           (response) => resolve(response),
           (error) => {
-            console.warn(' ::>> error ', error);
+            console.warn(" ::>> error ", error);
           }
         );
     });
@@ -67,7 +65,8 @@ export class ArticleService {
 
   public removeArticle(articleId: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.httpClient.createRequest(this.route)
+      this.httpClient
+        .createRequest(this.route)
         .asDelete()
         .withContent({ articleId })
         .send()
@@ -78,7 +77,8 @@ export class ArticleService {
 
   public activateArticle(articleId: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.httpClient.createRequest(this.route + '/activate')
+      this.httpClient
+        .createRequest(this.route + "/activate")
         .asPost()
         .withContent({ articleId })
         .send()
@@ -89,7 +89,8 @@ export class ArticleService {
 
   public deactivateArticle(articleId: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.httpClient.createRequest(this.route + '/deactivate')
+      this.httpClient
+        .createRequest(this.route + "/deactivate")
         .asPost()
         .withContent({ articleId })
         .send()
@@ -109,75 +110,85 @@ export class ArticleService {
   }
 
   public retrieveArticlesToReview(): Promise<any> {
-    return new Promise(resolve => {
-      this.httpClient.createRequest(this.route + '/review')
+    return new Promise((resolve) => {
+      this.httpClient
+        .createRequest(this.route + "/review")
         .asGet()
         .send()
         .then(
           (response) => resolve(response),
           (error) => {
-            console.warn(' ::>> error ', error);
+            console.warn(" ::>> error ", error);
           }
         );
     });
   }
-  
+
   public retrieveArticles(): Promise<any> {
-    return new Promise(resolve => {
-      this.httpClient.createRequest(this.route)
+    return new Promise((resolve) => {
+      this.httpClient
+        .createRequest(this.route)
         .asGet()
         .send()
         .then(
           (response) => resolve(response),
           (error) => {
-            console.warn(' ::>> error ', error);
+            console.warn(" ::>> error ", error);
           }
         );
     });
   }
 
   public retrieveArticle(articleId: string): Promise<any> {
-    return new Promise(resolve => {
-      this.httpClient.createRequest(this.route + '/edit')
+    return new Promise((resolve) => {
+      this.httpClient
+        .createRequest(this.route + "/edit")
         .asGet()
         .withParams({ articleId })
         .send()
         .then(
           (response) => resolve(response),
           (error) => {
-            console.warn(' ::>> error ', error);
+            console.warn(" ::>> error ", error);
           }
         );
     });
   }
-  
-  public retrieveCateredArticles(params: { [key: string]: string }): Promise<any> {
-    console.log(' ::>> params >>>> ', params);
-    return new Promise(resolve => {
+
+  public retrieveCateredArticles(params: {
+    [key: string]: string;
+  }): Promise<any> {
+    console.log(" ::>> params >>>> ", params);
+    return new Promise((resolve) => {
       // resolve([]);
 
-      this.httpClient.createRequest(this.route + '/category')
+      this.httpClient
+        .createRequest(this.route + "/category")
         .asGet()
         .withParams(params)
         .send()
         .then(
           (response) => resolve(response),
           (error) => {
-            console.warn(' ::>> error ', error);
+            console.warn(" ::>> error ", error);
           }
         );
     });
   }
 
-  public uploadAudio(file: {
-    name: string;
-    data: string | ArrayBuffer;
-    type: string;
-    size: string;
-    articleId: string
-  }, progressCallback: any): Promise<{ articleId: string }> {
+  public uploadAudio(
+    file: {
+      name: string;
+      data: string | ArrayBuffer;
+      type: string;
+      size: string;
+      articleId: string;
+    },
+    progressCallback: any
+  ): Promise<{ articleId: string }> {
     return new Promise((resolve, reject) => {
-      this.httpClient.createRequest('audio')
+      this.httpClient
+        .createRequest("audio")
         .asPost()
         .withContent(file)
         .withProgressCallback(progressCallback)
@@ -192,14 +203,19 @@ export class ArticleService {
     });
   }
 
-  public removeAudio(articleId: string, fileId: string, audioId: string): Promise<{ articleId: string }> {
+  public removeAudio(
+    articleId: string,
+    fileId: string,
+    audioId: string
+  ): Promise<{ articleId: string }> {
     return new Promise((resolve, reject) => {
-      this.httpClient.createRequest('audio')
+      this.httpClient
+        .createRequest("audio")
         .asDelete()
         .withContent({
           articleId,
           fileId,
-          audioId
+          audioId,
         })
         .send()
         .then(
@@ -214,8 +230,8 @@ export class ArticleService {
 
   public playAudio(file: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      
-      this.httpClient.createRequest('audio')
+      this.httpClient
+        .createRequest("audio")
         .asPut()
         .withContent({ audioId: file })
         .send()
