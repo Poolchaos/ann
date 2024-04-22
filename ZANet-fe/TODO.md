@@ -2,16 +2,17 @@
 
 ## TODO:
 
-1. User: When logged in and viewing articles page, the back button shouldn't show, but should still show when admin and journalist views articles
-2. User: Fix categories styling
-3. Style cart view
-4. User: add to cart - change grey background to a green rounded border
-5. User: Disable the checkout and clear card buttons when there are no items in the cart.
-6. User: When clicking checkout on purchases, create a new checkout view
+- User: When logged in and viewing articles page, the back button shouldn't show, but should still show when admin and journalist views articles
+- User: Fix categories styling
+- Style cart view
+- User: add to cart - change grey background to a green rounded border
+- User: Disable the checkout and clear card buttons when there are no items in the cart.
+- User: When clicking checkout on purchases, create a new checkout view
+- Update Admin dashboard
 
-7. Style error page. Can be seen when looing in with Voice-Over and selecting Articles.
-8. (Optional vir Zayne) Voice-Over: The same as default_user route, show articles on login
-9. (Optional vir Zayne) Make a new page with link in top header (on the left og language selector)
+- Style error page. Can be seen when looing in with Voice-Over and selecting Articles.
+- (Optional vir Zayne) Voice-Over: The same as default_user route, show articles on login
+- (Optional vir Zayne) Make a new page with link in top header (on the left og language selector)
 
 - Accounts will have left panel and content
 - Needs some thinking and modelling
