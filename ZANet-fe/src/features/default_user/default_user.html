@@ -1,41 +1,64 @@
 <template>
-  <h1>User dashboard</h1>
-  <!-- todo: implement colour hover states -->
+  <div class="bordered--5 white container">
+  
+      <div class="bordered--5 white container">
+        <h1 >
+          <div style="width: 200px"></div>
+          <div class="black-text flex flex--justify-center">
+            <img src="../../../src/assets/images/zanet-logo.png" />
+            <div class="spacer-v--10"></div>
+            <span>User Dashboard</span>
+         </h1> </div>
+  <!-- todo: implement colour hover states=semi done-->
   <div class="category-wrapper white-bg">
     <div class="category__item"
       click.trigger="viewArticleByCategory('news')">
-      <img src.bind="'../../icon-news.png'" width="50px" height="50px" /><br/>
+      <div innerhtml.bind="SVGManager.news" class="icon text-center blue-svg" width="50px" height="50px"><br/>
       <span i18n="page.user.dashboard.news"></span>
-    </div>
+   </div>
+   <h3>news</h3> 
+  </div>
     <div class="category__item"
       click.trigger="viewArticleByCategory('sport')">
-      <img src.bind="'../../icon-sport.png'" width="50px" height="50px" /><br/>
+      <div innerhtml.bind="SVGManager.sport" class="icon text-center blue-svg" width="50px" height="50px"><br/>
       <span i18n="page.user.dashboard.sport"></span>
-    </div>
+   </div>
+   <h3>sport</h3>  
+  </div>
     <div class="category__item"
       click.trigger="viewArticleByCategory('politics')">
-      <img src.bind="'../../icon-politics.png'" width="50px" height="50px" /><br/>
-      <span i18n="page.user.dashboard.politics"></span></div>
+      <div innerhtml.bind="SVGManager.politics" class="icon text-center blue-svg" width="50px" height="50px"><br/>
+      <span i18n="page.user.dashboard.politics"></span>
+      </div>
+      <h3>politics</h3> 
+    </div>
     <div class="category__item"
       click.trigger="viewArticleByCategory('crime')">
-      <img src.bind="'../../icon-crime.png'" width="50px" height="50px" /><br/>
+      <div innerhtml.bind="SVGManager.crime" class="icon text-center blue-svg" width="50px" height="50px"><br/>
       <span i18n="page.user.dashboard.crime"></span>
+    </div>
+    <h3>crime</h3> 
     </div>
     <div class="category__item"
       click.trigger="viewArticleByCategory('technical')">
-      <img src.bind="'../../icon-technical.png'" width="50px" height="50px" /><br/>
+      <div innerhtml.bind="SVGManager.technical" class="icon text-center blue-svg" width="50px" height="50px"><br/>
       <span i18n="page.user.dashboard.technical"></span>
     </div>
+    <h3>technical</h3> 
+  </div>
     <div class="category__item"
       click.trigger="viewArticleByCategory('business')">
-      <img src.bind="'../../icon-business.png'" width="50px" height="50px" /><br/>
+      <div innerhtml.bind="SVGManager.business" class="icon text-center blue-svg" width="50px" height="50px"><br/>
       <span i18n="page.user.dashboard.buniness"></span>
     </div>
+    <h3>business</h3> 
+  </div>
     <div class="category__item"
       click.trigger="viewArticleByCategory('travel')">
-      <img src.bind="'../../icon-travel.png'" width="50px" height="50px" /><br/>
+      <div innerhtml.bind="SVGManager.travel" class="icon text-center blue-svg" width="50px" height="50px"><br/>
       <span i18n="page.user.dashboard.travel"></span>
     </div>
+    <h3>travel</h3> 
   </div>
 </template>
 <!-- todo: add i18n  -->

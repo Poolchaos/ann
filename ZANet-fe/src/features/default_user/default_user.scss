@@ -3,13 +3,33 @@
   justify-content: space-evenly;
   flex-wrap: wrap;
   width: 100%;
-
-  .category__item {
-    padding: 100px 0;
-    width: 25%;
-    text-align: center;
-  }
+  padding-bottom: 60px;
+  align-items: baseline;
 }
+
+
+.category__item {
+  align-items: center; 
+  text-align: center; 
+  transition: background-color  1s ease; 
+  border-radius: 5px;
+  width: 50px; 
+  height: 50px; 
+  padding: 20px; 
+}
+
+.category__item:hover .icon path {
+  fill: #ffffff;
+}
+
+/*zayne*/
+.category__item:hover {
+  background:#01a89e ;
+  border-radius: 5px;
+  color: #fff;
+} /*zayne*/
+
+
 
 .white-bg {
   background: #fff;
