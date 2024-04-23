@@ -21,7 +21,7 @@
         </button>
         <button
           class="gray hoverable small-font rounded width-120 height-40"
-          if.bind="!dataStore.isJournalist"
+          if.bind="!dataStore.isJournalist && isUser"
           click.trigger="goToDashboard()"
         >
           Back
