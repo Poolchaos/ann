@@ -35,15 +35,14 @@
         <li if.bind="isAuthenticated" class="flex">
           <button
             class="background-none hover--fill-green text-center hoverable small-font height-40 flex flex--align-center-v svg-white mr-10"
-            click.trigger="showSettingsMenu()"
+            click.trigger="navToSettings()"
             innerhtml.bind="SVGManager.cogWheel"
           ></button
           >Settings
         </li>
-        <li if.bind="isAuthenticated" class="flex">
+        <li if.bind="isAuthenticated" class="flex" click.trigger="logout()">
           <button
             class="background-none hover--fill-white text-center hoverable small-font height-40 flex flex--align-center-v svg-white mr-10"
-            click.trigger="logout()"
             innerhtml.bind="SVGManager.power"
           ></button
           >Logout
