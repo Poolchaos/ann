@@ -15,9 +15,6 @@ export class Dashboard {
   constructor(private dataStore: DataStore, private router: Router) {}
 
   public configureRouter(config, router): void {
-    config.title = "ZANet";
-    config.options.pushState = true;
-
     const routeConfigs: RouteConfig[] = [].concat(DashboardRoutes.routes);
     config.map(routeConfigs);
     this.router = router;
