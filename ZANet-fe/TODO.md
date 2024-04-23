@@ -17,6 +17,9 @@
 - Accounts will have left panel and content
 - Needs some thinking and modelling
 
+- Only show a maximum of 2 lines of content per articles on articles list view with ellipses. Only show everything when viewing or editing an article.
+- Add view an article view (non editable), for a user
+
 1. Update email template: email-registration-complete.html
 2. Update email template: email-confirm-registration.html
 3. Update email template: email-password-reset-request-invalid.html

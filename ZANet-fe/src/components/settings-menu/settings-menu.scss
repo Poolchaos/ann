@@ -1,0 +1,62 @@
+.settings-menu {
+  .icon {
+    border-radius: 100%;
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    background: white;
+
+    &:hover {
+      background: rgb(218, 218, 218);
+    }
+
+    img,
+    svg {
+      width: 40px;
+      height: 40px;
+      margin-top: 3px;
+    }
+  }
+
+  nav.menu {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 260px;
+    z-index: 20;
+    background-color: #292a2d;
+    border-left: 1px solid #515359;
+    padding: 0 10px;
+
+    ul {
+      width: 100%;
+      li {
+        // background-color: #373737;
+        align-items: center;
+
+        language-selector {
+          margin-right: 10px;
+        }
+      }
+    }
+
+    .closable {
+      height: 82px;
+
+      .close {
+        cursor: pointer;
+
+        &:hover {
+          svg {
+            fill: rgb(218, 218, 218);
+          }
+        }
+        svg {
+          width: 30px;
+          height: 30px;
+        }
+      }
+    }
+  }
+}

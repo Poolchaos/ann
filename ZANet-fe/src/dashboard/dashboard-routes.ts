@@ -3,7 +3,8 @@ import { PLATFORM } from "aurelia-pal";
 
 export class DashboardRoutes {
   public static get routes(): RouteConfig[] {
-    return this.adminRoutes().concat(
+    return [].concat(
+      this.adminRoutes(),
       this.journalistRoutes(),
       this.voiceOverRoutes(),
       this.defaultUserRoutes()
@@ -12,6 +13,17 @@ export class DashboardRoutes {
 
   private static adminRoutes(): RouteConfig[] {
     return [
+      {
+        route: "",
+        name: "loader",
+        moduleId: PLATFORM.moduleName("features/loader/loader"),
+        nav: true,
+        title: "",
+        auth: false,
+        settings: {
+          access: ["Admin", "Journalist", "Voice_Over", "DEFAULT_USER"],
+        },
+      },
       {
         route: "admin",
         name: "admin",
@@ -58,7 +70,7 @@ export class DashboardRoutes {
         title: "Articles",
         auth: true,
         settings: {
-          access: ["Admin", "Journalist", "VoiceOver", "DEFAULT_USER"],
+          access: ["Admin", "Journalist", "Voice_Over", "DEFAULT_USER"],
         },
       },
       {

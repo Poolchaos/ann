@@ -1,2 +1,87 @@
 <template>
+  <style>
+    html, body {
+      background: #1e1e1e;
+    }
+  </style>
+  <div style="height: 100vh;width: 100vw;">
+    <nav
+      class="top-menu"
+    >
+      <div>
+        <img src="../assets/images/zanet-logo.png" />
+      </div>
+
+      <ul class="flex flex--align-center-v">
+        <li style="float: right">
+          <settings-menu></settings-menu>
+        </li>
+      </ul>
+    </nav>
+
+    <main class="app">
+      <div class="left-panel">
+        <div
+          style="width: 300px; margin: auto; height: 100%"
+          class="flex flex--justify-between flex--direction-cols"
+        >
+          <ul class="nav flex flex--direction-cols flex--align-center-v">
+            <li if.bind="isAuthenticated">
+              <button
+                class="hover--bb-blue text-bold background-none text-center hoverable small-font height-40"
+                click.trigger="goToDashboard()"
+                i18n="nav-links.dashboard"
+              ></button>
+            </li>
+            <li style="float: right" if.bind="dataStore.isAdmin">
+              <button
+                class="hover--bb-blue text-bold background-none text-center hoverable small-font height-40"
+                click.trigger="goToUsers()"
+              >
+                Users
+              </button>
+            </li>
+            <li style="float: right" if.bind="dataStore.isAdmin">
+              <button
+                class="hover--bb-blue text-bold background-none text-center hoverable small-font height-40"
+                click.trigger="goToArticles()"
+              >
+                Articles
+              </button>
+            </li>
+            <li
+              style="float: right"
+              if.bind="dataStore.isAdmin || dataStore.isUser"
+            >
+              <button
+                class="hover--bb-blue text-bold background-none text-center hoverable small-font height-40"
+                click.trigger="goToPurchases()"
+              >
+                Purchases
+              </button>
+            </li>
+          </ul>
+          <ul
+            class="nav flex flex--direction-cols flex--align-center-v flex--justify-end"
+            style="margin: auto"
+          >
+            <li
+              style="float: right"
+              if.bind="isAuthenticated && dataStore.isUser"
+            >
+              <button
+                class="hover--bb-blue text-bold background-none text-center hoverable small-font height-40 width-80"
+                click.trigger="viewCart()"
+              >
+                Cart (${dataStore.cart.itemsCount})
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="right-content">
+        <router-view></router-view>
+      </div>
+    </main>
 </template>

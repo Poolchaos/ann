@@ -76,10 +76,28 @@
         fill: var(--gray);
       }
     }
+    &-white:hover {
+      svg {
+        fill: white;
+      }
+    }
     &-green:hover {
       svg {
         fill: var(--blue);
       }
+    }
+  }
+}
+
+.svg {
+  &-white {
+    svg {
+      fill: white;
+    }
+  }
+  &-grey {
+    svg {
+      fill: var(--gray);
     }
   }
 }

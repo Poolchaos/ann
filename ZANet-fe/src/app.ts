@@ -47,10 +47,7 @@ export class App {
     config.options.pushState = true;
     config.addPipelineStep("authorize", AuthStep);
 
-    const routeConfigs: RouteConfig[] = [].concat(
-      AppRoutes.routes,
-      DashboardRoutes.routes
-    );
+    const routeConfigs: RouteConfig[] = [].concat(AppRoutes.routes);
     config.map(routeConfigs);
     this.router = router;
   }

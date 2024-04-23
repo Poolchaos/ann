@@ -1,10 +1,14 @@
 <template>
   <div class="locales flex">
-    <span
-      innerhtml.bind="SVGManager.language"
-      click.trigger="showLocale = !showLocale"
-      class="flex hoverable hover--fill-green"
-    ></span>
+    <div class="flex flex--align-center-v">
+      <span
+        innerhtml.bind="SVGManager.language"
+        click.trigger="showLocale = !showLocale"
+        class="flex hoverable hover--fill-green svg-white mr-10"
+      ></span
+      >Select Language
+    </div>
+
     <ul if.bind="showLocale" class="shadow">
       <li
         class="hoverable"

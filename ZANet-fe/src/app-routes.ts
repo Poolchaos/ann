@@ -100,7 +100,7 @@ export class AppRoutes {
     ];
   }
 
-  private static authRoutes(): RouteConfig[] {
+  public static authRoutes(): RouteConfig[] {
     return [
       {
         route: "dashboard",

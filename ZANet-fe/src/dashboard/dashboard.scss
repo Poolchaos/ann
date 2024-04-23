@@ -1,0 +1,28 @@
+.top-menu {
+  background-color: #292a2d;
+  height: calc(82px - 2rem);
+  color: #fff;
+  padding: 1rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+main.app {
+  height: calc(100% - 82px);
+  display: flex;
+
+  .left-panel {
+    width: 260px;
+    max-width: 260px;
+    min-width: 260px;
+    padding: 1rem 0;
+    background-color: #1e1e1e;
+    border: 1px solid #373737;
+  }
+  .right-content {
+    flex: 1;
+    height: 100%;
+  }
+}
