@@ -33,7 +33,7 @@
       width: 100%;
       li {
         // background-color: #373737;
-        align-items: center;
+        // align-items: center;
 
         language-selector {
           margin-right: 10px;
@@ -53,20 +53,6 @@
 
     .closable {
       height: 82px;
-
-      .close {
-        cursor: pointer;
-
-        &:hover {
-          svg {
-            fill: rgb(218, 218, 218);
-          }
-        }
-        svg {
-          width: 30px;
-          height: 30px;
-        }
-      }
     }
   }
 }

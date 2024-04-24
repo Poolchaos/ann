@@ -14,25 +14,27 @@
         <li
           class="flex flex--justify-between flex--align-center-v closable hoverable"
         >
-          <div class="icon">
+          <div class="icon flex flex--align-center-v">
             <img
               if.bind="dataStore.user.image"
               src.bind="dataStore.user.image"
+              class="mr-10"
             />
             <div
               if.bind="!dataStore.user.image"
-              class="svg-grey"
+              class="svg-grey mr-10"
               innerhtml.bind="SVGManager.user"
             ></div>
+            <div>${dataStore.user.firstName} ${dataStore.user.surname}</div>
           </div>
           <div
-            innerhtml.bind="SVGManager.ban"
-            class="svg-white close"
+            innerhtml.bind="SVGManager.xMark"
+            class="svg-white hoverable hover--fill-green width-svg-20 height-svg-20"
             click.trigger="closeMenu()"
           ></div>
         </li>
         <li
-          class="flex flex--align-center-v flex--justify-between hoverable hover--fill-green"
+          class="flex flex--align-start flex--justify-between hoverable hover--fill-green"
         >
           <div class="flex flex--align-center-v">
             <language-selector></language-selector>
@@ -40,7 +42,7 @@
           <div
             id="carret"
             innerhtml.bind="SVGManager.rightCarret"
-            class="svg-white width-20 height-20"
+            class="svg-white width-20 height-20 mt-5"
           ></div>
         </li>
         <li
@@ -90,7 +92,7 @@
               class="background-none text-center small-font height-40 flex flex--align-center-v svg-white mr-10"
               innerhtml.bind="SVGManager.power"
             ></button>
-            Logout
+            Sign out
           </div>
           <div
             id="carret"

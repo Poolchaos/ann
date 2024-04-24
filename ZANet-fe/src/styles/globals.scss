@@ -367,6 +367,9 @@ label {
   }
 
   &--align {
+    &-start {
+      align-items: flex-start;
+    }
     &-center-v {
       align-items: center;
     }
@@ -527,6 +530,14 @@ ux-dialog-container {
 }
 
 .m {
+  &t {
+    &-5 {
+      margin-top: 5px;
+    }
+    &-10 {
+      margin-top: 10px;
+    }
+  }
   &r {
     &-5 {
       margin-right: 5px;

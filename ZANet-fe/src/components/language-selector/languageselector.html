@@ -1,6 +1,6 @@
 <template>
   <div
-    class="locales flex hoverable hover--fill-green"
+    class="locales flex flex--direction-cols hoverable hover--fill-green"
     click.trigger="showLocale = !showLocale"
   >
     <div class="flex flex--align-center-v">
@@ -13,11 +13,15 @@
 
     <ul if.bind="showLocale" class="shadow">
       <li
-        class="hoverable"
+        class="hoverable flex flex--align-center-v"
         repeat.for="locale of locales"
         css="text-decoration: ${locale.code === currentLocale ? 'underline' : 'none'}"
         click.trigger="setLocale(locale, $event)"
       >
+        <div
+          innerhtml.bind="SVGManager.rightCarret"
+          class="svg-white width-20 height-20"
+        ></div>
         ${locale.title}
       </li>
     </ul>
