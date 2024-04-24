@@ -30,27 +30,19 @@
     </h1>
 
     <div class="articles white-bg">
-      <div class="flex flex--justify-between width--half m-auto">
-        <!-- <li
-          click.trigger="selectCategory(category)"
-          class="nav-list-item hoverable text-bold"
-          class.bind="selectedCategory === category ? 'selected':''"
-          repeat.for="category of categories"
-        >
-          ${category}
-        </li> -->
+      <div class="flex flex--justify-center m-auto">
         <div
-          class="category__item"
+          class="category__item text-center hoverable rounded"
           click.trigger="viewArticleByCategory('news')"
           repeat.for="category of categories"
         >
           <div
             innerhtml.bind="category.icon"
-            class="icon text-center blue-svg"
+            class="icon text-center blue-svg width-svg-50"
             width="50px"
             height="50px"
           ></div>
-          <h3>${category.title}</h3>
+          <span class="medium-font">${category.title}</span>
         </div>
       </div>
       <div

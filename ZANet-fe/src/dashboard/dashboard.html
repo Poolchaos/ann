@@ -54,20 +54,20 @@
               <button
                 class="background-none height-40 mr-10 svg-blue width-svg-20"
                 click.trigger="goToPurchases()"
-                innerhtml.bind="SVGManager.cart"
+                innerhtml.bind="SVGManager.history"
               ></button>
               Purchases
             </li>
             <li
-             
+              class="flex flex--align-center-v white-text hoverable  text-left small-font "
               if.bind="isAuthenticated && dataStore.isUser"
             >
               <button
-                class="hover--bb-blue background-none text-center hoverable small-font height-40 width-80 white-text"
+                class="background-none height-40 mr-10 svg-blue width-svg-20"
                 click.trigger="viewCart()"
-              >
-                Cart (${dataStore.cart.itemsCount})
-              </button>
+                innerhtml.bind="SVGManager.cart"
+              ></button>
+              Cart (${dataStore.cart.itemsCount})
             </li>
           </ul>
         </div>

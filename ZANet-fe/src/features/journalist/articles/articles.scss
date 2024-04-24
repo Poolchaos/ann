@@ -37,7 +37,18 @@
 }
 
 .category__item {
+  width: 60px;
+  padding: 5px;
+  margin: 0 10px;
   svg {
     height: 50px;
+  }
+
+  &:hover {
+    background: var(--blue);
+    color: white;
+    svg {
+      fill: white;
+    }
   }
 }
