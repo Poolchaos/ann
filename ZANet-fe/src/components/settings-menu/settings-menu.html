@@ -42,27 +42,9 @@
           <div
             id="carret"
             innerhtml.bind="SVGManager.rightCarret"
-            class="svg-white width-20 height-20"
+            class="svg-white width-20 height-20 mt-13"
           ></div>
         </li>
-        <!-- <li
-          if.bind="isAuthenticated"
-          class="flex flex--align-center-v flex--justify-between hoverable hover--fill-green"
-          click.trigger="navToProfile()"
-        >
-          <div class="flex flex--align-center-v">
-            <button
-              class="background-none text-center small-font height-40 flex flex--align-center-v svg-white mr-10"
-              innerhtml.bind="SVGManager.user"
-            ></button>
-            Your Profile
-          </div>
-          <div
-            id="carret"
-            innerhtml.bind="SVGManager.rightCarret"
-            class="svg-white width-20 height-20"
-          ></div>
-        </li> -->
         <li
           if.bind="isAuthenticated"
           class="flex flex--align-center-v flex--justify-between hoverable hover--fill-green"
