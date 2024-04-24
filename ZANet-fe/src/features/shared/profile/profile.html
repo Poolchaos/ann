@@ -1,3 +1,47 @@
 <template>
-  <h4 class="white-text">Profile content here</h4>
+  <h4 class="white-text">Public Profile</h4>
+
+  <form class="flex white-text">
+    <div flass="flex">
+      <div class="flex-1">
+        <label class="small-font">Name</label>
+        <div class="row">
+          <i class="fas fa-user"></i>
+          <input
+            type="text"
+            value.bind="identity & validate"
+            placeholder="Please enter your name."
+            class="icon small-font"
+            keyup.trigger="clearErrors()"
+          />
+        </div>
+      </div>
+      <div class="flex-1">
+        <label class="small-font">Surname</label>
+        <div class="row">
+          <i class="fas fa-user"></i>
+          <input
+            type="text"
+            value.bind="identity & validate"
+            placeholder="Please enter your surname."
+            class="icon small-font"
+            keyup.trigger="clearErrors()"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <img
+        if.bind="dataStore.user.image"
+        src.bind="dataStore.user.image"
+        class="width-svg-50"
+      />
+      <div
+        if.bind="!dataStore.user.image"
+        class="svg-white width-svg-50"
+        innerhtml.bind="SVGManager.user"
+      ></div>
+    </div>
+  </form>
 </template>
