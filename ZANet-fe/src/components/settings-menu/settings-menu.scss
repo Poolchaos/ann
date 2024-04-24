@@ -38,6 +38,16 @@
         language-selector {
           margin-right: 10px;
         }
+
+        #carret {
+          display: none;
+        }
+
+        &:hover {
+          #carret {
+            display: block;
+          }
+        }
       }
     }
 
