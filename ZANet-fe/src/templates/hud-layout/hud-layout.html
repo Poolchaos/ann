@@ -1,0 +1,39 @@
+<template>
+  <style>
+    html,
+    body {
+      background: #1e1e1e;
+    }
+  </style>
+  <div style="height: 100vh; width: 100vw">
+    <nav class="top-menu">
+      <img
+        src="../../assets/images/zanet-logo-mix.png"
+        width="34px"
+        height="40px"
+        class="hoverable"
+        click.trigger="goToDashboard()"
+      />
+      <ul class="flex flex--align-center-v">
+        <li>
+          <settings-menu></settings-menu>
+        </li>
+      </ul>
+    </nav>
+
+    <main class="app">
+      <div class="left-panel">
+        <div
+          style="width: 100%; margin: auto; height: 100%"
+          class="flex flex--justify-between flex--direction-cols"
+        >
+          <slot name="leftPanel"></slot>
+        </div>
+      </div>
+
+      <div class="right-content">
+        <router-view></router-view>
+      </div>
+    </main>
+  </div>
+</template>
