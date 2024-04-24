@@ -31,27 +31,72 @@
             click.trigger="closeMenu()"
           ></div>
         </li>
-        <li class="flex">
-          <language-selector></language-selector>
-        </li>
-        <li if.bind="isAuthenticated" class="flex hoverable">
-          <button
-            class="background-none hover--fill-green text-center small-font height-40 flex flex--align-center-v svg-white mr-10"
-            click.trigger="navToSettings()"
-            innerhtml.bind="SVGManager.cogWheel"
-          ></button
-          >Settings
+        <li
+          class="flex flex--align-center-v flex--justify-between hoverable hover--fill-green"
+        >
+          <div class="flex flex--align-center-v">
+            <language-selector></language-selector>
+          </div>
+          <div
+            id="carret"
+            innerhtml.bind="SVGManager.rightCarret"
+            class="svg-white width-20 height-20"
+          ></div>
         </li>
         <li
           if.bind="isAuthenticated"
-          class="flex hoverable"
+          class="flex flex--align-center-v flex--justify-between hoverable hover--fill-green"
+          click.trigger="navToProfile()"
+        >
+          <div class="flex flex--align-center-v">
+            <button
+              class="background-none text-center small-font height-40 flex flex--align-center-v svg-white mr-10"
+              click.trigger="navToSettings()"
+              innerhtml.bind="SVGManager.user"
+            ></button>
+            Your Profile
+          </div>
+          <div
+            id="carret"
+            innerhtml.bind="SVGManager.rightCarret"
+            class="svg-white width-20 height-20"
+          ></div>
+        </li>
+        <li
+          if.bind="isAuthenticated"
+          class="flex flex--align-center-v flex--justify-between hoverable hover--fill-green"
+        >
+          <div class="flex flex--align-center-v">
+            <button
+              class="background-none text-center small-font height-40 flex flex--align-center-v svg-white mr-10"
+              click.trigger="navToSettings()"
+              innerhtml.bind="SVGManager.cogWheel"
+            ></button>
+            Settings
+          </div>
+          <div
+            id="carret"
+            innerhtml.bind="SVGManager.rightCarret"
+            class="svg-white width-20 height-20"
+          ></div>
+        </li>
+        <li
+          if.bind="isAuthenticated"
+          class="flex flex--align-center-v flex--justify-between hoverable hover--fill-green"
           click.trigger="logout()"
         >
-          <button
-            class="background-none hover--fill-white text-center small-font height-40 flex flex--align-center-v svg-white mr-10"
-            innerhtml.bind="SVGManager.power"
-          ></button
-          >Logout
+          <div class="flex flex--align-center-v">
+            <button
+              class="background-none text-center small-font height-40 flex flex--align-center-v svg-white mr-10"
+              innerhtml.bind="SVGManager.power"
+            ></button>
+            Logout
+          </div>
+          <div
+            id="carret"
+            innerhtml.bind="SVGManager.rightCarret"
+            class="svg-white width-20 height-20"
+          ></div>
         </li>
       </ul>
     </nav>

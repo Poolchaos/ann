@@ -33,8 +33,11 @@ export class SettingsMenu {
   }
 
   public navToSettings(): void {
-    // todo;
-    console.log(" ::>> todo >>>> ");
+    alert(" ::>> todo: navigate to settings view ");
+  }
+
+  public navToProfile(): void {
+    alert(" ::>> todo: navigate to profile view ");
   }
 
   public logout(): void {

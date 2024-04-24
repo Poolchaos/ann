@@ -43,7 +43,7 @@ export class Dashboard {
   }
 
   public goToDashboard(): void {
-    this.router.navigate("dashboard");
+    this.router.navigate("");
   }
 
   public goToUsers(): void {
