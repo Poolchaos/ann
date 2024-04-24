@@ -20,6 +20,17 @@ button {
   margin: 0;
   padding: 0;
   height: 40px;
+
+  li {
+    border-top: 1px solid rgba(0, 0, 0, 0);
+    border-bottom: 1px solid rgba(0, 0, 0, 0);
+
+    &:hover {
+      border-top: 1px solid var(--blue);
+      border-bottom: 1px solid var(--blue);
+      background-color: #292a2d;
+    }
+  }
 }
 
 ul {
