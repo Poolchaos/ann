@@ -11,6 +11,6 @@ export class HudLayout {
 
   public goToDashboard(): void {
     console.log(" ::>> goToDashboard >>>> ", this.router.parent);
-    this.router.parent.navigateToRoute("/dashboard");
+    this.router.parent.navigate("dashboard");
   }
 }
