@@ -136,6 +136,89 @@ router.get(
   }
 );
 
+router.get(
+  '/widget',
+  (req, res, next) => authenticateToken(req, res, next, [ROLES.ADMIN]),
+  function (req, res, next) {
+    try {
+      const authHeader = req.headers['authorization'];
+      const token = authHeader && authHeader.split(' ')[1];
+      const decrypted = jwt.verify(token, process.env.COMPLETE_KEY);
+
+      if (!decrypted) return res.sendStatus(401);
+
+      ArticleModel.find({}, function (err, docs) {
+        const categoryCounts = {
+          totalArticles: {
+            news: 0,
+            sport: 0,
+            politics: 0,
+            crime: 0,
+            technical: 0,
+            business: 0,
+            travel: 0,
+          },
+          readyForReview: {
+            news: 0,
+            sport: 0,
+            politics: 0,
+            crime: 0,
+            technical: 0,
+            business: 0,
+            travel: 0,
+          },
+          reviewed: {
+            news: 0,
+            sport: 0,
+            politics: 0,
+            crime: 0,
+            technical: 0,
+            business: 0,
+            travel: 0,
+          },
+        };
+
+        docs.forEach(function (doc) {
+          const category = doc.category.toLowerCase(); // Ensure case-insensitivity
+
+          // Validate category existence (optional)
+          if (!categoryCounts.totalArticles.hasOwnProperty(category)) {
+            console.warn(`Unknown category: ${category}`);
+            return; // Or handle unknown categories differently
+          }
+
+          categoryCounts.totalArticles[category]++;
+
+          // Check for "reviewer" field to determine review status
+          if (doc.reviewer) {
+            categoryCounts.reviewed[category]++;
+          } else {
+            categoryCounts.readyForReview[category]++;
+          }
+        });
+
+        // Calculate total counts for each section
+        categoryCounts.totalArticles.total = Object.values(
+          categoryCounts.totalArticles
+        ).reduce((acc, val) => acc + val, 0);
+        categoryCounts.readyForReview.total = Object.values(
+          categoryCounts.readyForReview
+        ).reduce((acc, val) => acc + val, 0);
+        categoryCounts.reviewed.total = Object.values(
+          categoryCounts.reviewed
+        ).reduce((acc, val) => acc + val, 0);
+
+        return res.send(categoryCounts);
+        // const response = {};
+        // return res.send(docs);
+      });
+    } catch (e) {
+      console.info(' ::>> error ', e);
+      return res.sendStatus(500);
+    }
+  }
+);
+
 router.post(
   '/',
   (req, res, next) => authenticateToken(req, res, next, [ROLES.JOURNALIST]),

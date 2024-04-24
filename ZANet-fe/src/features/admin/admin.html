@@ -1,13 +1,111 @@
 <template>
-  <div class="bordered--5 white container centered">
-  <div class="flex flex--justify-evenly height--400 medium-font">
-    <div
-      class="flex flex--justify-center flex--align-center-v hoverable bg-gray width--half height--full"
-      click.trigger="goToMembers()"
-    >Users</div>
-    <div
-      class="flex flex--justify-center flex--align-center-v hoverable bg-gray width--half height--full"
-      click.trigger="goToReviewArticles()"
-    >Articles</div>
+  <div class="white-text">
+    <div style="width: 400px; height: 100px; padding: 20px">
+      <h4 class="white-text">Total Articles</h4>
+
+      <div class="flex flex--wrap">
+        <div>Total: ${widgetData.totalArticles.total}</div>
+        <div>
+          <!-- add news icon here with height/width 20px; -->
+          ${widgetData.totalArticles.news}
+        </div>
+        <div>
+          <!-- add sport icon here with height/width 20px; -->
+          ${widgetData.totalArticles.sport}
+        </div>
+        <div>
+          <!-- add politics icon here with height/width 20px; -->
+          ${widgetData.totalArticles.politics}
+        </div>
+        <div>
+          <!-- add crime icon here with height/width 20px; -->
+          ${widgetData.totalArticles.crime}
+        </div>
+        <div>
+          <!-- add technical icon here with height/width 20px; -->
+          ${widgetData.totalArticles.technical}
+        </div>
+        <div>
+          <!-- add business icon here with height/width 20px; -->
+          ${widgetData.totalArticles.business}
+        </div>
+        <div>
+          <!-- add travel icon here with height/width 20px; -->
+          ${widgetData.totalArticles.travel}
+        </div>
+      </div>
+    </div>
+
+    <div style="width: 400px; height: 100px; padding: 20px">
+      <h4 class="white-text">Articles Ready For Review</h4>
+
+      <div class="flex flex--wrap">
+        <div>Total: ${widgetData.readyForReview.total}</div>
+        <div>
+          <!-- add news icon here with height/width 20px; -->
+          ${widgetData.readyForReview.news}
+        </div>
+        <div>
+          <!-- add sport icon here with height/width 20px; -->
+          ${widgetData.readyForReview.sport}
+        </div>
+        <div>
+          <!-- add politics icon here with height/width 20px; -->
+          ${widgetData.readyForReview.politics}
+        </div>
+        <div>
+          <!-- add crime icon here with height/width 20px; -->
+          ${widgetData.readyForReview.crime}
+        </div>
+        <div>
+          <!-- add technical icon here with height/width 20px; -->
+          ${widgetData.readyForReview.technical}
+        </div>
+        <div>
+          <!-- add business icon here with height/width 20px; -->
+          ${widgetData.readyForReview.business}
+        </div>
+        <div>
+          <!-- add travel icon here with height/width 20px; -->
+          ${widgetData.readyForReview.travel}
+        </div>
+      </div>
+    </div>
+
+    <div style="width: 400px; height: 100px; padding: 20px">
+      <h4 class="white-text">Reviewed Articles</h4>
+
+      <div class="flex flex--wrap">
+        <div>Total: ${widgetData.reviewed.total}</div>
+        <div>
+          <!-- add news icon here with height/width 20px; -->
+          ${widgetData.reviewed.news}
+        </div>
+        <div>
+          <!-- add sport icon here with height/width 20px; -->
+          ${widgetData.reviewed.sport}
+        </div>
+        <div>
+          <!-- add politics icon here with height/width 20px; -->
+          ${widgetData.reviewed.politics}
+        </div>
+        <div>
+          <!-- add crime icon here with height/width 20px; -->
+          ${widgetData.reviewed.crime}
+        </div>
+        <div>
+          <!-- add technical icon here with height/width 20px; -->
+          ${widgetData.reviewed.technical}
+        </div>
+        <div>
+          <!-- add business icon here with height/width 20px; -->
+          ${widgetData.reviewed.business}
+        </div>
+        <div>
+          <!-- add travel icon here with height/width 20px; -->
+          ${widgetData.reviewed.travel}
+        </div>
+      </div>
+    </div>
   </div>
 </template>

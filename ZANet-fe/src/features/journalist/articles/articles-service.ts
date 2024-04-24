@@ -176,6 +176,21 @@ export class ArticleService {
     });
   }
 
+  public retrieveWidgetArticles(): Promise<any> {
+    return new Promise((resolve) => {
+      this.httpClient
+        .createRequest(this.route + "/widget")
+        .asGet()
+        .send()
+        .then(
+          (response) => resolve(response),
+          (error) => {
+            console.warn(" ::>> error ", error);
+          }
+        );
+    });
+  }
+
   public uploadAudio(
     file: {
       name: string;
