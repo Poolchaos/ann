@@ -1,10 +1,9 @@
-import { autoinject } from "aurelia-framework";
+import { autoinject, computedFrom } from "aurelia-framework";
 import { Router, RouteConfig } from "aurelia-router";
 
 import { DataStore } from "stores/data-store";
 import { SVGManager } from "../services/svg-manager-service";
 import { DashboardRoutes } from "./dashboard-routes";
-import { AuthStep } from "../app";
 
 import "./dashboard.scss";
 
@@ -61,5 +60,10 @@ export class Dashboard {
 
   public viewCart(): void {
     this.router.navigate("cart");
+  }
+
+  @computedFrom("dataStore.user")
+  public get isAuthenticated(): boolean {
+    return !!this.dataStore.user;
   }
 }

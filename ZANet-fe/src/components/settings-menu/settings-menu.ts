@@ -42,9 +42,4 @@ export class SettingsMenu {
     this.router.navigate("");
     this.authenticateService.logout();
   }
-
-  @computedFrom("dataStore.user")
-  public get isAuthenticated(): boolean {
-    return !!this.dataStore.user;
-  }
 }

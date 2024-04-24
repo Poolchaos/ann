@@ -22,20 +22,20 @@
     <main class="app">
       <div class="left-panel">
         <div
-          style="width: 300px; margin: auto; height: 100%"
+          style="width: 100%; margin: auto; height: 100%"
           class="flex flex--justify-between flex--direction-cols"
         >
           <ul class="nav flex flex--direction-cols flex--align-center-v">
             <li if.bind="isAuthenticated">
               <button
-                class="hover--bb-blue text-bold background-none text-center hoverable small-font height-40"
+                class="hover--bb-blue text-bold background-none text-center hoverable small-font height-40 white-text"
                 click.trigger="goToDashboard()"
                 i18n="nav-links.dashboard"
               ></button>
             </li>
             <li style="float: right" if.bind="dataStore.isAdmin">
               <button
-                class="hover--bb-blue text-bold background-none text-center hoverable small-font height-40"
+                class="hover--bb-blue text-bold background-none text-center hoverable small-font height-40 white-text"
                 click.trigger="goToUsers()"
               >
                 Users
@@ -43,7 +43,7 @@
             </li>
             <li style="float: right" if.bind="dataStore.isAdmin">
               <button
-                class="hover--bb-blue text-bold background-none text-center hoverable small-font height-40"
+                class="hover--bb-blue text-bold background-none text-center hoverable small-font height-40 white-text"
                 click.trigger="goToArticles()"
               >
                 Articles
@@ -54,23 +54,18 @@
               if.bind="dataStore.isAdmin || dataStore.isUser"
             >
               <button
-                class="hover--bb-blue text-bold background-none text-center hoverable small-font height-40"
+                class="hover--bb-blue text-bold background-none text-center hoverable small-font height-40 white-text"
                 click.trigger="goToPurchases()"
               >
                 Purchases
               </button>
             </li>
-          </ul>
-          <ul
-            class="nav flex flex--direction-cols flex--align-center-v flex--justify-end"
-            style="margin: auto"
-          >
             <li
               style="float: right"
               if.bind="isAuthenticated && dataStore.isUser"
             >
               <button
-                class="hover--bb-blue text-bold background-none text-center hoverable small-font height-40 width-80"
+                class="hover--bb-blue text-bold background-none text-center hoverable small-font height-40 width-80 white-text"
                 click.trigger="viewCart()"
               >
                 Cart (${dataStore.cart.itemsCount})
