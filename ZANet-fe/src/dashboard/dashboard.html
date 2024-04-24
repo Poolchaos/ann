@@ -8,16 +8,10 @@
     <nav
       class="top-menu"
     >
-      <div class="flex flex--align-center-v">
-        <img src="../assets/images/zanet-logo-mix.png" width="34px" height="40px" />
-        <div class="ml-10">
-          <div class="large-font bold">ZANet</div>
-          <div class="blue-text small-font bold">Where stories are crafted, <br/>and truth is bought.</div>
-        </div>
-      </div>
+      <img src="../assets/images/zanet-logo-mix.png" width="34px" height="40px" />
 
       <ul class="flex flex--align-center-v">
-        <li style="float: right">
+        <li>
           <settings-menu></settings-menu>
         </li>
       </ul>
@@ -29,47 +23,48 @@
           style="width: 100%; margin: auto; height: 100%"
           class="flex flex--justify-between flex--direction-cols"
         >
-          <ul class="nav flex flex--direction-cols flex--align-center-v">
-            <li if.bind="isAuthenticated">
+          <ul class="nav flex flex--direction-cols">
+            <li if.bind="isAuthenticated" class="flex flex--align-center-v white-text hoverable  text-left small-font ">
               <button
-                class="hover--bb-blue text-bold background-none text-center hoverable small-font height-40 white-text"
+              class="background-none height-40 mr-10 svg-blue width-svg-20"
                 click.trigger="goToDashboard()"
-                i18n="nav-links.dashboard"
+                innerhtml.bind="SVGManager.layers"
               ></button>
+              <span i18n="nav-links.dashboard"></span>
             </li>
-            <li style="float: right" if.bind="dataStore.isAdmin">
+            <li if.bind="dataStore.isAdmin" class="flex flex--align-center-v white-text hoverable  text-left small-font ">
               <button
-                class="hover--bb-blue text-bold background-none text-center hoverable small-font height-40 white-text"
+                class="background-none height-40 mr-10 svg-blue width-svg-20"
                 click.trigger="goToUsers()"
-              >
-                Users
-              </button>
+                innerhtml.bind="SVGManager.users"
+              ></button>
+              Users
             </li>
-            <li style="float: right" if.bind="dataStore.isAdmin">
+            <li if.bind="dataStore.isAdmin" class="flex flex--align-center-v white-text hoverable  text-left small-font ">
               <button
-                class="hover--bb-blue text-bold background-none text-center hoverable small-font height-40 white-text"
+                class="background-none height-40 mr-10 svg-blue width-svg-20"
                 click.trigger="goToArticles()"
-              >
-                Articles
-              </button>
+                innerhtml.bind="SVGManager.news"
+              ></button>
+              Articles
             </li>
             <li
-              style="float: right"
               if.bind="dataStore.isAdmin || dataStore.isUser"
+              class="flex flex--align-center-v white-text hoverable  text-left small-font "
             >
               <button
-                class="hover--bb-blue text-bold background-none text-center hoverable small-font height-40 white-text"
+                class="background-none height-40 mr-10 svg-blue width-svg-20"
                 click.trigger="goToPurchases()"
-              >
-                Purchases
-              </button>
+                innerhtml.bind="SVGManager.cart"
+              ></button>
+              Purchases
             </li>
             <li
-              style="float: right"
+             
               if.bind="isAuthenticated && dataStore.isUser"
             >
               <button
-                class="hover--bb-blue text-bold background-none text-center hoverable small-font height-40 width-80 white-text"
+                class="hover--bb-blue background-none text-center hoverable small-font height-40 width-80 white-text"
                 click.trigger="viewCart()"
               >
                 Cart (${dataStore.cart.itemsCount})

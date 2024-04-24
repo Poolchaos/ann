@@ -103,6 +103,11 @@
       fill: var(--gray);
     }
   }
+  &-blue {
+    svg {
+      fill: var(--blue);
+    }
+  }
 }
 
 .red {

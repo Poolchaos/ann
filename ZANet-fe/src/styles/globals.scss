@@ -171,6 +171,14 @@ li {
   &-200 {
     width: 200px;
   }
+
+  &-svg {
+    &-20 {
+      svg {
+        width: 20px;
+      }
+    }
+  }
 }
 
 .height {
