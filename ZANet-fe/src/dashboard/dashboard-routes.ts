@@ -29,7 +29,7 @@ export class DashboardRoutes {
         name: "admin",
         moduleId: PLATFORM.moduleName("features/admin/admin"),
         nav: true,
-        title: "Dashboard",
+        title: "Admin",
         auth: true,
         settings: {
           access: ["Admin"],
@@ -56,7 +56,7 @@ export class DashboardRoutes {
         name: "journalist",
         moduleId: PLATFORM.moduleName("features/journalist/journalist"),
         nav: true,
-        title: "Dashboard",
+        title: "Journalist",
         auth: true,
         settings: {
           access: ["Journalist"],
@@ -125,7 +125,7 @@ export class DashboardRoutes {
         name: "default_user",
         moduleId: PLATFORM.moduleName("features/journalist/articles/articles"),
         nav: true,
-        title: "Dashboard",
+        title: "Articles",
         auth: true,
         settings: {
           access: ["DEFAULT_USER"],

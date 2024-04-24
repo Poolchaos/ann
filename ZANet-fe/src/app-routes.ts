@@ -8,7 +8,8 @@ export class AppRoutes {
     return this.errorRoutes().concat(
       this.loginRoutes(),
       this.registrationRoutes(),
-      this.authRoutes()
+      this.authRoutes(),
+      this.sharedRoutes()
     );
   }
 
@@ -125,6 +126,33 @@ export class AppRoutes {
         nav: false,
         title: "Error",
         auth: false,
+      },
+    ];
+  }
+
+  private static sharedRoutes(): RouteConfig[] {
+    return [
+      {
+        route: "profile",
+        name: "profile",
+        moduleId: PLATFORM.moduleName("features/shared/profile/profile"),
+        nav: true,
+        title: "Profile",
+        auth: true,
+        settings: {
+          access: ["Admin", "Journalist", "Voice_Over", "DEFAULT_USER"],
+        },
+      },
+      {
+        route: "settings",
+        name: "settings",
+        moduleId: PLATFORM.moduleName("features/shared/settings/settings"),
+        nav: true,
+        title: "Settings",
+        auth: true,
+        settings: {
+          access: ["Admin", "Journalist", "Voice_Over", "DEFAULT_USER"],
+        },
       },
     ];
   }

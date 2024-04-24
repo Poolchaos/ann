@@ -33,11 +33,11 @@ export class SettingsMenu {
   }
 
   public navToSettings(): void {
-    alert(" ::>> todo: navigate to settings view ");
+    this.router.parent.navigate("settings");
   }
 
   public navToProfile(): void {
-    alert(" ::>> todo: navigate to profile view ");
+    this.router.parent.navigate("profile");
   }
 
   public logout(): void {

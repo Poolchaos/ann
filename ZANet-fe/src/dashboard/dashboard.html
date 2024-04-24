@@ -8,7 +8,7 @@
     <nav
       class="top-menu"
     >
-      <img src="../assets/images/zanet-logo-mix.png" width="34px" height="40px" />
+      <img src="../assets/images/zanet-logo-mix.png" width="34px" height="40px" class="hoverable" click.trigger="goToDashboard()" />
       <ul class="flex flex--align-center-v">
         <li>
           <settings-menu></settings-menu>
@@ -22,7 +22,7 @@
           style="width: 100%; margin: auto; height: 100%"
           class="flex flex--justify-between flex--direction-cols"
         >
-          <ul class="nav flex flex--direction-cols">
+          <ul class="nav flex flex--direction-cols" >
             <li if.bind="isAuthenticated" class="flex flex--align-center-v white-text hoverable  text-left small-font "
             click.trigger="goToDashboard()">
               <button
