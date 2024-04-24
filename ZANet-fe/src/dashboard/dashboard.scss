@@ -26,3 +26,25 @@ main.app {
     height: 100%;
   }
 }
+
+.pannelbutton {
+  font-weight: bold;
+  background: none;
+  text-align: center;
+  font-size: small;
+  height: 40px;
+  color: white;
+}
+
+.pannelbutton:hover {
+  border-bottom: 2px solid #007bff; /* bb-blue */
+}
+
+.ulP {
+  display: flex;
+  align-items: center;
+}
+
+.liP{
+  float: right
+}
