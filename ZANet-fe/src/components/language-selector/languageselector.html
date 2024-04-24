@@ -3,13 +3,24 @@
     class="locales flex flex--direction-cols hoverable hover--fill-green"
     click.trigger="showLocale = !showLocale"
   >
+    <div
+      class="flex flex--align-center-v flex--justify-between hoverable hover--fill-green"
+    >
+      <button
+        class="background-none text-center small-font height-40 flex flex--align-center-v svg-white mr-10 width-svg-20 height-svg-20"
+        innerhtml.bind="SVGManager.language"
+      ></button>
+      Select Language
+    </div>
+
+    <!-- 
     <div class="flex flex--align-center-v">
       <span
         innerhtml.bind="SVGManager.language"
-        class="flex hoverable svg-white mr-10"
+        class="flex hoverable svg-white mr-10 width-svg-20 height-svg-20"
       ></span>
       Select Language
-    </div>
+    </div> -->
 
     <ul if.bind="showLocale" class="shadow">
       <li
