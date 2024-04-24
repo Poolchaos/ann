@@ -108,33 +108,34 @@ export class App {
     }
   }
 
-  public goToLogin(): void {
-    this.router.navigate("login");
-  }
+  // public goToLogin(): void {
+  //   this.router.navigate("login");
+  // }
 
-  public goToRegistration(): void {
-    this.router.navigate("registration");
-  }
+  // public goToRegistration(): void {
+  //   this.router.navigate("registration");
+  // }
 
-  public goToDashboard(): void {
-    this.router.navigate("dashboard");
-  }
+  // public goToDashboard(): void {
+  //   console.log(" ::>> 1 >>>> ");
+  //   this.router.navigate("dashboard");
+  // }
 
-  public goToUsers(): void {
-    this.router.navigate("users");
-  }
+  // public goToUsers(): void {
+  //   this.router.navigate("users");
+  // }
 
-  public goToArticles(): void {
-    this.router.navigate("articles");
-  }
+  // public goToArticles(): void {
+  //   this.router.navigate("articles");
+  // }
 
-  public goToPurchases(): void {
-    this.router.navigate("purchases");
-  }
+  // public goToPurchases(): void {
+  //   this.router.navigate("purchases");
+  // }
 
-  public viewCart(): void {
-    this.router.navigate("cart");
-  }
+  // public viewCart(): void {
+  //   this.router.navigate("cart");
+  // }
 
   public logout(): void {
     this.eventAggregator.publish(EVENTS.USER_LOGGED_OUT);
@@ -142,10 +143,10 @@ export class App {
     this.authenticateService.logout();
   }
 
-  @computedFrom("dataStore.user")
-  public get isAuthenticated(): boolean {
-    return !!this.dataStore.user;
-  }
+  // @computedFrom("dataStore.user")
+  // public get isAuthenticated(): boolean {
+  //   return !!this.dataStore.user;
+  // }
 }
 
 @autoinject()

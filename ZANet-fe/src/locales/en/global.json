@@ -4,6 +4,10 @@
     "login": "Login",
     "register": "Register",
     "dashboard": "Dashboard",
+    "backToDashboard": "Back To Dashboard",
+    "profile": "Your Profile",
+    "general": "General",
+    "security": "Security",
     "logout": "Logout"
   },
   "page": {
@@ -47,9 +51,7 @@
         "content": "Article Content"
       }
     },
-    "voice-over": {
-
-    },
+    "voice-over": {},
     "user": {
       "dashboard": {
         "news": "News",

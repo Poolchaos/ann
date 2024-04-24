@@ -1,3 +1,50 @@
 <template>
-  <h4 class="white-text">settings content here</h4>
+  <hud-layout>
+    <ul class="nav flex flex--direction-cols" slot="leftPanel">
+      <li
+        if.bind="isAuthenticated"
+        class="flex flex--align-center-v white-text hoverable text-left small-font"
+        click.trigger="goToDashboard()"
+      >
+        <button
+          class="background-none height-40 mr-10 svg-blue width-svg-20"
+          innerhtml.bind="SVGManager.leftArrow"
+        ></button>
+        <span i18n="nav-links.backToDashboard"></span>
+      </li>
+      <li
+        if.bind="dataStore.isAdmin"
+        class="flex flex--align-center-v white-text hoverable text-left small-font"
+        click.trigger="goToProfile()"
+      >
+        <button
+          class="background-none height-40 mr-10 svg-blue width-svg-20"
+          innerhtml.bind="SVGManager.layers"
+        ></button>
+        <span i18n="nav-links.profile"></span>
+      </li>
+      <li
+        if.bind="isAuthenticated"
+        class="flex flex--align-center-v white-text hoverable text-left small-font"
+        click.trigger="goToGeneral()"
+      >
+        <button
+          class="background-none height-40 mr-10 svg-blue width-svg-20"
+          innerhtml.bind="SVGManager.cogWheel"
+        ></button>
+        General
+      </li>
+      <li
+        if.bind="isAuthenticated"
+        class="flex flex--align-center-v white-text hoverable text-left small-font"
+        click.trigger="goToSecurity()"
+      >
+        <button
+          class="background-none height-40 mr-10 svg-blue width-svg-20"
+          innerhtml.bind="SVGManager.security"
+        ></button>
+        Security
+      </li>
+    </ul>
+  </hud-layout>
 </template>

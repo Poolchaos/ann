@@ -5,8 +5,6 @@ import { DataStore } from "stores/data-store";
 import { SVGManager } from "../services/svg-manager-service";
 import { DashboardRoutes } from "./dashboard-routes";
 
-import "./dashboard.scss";
-
 @autoinject()
 export class Dashboard {
   public SVGManager = SVGManager;

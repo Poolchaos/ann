@@ -2,8 +2,6 @@ import { RouteConfig } from "aurelia-router";
 import { PLATFORM } from "aurelia-pal";
 
 export class AppRoutes {
-  constructor() {}
-
   public static get routes(): RouteConfig[] {
     return this.errorRoutes().concat(
       this.loginRoutes(),
@@ -132,17 +130,6 @@ export class AppRoutes {
 
   private static sharedRoutes(): RouteConfig[] {
     return [
-      {
-        route: "profile",
-        name: "profile",
-        moduleId: PLATFORM.moduleName("features/shared/profile/profile"),
-        nav: true,
-        title: "Profile",
-        auth: true,
-        settings: {
-          access: ["Admin", "Journalist", "Voice_Over", "DEFAULT_USER"],
-        },
-      },
       {
         route: "settings",
         name: "settings",
