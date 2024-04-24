@@ -39,7 +39,7 @@
               ></button>
               Users
             </li>
-            <li if.bind="dataStore.isAdmin" class="flex flex--align-center-v white-text hoverable  text-left small-font "
+            <li if.bind="dataStore.isAdmin || dataStore.isJournalist || dataStore.isUser" class="flex flex--align-center-v white-text hoverable  text-left small-font "
             click.trigger="goToArticles()">
               <button
                 class="background-none height-40 mr-10 svg-blue width-svg-20"
