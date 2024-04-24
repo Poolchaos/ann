@@ -23,7 +23,8 @@ export class LanguageSelector {
     }
   }
 
-  public setLocale(locale: { code: string }): void {
+  public setLocale(locale: { code: string }, event?: Event): void {
+    event && event.stopPropagation();
     const code = locale.code;
     if (this.currentLocale !== code) {
       this.i18n.setLocale(code);

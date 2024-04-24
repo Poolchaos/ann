@@ -11,7 +11,9 @@
 
     <nav class="menu" if.bind="isOpen">
       <ul class="">
-        <li class="flex flex--justify-between flex--align-center-v closable">
+        <li
+          class="flex flex--justify-between flex--align-center-v closable hoverable"
+        >
           <div class="icon">
             <img
               if.bind="dataStore.user.image"
@@ -32,17 +34,21 @@
         <li class="flex">
           <language-selector></language-selector>
         </li>
-        <li if.bind="isAuthenticated" class="flex">
+        <li if.bind="isAuthenticated" class="flex hoverable">
           <button
-            class="background-none hover--fill-green text-center hoverable small-font height-40 flex flex--align-center-v svg-white mr-10"
+            class="background-none hover--fill-green text-center small-font height-40 flex flex--align-center-v svg-white mr-10"
             click.trigger="navToSettings()"
             innerhtml.bind="SVGManager.cogWheel"
           ></button
           >Settings
         </li>
-        <li if.bind="isAuthenticated" class="flex" click.trigger="logout()">
+        <li
+          if.bind="isAuthenticated"
+          class="flex hoverable"
+          click.trigger="logout()"
+        >
           <button
-            class="background-none hover--fill-white text-center hoverable small-font height-40 flex flex--align-center-v svg-white mr-10"
+            class="background-none hover--fill-white text-center small-font height-40 flex flex--align-center-v svg-white mr-10"
             innerhtml.bind="SVGManager.power"
           ></button
           >Logout

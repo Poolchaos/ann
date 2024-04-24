@@ -1,12 +1,11 @@
 <template>
-  <div class="locales flex">
+  <div class="locales flex hoverable" click.trigger="showLocale = !showLocale">
     <div class="flex flex--align-center-v">
       <span
         innerhtml.bind="SVGManager.language"
-        click.trigger="showLocale = !showLocale"
         class="flex hoverable hover--fill-green svg-white mr-10"
-      ></span
-      >Select Language
+      ></span>
+      Select Language
     </div>
 
     <ul if.bind="showLocale" class="shadow">
@@ -14,7 +13,7 @@
         class="hoverable"
         repeat.for="locale of locales"
         css="text-decoration: ${locale.code === currentLocale ? 'underline' : 'none'}"
-        click.trigger="setLocale(locale)"
+        click.trigger="setLocale(locale, $event)"
       >
         ${locale.title}
       </li>
