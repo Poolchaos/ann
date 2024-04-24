@@ -1,6 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "outDir": "./dist",
     "module": "esnext",
     "typeRoots": [
       "./node_modules/@types"
@@ -21,7 +22,6 @@
   },
   "include": [
     "src",
-    "test"
   ],
   "atom": {
     "rewriteTsconfig": false

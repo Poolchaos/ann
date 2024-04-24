@@ -23,26 +23,26 @@
           class="flex flex--justify-between flex--direction-cols"
         >
           <ul class="nav flex flex--direction-cols">
-            <li if.bind="isAuthenticated" class="flex flex--align-center-v white-text hoverable  text-left small-font ">
+            <li if.bind="isAuthenticated" class="flex flex--align-center-v white-text hoverable  text-left small-font "
+            click.trigger="goToDashboard()">
               <button
               class="background-none height-40 mr-10 svg-blue width-svg-20"
-                click.trigger="goToDashboard()"
                 innerhtml.bind="SVGManager.layers"
               ></button>
               <span i18n="nav-links.dashboard"></span>
             </li>
-            <li if.bind="dataStore.isAdmin" class="flex flex--align-center-v white-text hoverable  text-left small-font ">
+            <li if.bind="dataStore.isAdmin" class="flex flex--align-center-v white-text hoverable  text-left small-font "
+            click.trigger="goToUsers()">
               <button
                 class="background-none height-40 mr-10 svg-blue width-svg-20"
-                click.trigger="goToUsers()"
                 innerhtml.bind="SVGManager.users"
               ></button>
               Users
             </li>
-            <li if.bind="dataStore.isAdmin" class="flex flex--align-center-v white-text hoverable  text-left small-font ">
+            <li if.bind="dataStore.isAdmin" class="flex flex--align-center-v white-text hoverable  text-left small-font "
+            click.trigger="goToArticles()">
               <button
                 class="background-none height-40 mr-10 svg-blue width-svg-20"
-                click.trigger="goToArticles()"
                 innerhtml.bind="SVGManager.news"
               ></button>
               Articles
@@ -50,10 +50,10 @@
             <li
               if.bind="dataStore.isAdmin || dataStore.isUser"
               class="flex flex--align-center-v white-text hoverable  text-left small-font "
+              click.trigger="goToPurchases()"
             >
               <button
                 class="background-none height-40 mr-10 svg-blue width-svg-20"
-                click.trigger="goToPurchases()"
                 innerhtml.bind="SVGManager.history"
               ></button>
               Purchases
@@ -61,10 +61,10 @@
             <li
               class="flex flex--align-center-v white-text hoverable  text-left small-font "
               if.bind="isAuthenticated && dataStore.isUser"
+              click.trigger="viewCart()"
             >
               <button
                 class="background-none height-40 mr-10 svg-blue width-svg-20"
-                click.trigger="viewCart()"
                 innerhtml.bind="SVGManager.cart"
               ></button>
               Cart (${dataStore.cart.itemsCount})
