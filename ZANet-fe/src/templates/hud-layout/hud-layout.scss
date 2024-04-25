@@ -24,6 +24,7 @@ main.app {
   .right-content {
     flex: 1;
     height: 100%;
+    overflow: auto;
   }
 }
 
@@ -45,6 +46,6 @@ main.app {
   align-items: center;
 }
 
-.liP{
-  float: right
+.liP {
+  float: right;
 }

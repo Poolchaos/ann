@@ -1,17 +1,21 @@
-import { autoinject } from 'aurelia-framework';
-import { Router } from 'aurelia-router';
-import { ValidationControllerFactory, ValidationController, ValidationRules, validateTrigger } from 'aurelia-validation';
+import { autoinject } from "aurelia-framework";
+import { Router } from "aurelia-router";
+import {
+  ValidationControllerFactory,
+  ValidationController,
+  ValidationRules,
+  validateTrigger,
+} from "aurelia-validation";
 
-import { RegistrationService } from './registration-service';
+import { RegistrationService } from "./registration-service";
 
 @autoinject()
 export class Registration {
-
   public firstName: string;
   public surname: string;
   public email: string;
   public number: string;
-  public submitted: boolean = false;
+  public submitted: boolean;
   public error: string;
 
   private validation: ValidationController;
@@ -32,21 +36,21 @@ export class Registration {
   }
 
   private setupValidations(): void {
-    ValidationRules.ensure('firstName')
+    ValidationRules.ensure("firstName")
       .required()
-      .withMessage('Please enter your first name.')
-      .ensure('surname')
+      .withMessage("Please enter your first name.")
+      .ensure("surname")
       .required()
-      .withMessage('Please enter your last name.')
-      .ensure('email')
+      .withMessage("Please enter your last name.")
+      .ensure("email")
       .required()
-      .withMessage('Please enter your email.')
+      .withMessage("Please enter your email.")
       .then()
       .email()
-      .withMessage('Please enter a valid email.')
-      .ensure('number')
+      .withMessage("Please enter a valid email.")
+      .ensure("number")
       .required()
-      .withMessage('Please enter your contact number.')
+      .withMessage("Please enter your contact number.")
       .on(this);
   }
 
@@ -57,18 +61,19 @@ export class Registration {
   public register(): void {
     this.error = null;
 
-    this.validation
-      .validate()
-      .then(validation => {
+    this.validation.validate().then(
+      (validation) => {
         if (!validation.valid) {
-          console.log(' ::>> is invalid ', validation);
+          console.log(" ::>> is invalid ", validation);
           this.submitted = false;
           return;
         }
         this.triggerRegistration();
-      }, () => {
+      },
+      () => {
         this.submitted = false;
-      });
+      }
+    );
   }
 
   private triggerRegistration(): void {
@@ -80,9 +85,14 @@ export class Registration {
         this.number,
         this.selectedRole
       )
-      .then(() => this.router.navigate('email-sent'))
+      .then(() => this.router.navigate("email-sent"))
       .catch(() => {
-        this.error = 'Registration failed. Please contact support for assistance.';
+        this.error =
+          "Registration failed. Please contact support for assistance.";
       });
+  }
+
+  public goToLogin(): void {
+    this.router.navigate("");
   }
 }

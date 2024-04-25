@@ -8,9 +8,7 @@
 
     <div class="login-form left">
       <form>
-        <label
-          class="small-font"
-          i18n="page.register.form.firstName"></label>
+        <label class="small-font" i18n="page.register.form.firstName"></label>
         <div class="row">
           <i class="fas fa-user"></i>
           <input
@@ -20,9 +18,7 @@
             class="icon small-font"
           />
         </div>
-        <label
-          class="small-font"
-          i18n="page.register.form.lastName"></label>
+        <label class="small-font" i18n="page.register.form.lastName"></label>
         <div class="row">
           <i class="far fa-user"></i>
           <input
@@ -32,9 +28,7 @@
             class="icon small-font"
           />
         </div>
-        <label
-          class="small-font"
-          i18n="page.register.form.email"></label>
+        <label class="small-font" i18n="page.register.form.email"></label>
         <div class="row">
           <i class="fas fa-envelope"></i>
           <input
@@ -46,7 +40,8 @@
         </div>
         <label
           class="small-font"
-          i18n="page.register.form.contactNumber"></label>
+          i18n="page.register.form.contactNumber"
+        ></label>
         <div class="row">
           <i class="fas fa-phone-square-alt"></i>
           <input
@@ -56,42 +51,58 @@
             class="icon small-font"
           />
         </div>
-        
+
         <ul class="reg-roles hoverable flex">
-          <li click.trigger="selectRole('Admin')" class.bind="selectedRole === 'Admin' ? 'selected' : ''">
+          <li
+            click.trigger="selectRole('Admin')"
+            class.bind="selectedRole === 'Admin' ? 'selected' : ''"
+          >
             <span class="thick-font medium-font">Admin</span>
             (This will be removed)
           </li>
-          <li click.trigger="selectRole('Journalist')" class.bind="selectedRole === 'Journalist' ? 'selected' : ''">
+          <li
+            click.trigger="selectRole('Journalist')"
+            class.bind="selectedRole === 'Journalist' ? 'selected' : ''"
+          >
             <span class="thick-font medium-font">Journalist</span>
             Create news articles
           </li>
-          <li click.trigger="selectRole('Voice-Over')" class.bind="selectedRole === 'Voice-Over' ? 'selected' : ''">
+          <li
+            click.trigger="selectRole('Voice-Over')"
+            class.bind="selectedRole === 'Voice-Over' ? 'selected' : ''"
+          >
             <span class="thick-font medium-font">Voice-Over</span>
             Add voice over to articles
           </li>
-          <li click.trigger="selectRole('DEFAULT_USER')" class.bind="selectedRole === 'DEFAULT_USER' ? 'selected' : ''">
+          <li
+            click.trigger="selectRole('DEFAULT_USER')"
+            class.bind="selectedRole === 'DEFAULT_USER' ? 'selected' : ''"
+          >
             <span class="thick-font medium-font">User</span>
             Find and use articles
           </li>
         </ul>
         <div class="row">
           <ul if.bind="validation.errors" class="red-text">
-            <li repeat.for="error of validation.errors">
-              ${error.message}
-            </li>
+            <li repeat.for="error of validation.errors">${error.message}</li>
           </ul>
 
           <div class="spacer--20"></div>
           <div class="flex flex--justify-between">
             <button
-              class="blue medium-font hoverable pad--t-10 pad--b-10 pad--r-40 pad--l-40"
+              class="blue hoverable small-font rounded pad--t-10 pad--b-10 width-120"
               disabled.bind="submitted"
-              click.trigger="register()" i18n="page.register.form.register-button"></button>
+              click.trigger="register()"
+              i18n="page.register.form.register-button"
+            ></button>
+          </div>
+          <div class="spacer--20"></div>
+          <div class="centered">
+            Already have an account,
+            <a click.trigger="goToLogin()">login</a> now.
           </div>
         </div>
       </form>
     </div>
   </div>
-
 </template>

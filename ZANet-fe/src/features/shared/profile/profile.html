@@ -1,47 +1,70 @@
 <template>
   <h4 class="white-text">Public Profile</h4>
 
-  <form class="flex white-text">
-    <div flass="flex">
-      <div class="flex-1">
-        <label class="small-font">Name</label>
-        <div class="row">
-          <i class="fas fa-user"></i>
-          <input
-            type="text"
-            value.bind="identity & validate"
-            placeholder="Please enter your name."
-            class="icon small-font"
-            keyup.trigger="clearErrors()"
-          />
-        </div>
+  <form class="white-text">
+    <div>
+      <!-- This is the profile picture -->
+      <img
+        if.bind="user.image"
+        src.bind="user.image"
+        class="width-svg-50 height-svg-50"
+      />
+      <div
+        if.bind="!user.image"
+        class="svg-white width-svg-50 height-svg-50"
+        innerhtml.bind="SVGManager.user"
+      ></div>
+    </div>
+
+    <div class="flex">
+      <div>
+        <label>Name</label>
+        <input
+          type="text"
+          value.bind="user.firstName & validate"
+          placeholder="Please enter your name."
+          class="icon small-font"
+          keyup.trigger="clearErrors()"
+        />
       </div>
-      <div class="flex-1">
-        <label class="small-font">Surname</label>
-        <div class="row">
-          <i class="fas fa-user"></i>
-          <input
-            type="text"
-            value.bind="identity & validate"
-            placeholder="Please enter your surname."
-            class="icon small-font"
-            keyup.trigger="clearErrors()"
-          />
-        </div>
+
+      <div>
+        <label>Surname</label>
+        <input
+          type="text"
+          value.bind="user.surname & validate"
+          placeholder="Please enter your surname."
+          class="icon small-font"
+          keyup.trigger="clearErrors()"
+        />
       </div>
     </div>
 
-    <div>
-      <img
-        if.bind="dataStore.user.image"
-        src.bind="dataStore.user.image"
-        class="width-svg-50"
-      />
-      <div
-        if.bind="!dataStore.user.image"
-        class="svg-white width-svg-50"
-        innerhtml.bind="SVGManager.user"
-      ></div>
+    <div class="flex">
+      <div>
+        <label>Email</label>
+        <input
+          type="text"
+          value.bind="user.email & validate"
+          placeholder="Please enter your email."
+          class="icon small-font"
+          keyup.trigger="clearErrors()"
+        />
+      </div>
+    </div>
+
+    <div class="flex">
+      <div>
+        <label>Bio</label><br />
+        <textarea
+          type="text"
+          value.bind="user.bio"
+          placeholder="Tell us a bit about yourself."
+          class="icon small-font"
+          keyup.trigger="clearErrors()"
+          style="width: 450px; height: 150px"
+        ></textarea>
+      </div>
     </div>
   </form>
 </template>

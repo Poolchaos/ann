@@ -23,8 +23,10 @@ export class Profile {
     this.validation = validationControllerFactory.createForCurrentScope();
     this.validation.validateTrigger = validateTrigger.change;
 
-    console.log(" ::>> profile >>>> ");
-    this.user = JSON.parse(JSON.stringify(dataStore.user));
+    if (dataStore.user) {
+      this.user = JSON.parse(JSON.stringify(dataStore.user));
+    }
+    console.log(" ::>> profile >>>> ", this.user);
   }
 
   public activate(): void {

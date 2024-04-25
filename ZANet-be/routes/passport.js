@@ -141,10 +141,19 @@ router.post('/authenticate', authenticateAnonymous, function (req, res, next) {
     if (!token || email == null) return res.sendStatus(401);
 
     UserModel.find({ email })
-      .select({ token: 1, role: 1, password: 1, permissions: 1 }) // todo: check for other data mappings
+      .select({
+        firstName: 1,
+        surname: 1,
+        email: 1,
+        number: 1,
+        password: 1,
+        token: 1,
+        role: 1,
+        permissions: 1,
+      }) // todo: check for other data mappings
       .then(function (docs, err) {
+        console.log(' ::>> 401 >> 2', docs);
         if (err || !docs || docs.length == 0) {
-          console.log(' ::>> 401 >> 2');
           return res.send(
             401,
             'Email or password is incorrect. Please try again.'
@@ -168,6 +177,7 @@ router.post('/authenticate', authenticateAnonymous, function (req, res, next) {
         );
       })
       .catch((e) => {
+        console.log(' ::>> e ', e);
         return res.sendStatus(500, { error: e });
       });
   } catch (e) {
