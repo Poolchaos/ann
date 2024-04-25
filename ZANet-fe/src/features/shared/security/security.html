@@ -1,10 +1,12 @@
 <template>
-  <h4 class="white-text">security content here</h4>
+  <h4 class="white-text">Security Settings</h4>
+  <hr />
 
+  <h4 class="white-text">Change email</h4>
   <form class="white-text">
     <div class="flex">
       <div>
-        <label>Change email</label>
+        <label>Current Email</label>
         <input
           type="text"
           value.bind="user.email"
@@ -12,6 +14,66 @@
           class="icon small-font"
           keyup.trigger="clearErrors()"
         />
+      </div>
+      <div>
+        <label>New Email</label>
+        <input
+          type="text"
+          value.bind="user.email"
+          placeholder="Please enter your email."
+          class="icon small-font"
+          keyup.trigger="clearErrors()"
+        />
+      </div>
+    </div>
+
+    <hr />
+
+    <h4 class="white-text">Change Password</h4>
+    <div class="flex">
+      <div>
+        <label>Current Password</label>
+        <input
+          type="text"
+          value.bind="user.currentPassword"
+          placeholder="Please enter your current password."
+          class="icon small-font"
+          keyup.trigger="clearErrors()"
+        />
+      </div>
+      <div>
+        <label>New Password</label>
+        <input
+          type="text"
+          value.bind="user.newPassword"
+          placeholder="Please enter your new password."
+          class="icon small-font"
+          keyup.trigger="clearErrors()"
+        />
+      </div>
+    </div>
+
+    <hr />
+
+    <h4 class="white-text">Protection of Personal Information Act</h4>
+    <div class="flex">
+      <div class="mr-10">
+        <button>Download All Personal Info</button>
+      </div>
+      <div>
+        <button>Delete Personal Info</button>
+      </div>
+    </div>
+
+    <hr />
+
+    <h4 class="white-text">Account status</h4>
+    <div class="flex">
+      <div class="mr-10">
+        <button>Temporarily Disable Account</button>
+      </div>
+      <div>
+        <button class="red">Delete Account</button>
       </div>
     </div>
   </form>

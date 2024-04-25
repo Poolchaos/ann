@@ -11,6 +11,8 @@ export class Security {
 
   constructor(dataStore: DataStore) {
     console.log(" ::>> security >>>> ", dataStore);
-    this.user = JSON.parse(JSON.stringify(dataStore.user));
+    if (dataStore.user) {
+      this.user = JSON.parse(JSON.stringify(dataStore.user));
+    }
   }
 }
