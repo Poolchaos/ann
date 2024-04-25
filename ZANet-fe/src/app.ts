@@ -40,6 +40,30 @@ export class App {
     this.configureHTTP();
     this.init();
     // todo: add cookie permission
+    console.log(
+      " ::>> Intl.DateTimeFormat().resolvedOptions().timeZone >>>>> ",
+      Intl.DateTimeFormat().resolvedOptions()
+    );
+    navigator.geolocation.getCurrentPosition((position) => {
+      console.log(position);
+    });
+    const userLanguage = navigator.language.substring(0, 2);
+
+    // // Using navigator.languages (preferred)
+    // const languages = navigator.languages || [navigator.language];
+
+    // // Accessing the most preferred language from the array
+    // const primaryLanguage = languages[0];
+    // console.log(" ::>> test >>>> ", primaryLanguage, userLanguage);
+
+    // @ts-ignore
+    const languageNames = new Intl.DisplayNames(["en"], {
+      type: "language",
+    });
+    console.log(
+      " ::>> language conversion >>>>> ",
+      languageNames.of(userLanguage)
+    );
   }
 
   public configureRouter(config, router): void {

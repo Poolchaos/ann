@@ -1,14 +1,13 @@
-import { autoinject } from 'aurelia-framework';
-import { EventAggregator } from 'aurelia-event-aggregator';
-import { Router } from 'aurelia-router';
+import { autoinject } from "aurelia-framework";
+import { EventAggregator } from "aurelia-event-aggregator";
+import { Router } from "aurelia-router";
 
-import { DataStore } from 'stores/data-store';
-import { PurchaseService } from 'features/default_user/purchases/purchase-service';
-import { EVENTS } from 'stores/events';
+import { DataStore } from "stores/data-store";
+import { PurchaseService } from "features/default_user/purchases/purchase-service";
+import { EVENTS } from "stores/events";
 
 @autoinject()
 export class Cart {
-
   public error: boolean;
 
   constructor(
@@ -19,18 +18,20 @@ export class Cart {
   ) {}
 
   public checkout(): void {
-
     this.error = false;
     if (!this.dataStore.cart.hasItems) return;
+
+    // add stripe intermediary step
+
     const articleIds = this.dataStore.cart.checkout();
 
     this.purchaseService
       .checkout(articleIds)
       .then(() => {
-        this.router.navigate('checkout-complete');
+        this.router.navigate("checkout-complete");
       })
       .catch(() => {
-        console.log(' ::>> failed to activate article ');
+        console.log(" ::>> failed to activate article ");
         this.error = true;
       });
   }
