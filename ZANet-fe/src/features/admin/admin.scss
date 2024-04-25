@@ -1,27 +1,37 @@
 .widgetpanel {
   display: flex;
   justify-content: space-between; 
+  
 }
 
+.widgetpanel svg{
+  height: 20px;
+  width: 20px;
+}
 
 .wwbox{
   border: 3px solid #323232;
   width: 300px;
   border-radius: 10px;
   height: 150px;
-  color: #13a89e;
+  color: #fff;
   padding-left: 10px;
   padding-right: 10px;
+  
 }
 
 .container2 {
-  display: flex;
+
   justify-content: space-between;
+  padding: 20px 30px;
+  display: flex;
+
 }
 
 .white-text2 {
-  color: #13a89e;
+  color: #fff;
   margin: 0;
+ 
 }
 
 
