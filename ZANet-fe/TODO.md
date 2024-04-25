@@ -2,6 +2,13 @@
 
 ## TODO:
 
+Admin:
+
+- Style dashboard widgets (in progress)
+- Apply new theme to users
+- Apply new theme to Articles
+- Apply new theme to creaye Article
+
 - User: When logged in and viewing articles page, the back button shouldn't show, but should still show when admin and journalist views articles
 - User: Fix categories styling
 - Style cart view

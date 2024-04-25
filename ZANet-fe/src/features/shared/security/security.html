@@ -1,3 +1,18 @@
 <template>
   <h4 class="white-text">security content here</h4>
+
+  <form class="white-text">
+    <div class="flex">
+      <div>
+        <label>Change email</label>
+        <input
+          type="text"
+          value.bind="user.email"
+          placeholder="Please enter your email."
+          class="icon small-font"
+          keyup.trigger="clearErrors()"
+        />
+      </div>
+    </div>
+  </form>
 </template>

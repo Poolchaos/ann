@@ -1,5 +1,16 @@
+import { autoinject } from "aurelia-framework";
+
+import { SVGManager } from "../../../services/svg-manager-service";
+import { DataStore } from "../../../stores/data-store";
+
+@autoinject()
 export class Security {
-  constructor() {
-    console.log(" ::>> security >>>> ");
+  public SVGManager = SVGManager;
+
+  public user;
+
+  constructor(dataStore: DataStore) {
+    console.log(" ::>> security >>>> ", dataStore);
+    this.user = JSON.parse(JSON.stringify(dataStore.user));
   }
 }

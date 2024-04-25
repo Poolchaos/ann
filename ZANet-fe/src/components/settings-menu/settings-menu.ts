@@ -42,7 +42,6 @@ export class SettingsMenu {
 
   public logout(): void {
     this.eventAggregator.publish(EVENTS.USER_LOGGED_OUT);
-    this.router.navigate("");
     this.authenticateService.logout();
   }
 
