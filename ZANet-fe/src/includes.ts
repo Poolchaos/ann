@@ -11,3 +11,5 @@ import "./features/journalist/articles/articles.scss";
 
 import "../node_modules/trix/dist/trix.css";
 import "../node_modules/trix/dist/trix.js";
+
+import "./features/admin/admin.scss";

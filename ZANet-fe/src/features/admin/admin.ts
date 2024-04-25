@@ -1,10 +1,12 @@
 import { autoinject } from "aurelia-framework";
 import { Router } from "aurelia-router";
-
 import { ArticleService } from "./../journalist/articles/articles-service";
+import "./admin.scss"
+import { SVGManager } from "services/svg-manager-service";
 
 @autoinject()
 export class Admin {
+  public SVGManager= SVGManager
   public widgetData = {};
 
   constructor(private router: Router, private articleService: ArticleService) {}
