@@ -1,37 +1,30 @@
-.widgetpanel {
-  display: flex;
-  justify-content: space-between; 
-  
-}
-
-.widgetpanel svg{
-  height: 20px;
-  width: 20px;
-}
-
-.wwbox{
-  border: 3px solid #323232;
+.widget {
+  background-color: #292a2d;
   width: 300px;
   border-radius: 10px;
-  height: 150px;
   color: #fff;
-  padding-left: 10px;
-  padding-right: 10px;
   text-align: center;
+  margin: 10px 10px 0 10px;
 }
 
-.container2 {
-
-  justify-content: space-between;
-  padding: 20px 30px;
+.widgetpanel {
   display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
 
+.widgetpanel svg {
+  height: 20px;
+  width: 20px;
 }
 
 .white-text2 {
   color: #fff;
   margin: 0;
- 
 }
 
-
+.section {
+  width: 30%;
+  min-width: 30%;
+  margin: 5px;
+}

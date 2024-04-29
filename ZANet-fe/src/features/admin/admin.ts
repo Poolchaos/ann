@@ -1,20 +1,44 @@
 import { autoinject } from "aurelia-framework";
 import { Router } from "aurelia-router";
 import { ArticleService } from "./../journalist/articles/articles-service";
-import "./admin.scss"
+import "./admin.scss";
 import { SVGManager } from "services/svg-manager-service";
 
 @autoinject()
 export class Admin {
-  public SVGManager= SVGManager
+  public SVGManager = SVGManager;
   public widgetData = {};
 
   constructor(private router: Router, private articleService: ArticleService) {}
 
   public async activate(): Promise<void> {
     try {
-      this.widgetData = await this.articleService.retrieveWidgetArticles();
-      console.log(" ::>> widgetData >>>> ", this.widgetData);
+      const widgetData = await this.articleService.retrieveWidgetArticles();
+      console.log(
+        " ::>> widgetData >>>> ",
+        JSON.parse(JSON.stringify(widgetData))
+      );
+
+      widgetData.totalArticles = {
+        list: Object.entries(widgetData.totalArticles).filter(
+          (entry) => entry[0] !== "total"
+        ),
+        total: widgetData.totalArticles.total,
+      };
+      widgetData.readyForReview = {
+        list: Object.entries(widgetData.readyForReview).filter(
+          (entry) => entry[0] !== "total"
+        ),
+        total: widgetData.readyForReview.total,
+      };
+      widgetData.reviewed = {
+        list: Object.entries(widgetData.reviewed).filter(
+          (entry) => entry[0] !== "total"
+        ),
+        total: widgetData.reviewed.total,
+      };
+      this.widgetData = widgetData;
+      console.log(" ::>> this.widgetData >>>> ", this.widgetData);
     } catch (e) {
       console.error(" > Failed to retrieve articles widget due to:", e);
     }
