@@ -4,5 +4,12 @@
 
 .login-form {
   padding: 40px;
-
 }
+
+  @media only screen and (max-width: 600px) {
+    .login-form {
+        padding: 10px;
+        font-size: 14px; 
+    }
+}
+

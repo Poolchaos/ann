@@ -38,13 +38,14 @@ li {
   list-style-type: none;
 }
 
+
 .wrapper {
-  width: 1000px;
+  width: 100%;   //1000px
   margin: auto;
 }
 
 .small-wrapper {
-  width: 500px;
+  width: 50%;  //500px
   margin: auto;
 }
 
