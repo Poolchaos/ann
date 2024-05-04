@@ -30,6 +30,7 @@ router.get(
       const authHeader = req.headers['authorization'];
       const token = authHeader && authHeader.split(' ')[1];
       const decrypted = jwt.verify(token, process.env.COMPLETE_KEY);
+      console.log(' ::>> decrypted >>>> ', decrypted);
 
       if (!decrypted) return res.sendStatus(401);
       // todo: map response > only show created, reviewer for admins

@@ -41,7 +41,7 @@ const authenticateToken = function (req, res, next, rolePermissions) {
   try {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
-
+    console.log(' ::>> authenticateToken >>>> ', token);
     if (!token) return res.sendStatus(401);
 
     const decrypted = jwt.verify(token, process.env.COMPLETE_KEY);
