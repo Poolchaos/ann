@@ -59,9 +59,10 @@ router.post('/submit', authenticateAnonymous, function (req, res, next) {
       firstName: req.body.firstName,
       surname: req.body.surname,
       email: req.body.email,
-      number: req.body.number,
+      number: req.body.phoneNumber,
       role: req.body.role,
       token: reg_token,
+      password: req.body.password,
     };
 
     RegistrationModel.find({ email: user.email }, function (err, docs) {
@@ -95,32 +96,72 @@ router.post('/complete-registration', tokenValidate, function (req, res, next) {
       token,
       process.env.COMPLETING_REGISTRATION_KEY
     );
-
-    if (!req.body.password)
-      return res.sendStatus(500, { error: 'No password specified' });
-
+    console.log(' ::>> decrypted >>>> ', decrypted);
     RegistrationModel.findById(decrypted.userId, function (err, doc) {
+      console.log(' ::>> err >>>>> ', err);
       if (err) return res.sendStatus(500, { error: err });
 
       let user = doc.toJSON();
       if (user) {
-        const password = req.body ? req.body.password : null;
         user.token = null;
         user.token = jwt.sign(user, process.env.COMPLETE_KEY);
-        user.password = password;
         user.permissions = user.role === ROLES.ADMIN;
+
+        console.log(' ::>> user >>>>> ', user);
 
         doc.status = 'registration-complete';
         doc.save();
+        console.log(' ::>> test 1 >>>>> ');
 
         const user_instance = new UserModel(user);
+        console.log(' ::>> test 2 >>>>> ');
         user_instance.save(function (err) {
+          console.log(' ::>> test 3 >>>>> ', err);
           if (err) return res.sendStatus(500, { error: err });
+          console.log(' ::>> test 5 >>>>> ');
           sendRegistrationCompleteEmail(user);
           //todo: send registration complete email to admin > authenticate user
           log('Registration Complete', user.email);
           return res.sendStatus(200);
         });
+      } else {
+        return res.sendStatus(401);
+      }
+    });
+  } catch (e) {
+    error('Failed to complete registration', token, req.body, e);
+    res.sendStatus(500, { error: e });
+  }
+});
+
+router.delete('/remove-registration', tokenValidate, function (req, res, next) {
+  try {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    const decrypted = jwt.verify(
+      token,
+      process.env.COMPLETING_REGISTRATION_KEY
+    );
+    console.log(' ::>> decrypted >>>> ', decrypted);
+    RegistrationModel.findById(decrypted.userId, function (err, doc) {
+      console.log(' ::>> err >>>>> ', err);
+      if (err) return res.sendStatus(500, { error: err });
+
+      let user = doc.toJSON();
+
+      if (user) {
+        if (doc.status !== 'registration-complete') {
+          doc.remove(function (deleteErr) {
+            if (deleteErr) {
+              console.error('Error removing user:', deleteErr);
+              return res.sendStatus(500, { error: 'Failed to remove user.' });
+            }
+            return res.sendStatus(200);
+          });
+          return;
+        }
+
+        return res.sendStatus(403, { error: 'User already registered.' });
       } else {
         return res.sendStatus(401);
       }
