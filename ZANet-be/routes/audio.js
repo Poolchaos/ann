@@ -14,7 +14,7 @@ const logger = require('../logger');
 
 //Set up default mongoose connection
 const mongoDB = 'mongodb://localhost:27017/ZANet-projector';
-mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.set('useFindAndModify', false);
 
 //Get the default connection
@@ -23,16 +23,19 @@ var db = mongoose.connection;
 //Bind connection to error event (to get notification of connection errors)
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-router.post('/',
-  (req, res, next) => authenticateToken(req, res, next, [ROLES.JOURNALIST]),
-  function(req, res, next) {
-    const authHeader = req.headers['authorization']
+router.post(
+  '/',
+  (req, res, next) =>
+    authenticateToken(req, res, next, [ROLES.CIPHER, ROLES.JOURNALIST]),
+  function (req, res, next) {
+    const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
     try {
       //todo: move to enum
       const acceptedTypes = ['audio/wav', 'audio/mpeg'];
-      if (!req.body.type || !acceptedTypes.includes(req.body.type)) return res.sendStatus(500);
+      if (!req.body.type || !acceptedTypes.includes(req.body.type))
+        return res.sendStatus(500);
       if (!req.body) return res.sendStatus(500, { error: err });
       const decrypted = jwt.verify(token, process.env.COMPLETE_KEY);
 
@@ -41,24 +44,32 @@ router.post('/',
       const audio = {
         _id: new ObjectID(),
         name: req.body.name,
-        location: __dirname + `\\tmp\\${generatedName}.${extention[extention.length - 1]}`,
+        location:
+          __dirname +
+          `\\tmp\\${generatedName}.${extention[extention.length - 1]}`,
         type: req.body.type,
-        articleId: req.body.articleId
+        articleId: req.body.articleId,
       };
-    
-      fs.writeFileSync(audio.location, Buffer.from(req.body.data.replace(`data:${audio.type};base64,`, ''), 'base64'));
+
+      fs.writeFileSync(
+        audio.location,
+        Buffer.from(
+          req.body.data.replace(`data:${audio.type};base64,`, ''),
+          'base64'
+        )
+      );
 
       var instance = new FileModel(audio);
       instance.save(function (err) {
-        if (err) return res.sendStatus(500, {error: err});
+        if (err) return res.sendStatus(500, { error: err });
         log('Audio uploaded', audio._id, audio.articleId, decrypted._id);
-        
+
         ArticleModel.findById(audio.articleId, function (err, doc) {
-          if (err) return res.sendStatus(500, {error: err});
-          if (!doc) return res.sendStatus(404, {error: 'Article not found'});
+          if (err) return res.sendStatus(500, { error: err });
+          if (!doc) return res.sendStatus(404, { error: 'Article not found' });
           doc.files.addToSet({
             audioId: audio._id,
-            name: audio.name
+            name: audio.name,
           });
           doc.save();
 
@@ -66,8 +77,7 @@ router.post('/',
           return res.send({ articleId: req.body.articleId });
         });
       });
-
-    } catch(e) {
+    } catch (e) {
       console.log(' ::>> err ', e);
       error('Failed to upload audio', token, req.body.type, e);
       return res.sendStatus(500, { error: err });
@@ -75,10 +85,16 @@ router.post('/',
   }
 );
 
-router.put('/', 
-  (req, res, next) => authenticateToken(req, res, next, [ROLES.ADMIN, ROLES.JOURNALIST]),
-  function(req, res, next) {
-    const authHeader = req.headers['authorization']
+router.put(
+  '/',
+  (req, res, next) =>
+    authenticateToken(req, res, next, [
+      ROLES.CIPHER,
+      ROLES.ADMIN,
+      ROLES.JOURNALIST,
+    ]),
+  function (req, res, next) {
+    const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
     try {
@@ -93,24 +109,30 @@ router.put('/',
             log('Streaming audio', req.body.audioId, decrypted._id);
             return res.send({
               type: doc.type,
-              content: Buffer.from(data, 'binary').toString('base64')
+              content: Buffer.from(data, 'binary').toString('base64'),
             });
           });
         } else {
           return res.sendStatus(500, { error: 'File does not exist' });
         }
       });
-    } catch(e) {
+    } catch (e) {
       error('Failed to stream audio', token, req.body, e);
       return res.sendStatus(500, { error: err });
     }
   }
 );
 
-router.delete('/', 
-  (req, res, next) => authenticateToken(req, res, next, [ROLES.ADMIN, ROLES.JOURNALIST]),
-  function(req, res, next) {
-    const authHeader = req.headers['authorization']
+router.delete(
+  '/',
+  (req, res, next) =>
+    authenticateToken(req, res, next, [
+      ROLES.CIPHER,
+      ROLES.ADMIN,
+      ROLES.JOURNALIST,
+    ]),
+  function (req, res, next) {
+    const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
     try {
@@ -118,45 +140,51 @@ router.delete('/',
       const decrypted = jwt.verify(token, process.env.COMPLETE_KEY);
       if (!decrypted) return res.sendStatus(401);
 
-      FileModel.deleteOne({
-        _id: req.body.audioId
-      }, function (err) {
-        if (err) return res.sendStatus(500, { error: err });
-        log('Audio file removed', req.body.audioId, decrypted._id);
+      FileModel.deleteOne(
+        {
+          _id: req.body.audioId,
+        },
+        function (err) {
+          if (err) return res.sendStatus(500, { error: err });
+          log('Audio file removed', req.body.audioId, decrypted._id);
 
-        ArticleModel.findById(req.body.articleId, function (err, doc) {
-          if (err) return res.sendStatus(500, {error: err});
-          if (!doc) return res.sendStatus(404, {error: 'Article not found'});
-          doc.files = doc.files.filter(file => file.audioId !== req.body.audioId);
-          doc.save();
+          ArticleModel.findById(req.body.articleId, function (err, doc) {
+            if (err) return res.sendStatus(500, { error: err });
+            if (!doc)
+              return res.sendStatus(404, { error: 'Article not found' });
+            doc.files = doc.files.filter(
+              (file) => file.audioId !== req.body.audioId
+            );
+            doc.save();
 
-          log('Article reviewed', req.body.articleId, decrypted._id);
-          return res.send(200, { articleId: req.body.articleId });
-        });
-      });
-    } catch(e) {
+            log('Article reviewed', req.body.articleId, decrypted._id);
+            return res.send(200, { articleId: req.body.articleId });
+          });
+        }
+      );
+    } catch (e) {
       error('Failed to remove audio', token, req.body, e);
       return res.sendStatus(500, { error: err });
     }
   }
 );
 
-const log = function(message, audioId, articleId, userId) {
+const log = function (message, audioId, articleId, userId) {
   logger.info(message, {
     audioId,
     articleId,
     userId,
-    domain: 'audio'
+    domain: 'audio',
   });
-}
+};
 
-const error = function(message, token, body, error) {
+const error = function (message, token, body, error) {
   logger.error(message, {
     token,
     body,
     error: Object.getOwnPropertyDescriptors(new Error(error)).message,
-    domain: 'audio'
+    domain: 'audio',
   });
-}
+};
 
 module.exports = router;

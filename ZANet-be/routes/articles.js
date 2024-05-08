@@ -24,7 +24,8 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 router.get(
   '/',
-  (req, res, next) => authenticateToken(req, res, next, [ROLES.JOURNALIST]),
+  (req, res, next) =>
+    authenticateToken(req, res, next, [ROLES.CIPHER, ROLES.JOURNALIST]),
   function (req, res, next) {
     try {
       const authHeader = req.headers['authorization'];
@@ -50,7 +51,8 @@ router.get(
 
 router.get(
   '/edit',
-  (req, res, next) => authenticateToken(req, res, next, [ROLES.JOURNALIST]),
+  (req, res, next) =>
+    authenticateToken(req, res, next, [ROLES.CIPHER, ROLES.JOURNALIST]),
   function (req, res, next) {
     try {
       const authHeader = req.headers['authorization'];
@@ -81,7 +83,8 @@ router.get(
 
 router.get(
   '/review',
-  (req, res, next) => authenticateToken(req, res, next, [ROLES.ADMIN]),
+  (req, res, next) =>
+    authenticateToken(req, res, next, [ROLES.CIPHER, ROLES.ADMIN]),
   function (req, res, next) {
     try {
       const authHeader = req.headers['authorization'];
@@ -104,6 +107,7 @@ router.get(
   '/category',
   (req, res, next) =>
     authenticateToken(req, res, next, [
+      ROLES.CIPHER,
       ROLES.ADMIN,
       ROLES.JOURNALIST,
       ROLES.DEFAULT_USER,
@@ -139,7 +143,8 @@ router.get(
 
 router.get(
   '/widget',
-  (req, res, next) => authenticateToken(req, res, next, [ROLES.ADMIN]),
+  (req, res, next) =>
+    authenticateToken(req, res, next, [ROLES.CIPHER, ROLES.ADMIN]),
   function (req, res, next) {
     try {
       const authHeader = req.headers['authorization'];
@@ -222,7 +227,8 @@ router.get(
 
 router.post(
   '/',
-  (req, res, next) => authenticateToken(req, res, next, [ROLES.JOURNALIST]),
+  (req, res, next) =>
+    authenticateToken(req, res, next, [ROLES.CIPHER, ROLES.JOURNALIST]),
   function (req, res, next) {
     try {
       if (!req.body) return res.sendStatus(500, { error: err });
@@ -263,7 +269,8 @@ router.post(
 
 router.put(
   '/',
-  (req, res, next) => authenticateToken(req, res, next, [ROLES.JOURNALIST]),
+  (req, res, next) =>
+    authenticateToken(req, res, next, [ROLES.CIPHER, ROLES.JOURNALIST]),
   function (req, res, next) {
     try {
       if (!req.body) return res.sendStatus(500, { error: err });
@@ -298,7 +305,8 @@ router.put(
 
 router.post(
   '/activate',
-  (req, res, next) => authenticateToken(req, res, next, [ROLES.ADMIN]),
+  (req, res, next) =>
+    authenticateToken(req, res, next, [ROLES.CIPHER, ROLES.ADMIN]),
   function (req, res, next) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
@@ -332,7 +340,8 @@ router.post(
 
 router.post(
   '/deactivate',
-  (req, res, next) => authenticateToken(req, res, next, [ROLES.ADMIN]),
+  (req, res, next) =>
+    authenticateToken(req, res, next, [ROLES.CIPHER, ROLES.ADMIN]),
   function (req, res, next) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
@@ -366,7 +375,8 @@ router.post(
 
 router.delete(
   '/',
-  (req, res, next) => authenticateToken(req, res, next, [ROLES.JOURNALIST]),
+  (req, res, next) =>
+    authenticateToken(req, res, next, [ROLES.CIPHER, ROLES.JOURNALIST]),
   function (req, res, next) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
